@@ -1,47 +1,54 @@
+import {Helper} from "../Helper";
+import {AbstractView} from "./AbstractView";
+import {views} from "../types/strategy/views";
+import {generic} from "../types/strategy/generic";
+import SupportedDomains = generic.SupportedDomains;
+
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
-
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
-import { ViewConfig } from '../types/strategy/strategy-views';
-import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
-
 /**
  * Scene View Class.
  *
- * sed to create a view configuration for entities of the scene domain.
+ * Used to create a view for entities of the scene domain.
+ *
+ * @class SceneView
+ * @extends AbstractView
  */
 class SceneView extends AbstractView {
-  /** The domain of the entities that the view is representing. */
-  static readonly domain = 'scene' as const;
+  /**
+   * Domain of the view's entities.
+   *
+   * @type {SupportedDomains}
+   * @static
+   * @private
+   */
+  static #domain: SupportedDomains = "scene";
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('scene.scenes'),
-      path: 'scenes',
-      icon: 'mdi:palette',
-      subview: false,
-      headerCardConfiguration: {
-        showControls: false,
-      },
-    };
-  }
-
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
-    return {};
-  }
+  /**
+   * Default configuration of the view.
+   *
+   * @type {views.ViewConfig}
+   * @private
+   */
+  #defaultConfig: views.ViewConfig = {
+    title: Helper.customLocalize("scene.scenes"),
+    path: "scenes",
+    icon: "mdi:palette",
+    subview: false,
+    controllerCardOptions: {
+      showControls: false,
+    },
+  };
 
   /**
    * Class constructor.
    *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * @param {views.ViewConfig} [options={}] Options for the view.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
+  constructor(options: views.ViewConfig = {}) {
+    super(SceneView.#domain);
 
-    this.initializeViewConfig(SceneView.getDefaultConfig(), customConfiguration, SceneView.getViewHeaderCardConfig());
+    this.config = Object.assign(this.config, this.#defaultConfig, options);
   }
 }
 
-export default SceneView;
+export {SceneView};

@@ -1,267 +1,284 @@
+import {Helper} from "../Helper";
+import {AbstractView} from "./AbstractView";
+import {views} from "../types/strategy/views";
+import {LovelaceChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
+import {ChipsCardConfig} from "../types/lovelace-mushroom/cards/chips-card";
+import {TemplateCardConfig} from "../types/lovelace-mushroom/cards/template-card-config";
+import {ActionConfig} from "../types/homeassistant/data/lovelace";
+import {TitleCardConfig} from "../types/lovelace-mushroom/cards/title-card-config";
+import {PersonCardConfig} from "../types/lovelace-mushroom/cards/person-card-config";
+import {AreaCardConfig, StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
+import {generic} from "../types/strategy/generic";
+import supportedChips = generic.SupportedChips;
+
+
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
-
-import { Registry } from '../Registry';
-import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
-import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
-import { AreaCardConfig, StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import { ChipsCardConfig } from '../types/lovelace-mushroom/cards/chips-card';
-import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
-import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
-import { LovelaceChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
-import { HomeViewSections, isSupportedChip } from '../types/strategy/strategy-generics';
-import { ViewConfig } from '../types/strategy/strategy-views';
-import { sanitizeClassName } from '../utilities/auxiliaries';
-import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
-import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
-import registryFilter from '../utilities/RegistryFilter';
-import { stackHorizontal } from '../utilities/cardStacking';
-
 /**
  * Home View Class.
  *
  * Used to create a Home view.
+ *
+ * @class HomeView
+ * @extends AbstractView
  */
 class HomeView extends AbstractView {
-  /** The domain of the entities that the view is representing. */
-  static readonly domain = 'home' as const;
-
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('generic.home'),
-      icon: 'mdi:home-assistant',
-      path: 'home',
-      subview: false,
-    };
-  }
+  /**
+   * Default configuration of the view.
+   *
+   * @type {views.ViewConfig}
+   * @private
+   */
+  #defaultConfig: views.ViewConfig = {
+    title: Helper.customLocalize("generic.home"),
+    icon: "mdi:home-assistant",
+    path: "home",
+    subview: false,
+  };
 
   /**
    * Class constructor.
    *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * @param {views.ViewConfig} [options={}] Options for the view.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
+  constructor(options: views.ViewConfig = {}) {
+    super("home");
 
-    this.baseConfiguration = { ...this.baseConfiguration, ...HomeView.getDefaultConfig(), ...customConfiguration };
+    this.config = Object.assign(this.config, this.#defaultConfig, options);
   }
 
   /**
-   * Create the configuration of the cards to include in the view.
+   * Create the cards to include in the view.
    *
+   * @return {Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]>} Promise a View Card array.
    * @override
    */
-  async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
-    const homeViewCards: LovelaceCardConfig[] = [];
+  async createViewCards(): Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]> {
+    return await Promise.all([
+      this.#createChips(),
+      this.#createPersonCards(),
+      this.#createAreaSection(),
+    ]).then(([chips, personCards, areaCards]) => {
+      const options = Helper.strategyOptions;
+      const homeViewCards = [];
 
-    let chipsSection, personsSection, areasSection;
+      if (chips.length) {
+        // TODO: Create the Chip card at this.#createChips()
+        homeViewCards.push({
+          type: "custom:mushroom-chips-card",
+          alignment: "center",
+          chips: chips,
+        } as ChipsCardConfig)
+      }
 
-    try {
-      [chipsSection, personsSection, areasSection] = await Promise.all([
-        this.createChipsSection(),
-        this.createPersonsSection(),
-        this.createAreasSection(),
-      ]);
-    } catch (e) {
-      logMessage(lvlError, 'Error importing created sections!', e);
+      if (personCards.length) {
+        // TODO: Create the stack at this.#createPersonCards()
+        homeViewCards.push({
+          type: "horizontal-stack",
+          cards: personCards,
+        } as StackCardConfig);
+      }
+
+      if (!(Helper.strategyOptions.home_view.hidden as string[]).includes("greeting")) {
+        homeViewCards.push({
+          type: "custom:mushroom-template-card",
+          primary:
+            `{% set time = now().hour %} {% if (time >= 18) %} ${Helper.customLocalize("generic.good_evening")},{{user}}!
+             {% elif (time >= 12) %} ${Helper.customLocalize("generic.good_afternoon")}, {{user}}!
+             {% elif (time >= 5) %} ${Helper.customLocalize("generic.good_morning")}, {{user}}!
+             {% else %} ${Helper.customLocalize("generic.hello")}, {{user}}! {% endif %}`,
+          icon: "mdi:hand-wave",
+          icon_color: "orange",
+          tap_action: {
+            action: "none",
+          } as ActionConfig,
+          double_tap_action: {
+            action: "none",
+          } as ActionConfig,
+          hold_action: {
+            action: "none",
+          } as ActionConfig,
+        } as TemplateCardConfig);
+      }
+
+      // Add quick access cards.
+      if (options.quick_access_cards) {
+        homeViewCards.push(...options.quick_access_cards);
+      }
+
+      // Add area cards.
+      homeViewCards.push({
+        type: "vertical-stack",
+        cards: areaCards,
+      } as StackCardConfig);
+
+      // Add custom cards.
+      if (options.extra_cards) {
+        homeViewCards.push(...options.extra_cards);
+      }
 
       return homeViewCards;
-    }
-
-    if (chipsSection) {
-      homeViewCards.push(chipsSection);
-    }
-
-    if (personsSection) {
-      homeViewCards.push(personsSection);
-    }
-
-    // Create the greeting section.
-    if (!('greeting' in Registry.strategyOptions.home_view.hidden)) {
-      homeViewCards.push({
-        type: 'custom:mushroom-template-card',
-        primary: `{% set time = now().hour %}
-           {% if (time >= 18) %}
-             ${localize('generic.good_evening')},{{user}}!
-           {% elif (time >= 12) %}
-             ${localize('generic.good_afternoon')}, {{user}}!
-           {% elif (time >= 6) %}
-             ${localize('generic.good_morning')}, {{user}}!
-           {% else %}
-             ${localize('generic.hello')}, {{user}}! {% endif %}`,
-        icon: 'mdi:hand-wave',
-        icon_color: 'orange',
-        tap_action: {
-          action: 'none',
-        } as ActionConfig,
-        double_tap_action: {
-          action: 'none',
-        } as ActionConfig,
-        hold_action: {
-          action: 'none',
-        } as ActionConfig,
-      } as TemplateCardConfig);
-    }
-
-    if (Registry.strategyOptions.quick_access_cards) {
-      homeViewCards.push(...Registry.strategyOptions.quick_access_cards);
-    }
-
-    if (areasSection) {
-      homeViewCards.push(areasSection);
-    }
-
-    if (Registry.strategyOptions.extra_cards) {
-      homeViewCards.push(...Registry.strategyOptions.extra_cards);
-    }
-
-    return homeViewCards;
+    });
   }
 
   /**
-   * Create a chip section to include in the view
+   * Create the chips to include in the view.
    *
-   * If the section is marked as hidden in the strategy option, then the section is not created.
+   * @return {Promise<LovelaceChipConfig[]>} Promise a chip array.
    */
-  private async createChipsSection(): Promise<ChipsCardConfig | undefined> {
-    if ((Registry.strategyOptions.home_view.hidden as string[]).includes('chips')) {
-      // The section is hidden.
-      return;
+  async #createChips(): Promise<LovelaceChipConfig[]> {
+    if ((Helper.strategyOptions.home_view.hidden as string[]).includes("chips")) {
+      // The Chip section is hidden.
+
+      return [];
     }
 
-    const chipConfigurations: LovelaceChipConfig[] = [];
-    const exposedChips = Registry.getExposedNames('chip');
+    const chips: LovelaceChipConfig[] = [];
+    const chipOptions = Helper.strategyOptions.chips;
 
-    let Chip;
+    // TODO: Get domains from config.
+    const exposedChips: supportedChips[] = ["light", "fan", "cover", "switch", "climate"];
+    // Create a list of area-ids, used for switching all devices via chips
+    const areaIds = Helper.areas.map(area => area.area_id ?? "");
+
+    let chipModule;
 
     // Weather chip.
-    // FIXME: It's not possible to hide the weather chip in the configuration.
-    const weatherEntityId =
-      Registry.strategyOptions.chips.weather_entity === 'auto'
-        ? Registry.entities.find((entity) => entity.entity_id.startsWith('weather.'))?.entity_id
-        : Registry.strategyOptions.chips.weather_entity;
+    const weatherEntityId = chipOptions.weather_entity ?? Helper.entities.find(
+      (entity) => entity.entity_id.startsWith("weather.") && entity.disabled_by === null && entity.hidden_by === null,
+    )?.entity_id;
 
     if (weatherEntityId) {
       try {
-        Chip = (await import('../chips/WeatherChip')).default;
-        const weatherChip = new Chip(weatherEntityId);
+        chipModule = await import("../chips/WeatherChip");
+        const weatherChip = new chipModule.WeatherChip(weatherEntityId);
 
-        chipConfigurations.push(weatherChip.getChipConfiguration());
+        chips.push(weatherChip.getChip());
       } catch (e) {
-        logMessage(lvlError, 'Error importing chip weather!', e);
+        Helper.logError("An error occurred while creating the weather chip!", e);
       }
-    } else {
-      logMessage(lvlInfo, 'Weather chip has no entities available.');
     }
 
     // Numeric chips.
-    for (const chipName of exposedChips) {
-      if (!isSupportedChip(chipName) || !new registryFilter(Registry.entities).whereDomain(chipName).count()) {
-        logMessage(lvlInfo, `Chip for domain ${chipName} is unsupported or has no entities available.`);
+    for (let chipType of exposedChips) {
+      if (chipType !== "weather" && (chipOptions?.[(`${chipType}_count`)] ?? true)) {
+        const className = Helper.sanitizeClassName(chipType + "Chip");
+        try {
+          chipModule = await import((`../chips/${className}`));
+          const chip = new chipModule[className]();
 
-        continue;
-      }
-
-      const moduleName = sanitizeClassName(chipName + 'Chip');
-
-      try {
-        Chip = (await import(`../chips/${moduleName}`)).default;
-        const currentChip = new Chip();
-
-        chipConfigurations.push(currentChip.getChipConfiguration());
-      } catch (e) {
-        logMessage(lvlError, `Error importing chip ${chipName}!`, e);
+          chip.setTapActionTarget({area_id: areaIds});
+          chips.push(chip.getChip());
+        } catch (e) {
+          Helper.logError(`An error occurred while creating the ${chipType} chip!`, e);
+        }
       }
     }
 
-    // Add extra chips.
-    if (Registry.strategyOptions.chips?.extra_chips) {
-      chipConfigurations.push(...Registry.strategyOptions.chips.extra_chips);
+    // Extra chips.
+    if (chipOptions?.extra_chips) {
+      chips.push(...chipOptions.extra_chips);
     }
 
-    return {
-      type: 'custom:mushroom-chips-card',
-      alignment: 'center',
-      chips: chipConfigurations,
-    };
+    return chips;
   }
 
   /**
-   * Create a persons section to include in the view.
+   * Create the person cards to include in the view.
    *
-   * If the section is marked as hidden in the strategy option, then the section is not created.
+   * @return {PersonCardConfig[]} A Person Card array.
    */
-  private async createPersonsSection(): Promise<StackCardConfig | undefined> {
-    if ((Registry.strategyOptions.home_view.hidden as string[]).includes('persons')) {
-      // The section is hidden.
+  #createPersonCards(): PersonCardConfig[] {
+    if ((Helper.strategyOptions.home_view.hidden as string[]).includes("persons")) {
+      // The Person section is hidden.
 
-      return;
+      return [];
     }
 
-    const cardConfigurations: PersonCardConfig[] = [];
-    const PersonCard = (await import('../cards/PersonCard')).default;
+    const cards: PersonCardConfig[] = [];
 
-    cardConfigurations.push(
-      ...Registry.entities
-        .filter((entity) => entity.entity_id.startsWith('person.'))
-        .map((person) => new PersonCard(person).getCard()),
-    );
+    import("../cards/PersonCard").then(personModule => {
+      for (const person of Helper.entities.filter((entity) => {
+        return entity.entity_id.startsWith("person.")
+          && entity.hidden_by == null
+          && entity.disabled_by == null;
+      })) {
+        cards.push(new personModule.PersonCard(person).getCard());
+      }
+    });
 
-    return {
-      type: 'vertical-stack',
-      cards: stackHorizontal(cardConfigurations),
-    };
+    return cards;
   }
 
   /**
    * Create the area cards to include in the view.
    *
    * Area cards are grouped into two areas per row.
-   * If the section is marked as hidden in the strategy option, then the section is not created.
+   *
+   * @return {Promise<(TitleCardConfig | StackCardConfig)[]>} Promise an Area Card Section.
    */
-  private async createAreasSection(): Promise<StackCardConfig | undefined> {
-    if ((Registry.strategyOptions.home_view.hidden as string[]).includes('areas')) {
+  async #createAreaSection(): Promise<(TitleCardConfig | StackCardConfig)[]> {
+    if ((Helper.strategyOptions.home_view.hidden as string[]).includes("areas")) {
       // Areas section is hidden.
 
-      return;
+      return [];
     }
 
-    const cardConfigurations: (TemplateCardConfig | AreaCardConfig)[] = [];
+    const groupedCards: (TitleCardConfig | StackCardConfig)[] = [];
 
-    let onlyDefaultCards = true;
+    let areaCards: (TemplateCardConfig | AreaCardConfig)[] = [];
 
-    for (const area of Registry.areas) {
-      const moduleName =
-        Registry.strategyOptions.areas[area.area_id]?.type ?? Registry.strategyOptions.areas['_']?.type ?? 'default';
+    if (!(Helper.strategyOptions.home_view.hidden as string[]).includes("areasTitle")) {
+      groupedCards.push({
+          type: "custom:mushroom-title-card",
+          title: Helper.customLocalize("generic.areas"),
+        },
+      );
+    }
 
-      let AreaCard;
+    for (const [i, area] of Helper.areas.entries()) {
+      type ModuleType = typeof import("../cards/AreaCard");
 
-      onlyDefaultCards = onlyDefaultCards && moduleName === 'default';
+      let module: ModuleType;
+      let moduleName =
+            Helper.strategyOptions.areas[area.area_id]?.type ??
+            Helper.strategyOptions.areas["_"]?.type ??
+            "default";
 
+      // Load module by type in strategy options.
       try {
-        AreaCard = (await import(`../cards/${moduleName}`)).default;
+        module = await import((`../cards/${moduleName}`));
       } catch (e) {
         // Fallback to the default strategy card.
-        AreaCard = (await import('../cards/AreaCard')).default;
+        module = await import("../cards/AreaCard");
 
-        if (Registry.strategyOptions.debug && moduleName !== 'default') {
-          logMessage(lvlError, `Error importing ${moduleName}: card!`, e);
+        if (Helper.strategyOptions.debug && moduleName !== "default") {
+          console.error(e);
         }
       }
 
-      cardConfigurations.push(new AreaCard(area).getCard());
+      // Get a card for the area.
+      if (!Helper.strategyOptions.areas[area.area_id as string]?.hidden) {
+        let options = {
+          ...Helper.strategyOptions.areas["_"],
+          ...Helper.strategyOptions.areas[area.area_id],
+        };
+
+        areaCards.push(new module.AreaCard(area, options).getCard());
+      }
+
+      // Horizontally group every two area cards if all cards are created.
+      if (i === Helper.areas.length - 1) {
+        for (let i = 0; i < areaCards.length; i += 2) {
+          groupedCards.push({
+            type: "horizontal-stack",
+            cards: areaCards.slice(i, i + 2),
+          } as StackCardConfig);
+        }
+      }
     }
 
-    // FIXME: The columns are too narrow when having HASS area cards.
-    return {
-      type: 'vertical-stack',
-      title: (Registry.strategyOptions.home_view.hidden as HomeViewSections[]).includes('areasTitle')
-        ? undefined
-        : localize('generic.areas'),
-      cards: stackHorizontal(cardConfigurations, { area: 1, 'custom:mushroom-template-card': 2 }),
-    };
+    return groupedCards;
   }
 }
 
-export default HomeView;
+export {HomeView};

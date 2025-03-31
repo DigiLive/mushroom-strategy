@@ -1,56 +1,80 @@
+import {Helper} from "../Helper";
+import {ControllerCard} from "../cards/ControllerCard";
+import {AbstractView} from "./AbstractView";
+import {views} from "../types/strategy/views";
+import {cards} from "../types/strategy/cards";
+import {generic} from "../types/strategy/generic";
+import SupportedDomains = generic.SupportedDomains;
+
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
-
-import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
-import { ViewConfig } from '../types/strategy/strategy-views';
-import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
-
 /**
  * Vacuum View Class.
  *
- * Used to create a view configuration for entities of the vacuum domain.
+ * Used to create a view for entities of the vacuum domain.
+ *
+ * @class VacuumView
+ * @extends AbstractView
  */
 class VacuumView extends AbstractView {
-  /** The domain of the entities that the view is representing. */
-  static readonly domain = 'vacuum' as const;
+  /**
+   * Domain of the view's entities.
+   *
+   * @type {SupportedDomains}
+   * @static
+   * @private
+   */
+  static #domain: SupportedDomains = "vacuum";
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('vacuum.vacuums'),
-      path: 'vacuums',
-      icon: 'mdi:robot-vacuum',
-      subview: false,
-      headerCardConfiguration: {
-        iconOn: 'mdi:robot-vacuum',
-        iconOff: 'mdi:robot-vacuum-off',
-        onService: 'vacuum.start',
-        offService: 'vacuum.stop',
-      },
-    };
-  }
+  /**
+   * Default configuration of the view.
+   *
+   * @type {views.ViewConfig}
+   * @private
+   */
+  #defaultConfig: views.ViewConfig = {
+    title: Helper.customLocalize("vacuum.vacuums"),
+    path: "vacuums",
+    icon: "mdi:robot-vacuum",
+    subview: false,
+    controllerCardOptions: {
+      iconOn: "mdi:robot-vacuum",
+      iconOff: "mdi:robot-vacuum-off",
+      onService: "vacuum.start",
+      offService: "vacuum.stop",
+    },
+  };
 
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
-    return {
-      title: localize('vacuum.all_vacuums'),
-      subtitle:
-        `${Registry.getCountTemplate(VacuumView.domain, 'in', '[cleaning, returning]')} ${localize('vacuum.vacuums')} ` +
-        localize('generic.busy'),
-    };
-  }
+  /**
+   * Default configuration of the view's Controller card.
+   *
+   * @type {cards.ControllerCardOptions}
+   * @private
+   */
+  #viewControllerCardConfig: cards.ControllerCardOptions = {
+    title: Helper.customLocalize("vacuum.all_vacuums"),
+    subtitle:
+      `${Helper.getCountTemplate(VacuumView.#domain, "ne", "off")} ${Helper.customLocalize("vacuum.vacuums")} `
+      + Helper.customLocalize("generic.busy"),
+  };
 
   /**
    * Class constructor.
    *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * @param {views.ViewConfig} [options={}] Options for the view.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
+  constructor(options: views.ViewConfig = {}) {
+    super(VacuumView.#domain);
 
-    this.initializeViewConfig(VacuumView.getDefaultConfig(), customConfiguration, VacuumView.getViewHeaderCardConfig());
+    this.config = Object.assign(this.config, this.#defaultConfig, options);
+
+    // Create a Controller card to switch all entities of the domain.
+    this.viewControllerCard = new ControllerCard(
+      this.targetDomain(VacuumView.#domain),
+      {
+        ...this.#viewControllerCardConfig,
+        ...("controllerCardOptions" in this.config ? this.config.controllerCardOptions : {}) as cards.ControllerCardConfig,
+      }).createCard();
   }
 }
 
-export default VacuumView;
+export {VacuumView};

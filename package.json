@@ -1,49 +1,38 @@
 {
   "name": "mushroom-strategy",
-  "version": "2.3.0",
-  "description": "Automatically generate a dashboard of Mushroom cards.",
+  "version": "2.2.1",
+  "description": "Automatically create a dashboard using Mushroom cards",
   "keywords": [
-    "dashboard",
     "strategy",
     "mushroom"
   ],
-  "homepage": "https://github.com/DigiLive/mushroom-strategy",
-  "bugs": "https://github.com/DigiLive/mushroom-strategy/issues",
+  "homepage": "https://github.com/AalianKhan/mushroom-strategy",
+  "bugs": "https://github.com/AalianKhan/mushroom-strategy/issues",
   "license": "MIT",
   "author": {
-    "name": "Ferry Cools"
+    "name": "Aalian Khan"
   },
   "contributors": [
     {
-      "name": "Aalian Khan"
+      "name": "Ferry Cools"
     }
   ],
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/DigiLive"
-  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/DigiLive/mushroom-strategy"
+    "url": "https://github.com/AalianKhan/mushroom-strategy"
   },
   "dependencies": {
     "deepmerge": "^4"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
-    "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
-    "eslint-plugin-prettier": "^5.2.6",
-    "home-assistant-js-websocket": "^9.5.0",
-    "prettier": "^3.5.3",
-    "superstruct": "^2.0.2",
-    "ts-loader": "^9.5.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
+    "home-assistant-js-websocket": "^9",
+    "superstruct": "^1",
+    "ts-loader": "^9.5.0",
+    "ts-node": "^10",
+    "typescript": "^5",
     "version-bump-prompt": "^6",
-    "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1"
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "build-dev": "webpack --config webpack.dev.config.ts",

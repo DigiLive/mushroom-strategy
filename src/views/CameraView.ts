@@ -1,54 +1,77 @@
+import {ControllerCard} from "../cards/ControllerCard";
+import {AbstractView} from "./AbstractView";
+import {views} from "../types/strategy/views";
+import {cards} from "../types/strategy/cards";
+import {Helper} from "../Helper";
+import {generic} from "../types/strategy/generic";
+import SupportedDomains = generic.SupportedDomains;
+
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
-
-import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
-import { SupportedDomains } from '../types/strategy/strategy-generics';
-import { ViewConfig } from '../types/strategy/strategy-views';
-import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
-
 /**
  * Camera View Class.
  *
- * Used to create a view configuration for entities of the camera domain.
+ * Used to create a view for entities of the camera domain.
+ *
+ * @class CameraView
+ * @extends AbstractView
  */
 class CameraView extends AbstractView {
-  /** The domain of the entities that the view is representing. */
-  static readonly domain: SupportedDomains = 'camera' as const;
+  /**
+   * Domain of the view's entities.
+   *
+   * @type {SupportedDomains}
+   * @static
+   * @private
+   */
+  static #domain: SupportedDomains = "camera";
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('camera.cameras'),
-      path: 'cameras',
-      icon: 'mdi:cctv',
-      subview: false,
-      headerCardConfiguration: {
-        showControls: false,
-      },
-    };
-  }
+  /**
+   * Default configuration of the view.
+   *
+   * @type {views.ViewConfig}
+   * @private
+   */
+  #defaultConfig: views.ViewConfig = {
+    title: Helper.customLocalize("camera.cameras"),
+    path: "cameras",
+    icon: "mdi:cctv",
+    subview: false,
+    controllerCardOptions: {
+      showControls: false,
+    },
+  };
 
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
-    return {
-      title: localize('camera.all_cameras'),
-      subtitle:
-        `${Registry.getCountTemplate(CameraView.domain, 'ne', 'off')} ${localize('camera.cameras')} ` +
-        localize('generic.busy'),
-    };
-  }
+  /**
+   * Default configuration of the view's Controller card.
+   *
+   * @type {cards.ControllerCardOptions}
+   * @private
+   */
+  #viewControllerCardConfig: cards.ControllerCardOptions = {
+    title: Helper.customLocalize("camera.all_cameras"),
+    subtitle:
+      `${Helper.getCountTemplate(CameraView.#domain, "ne", "off")} ${Helper.customLocalize("camera.cameras")} `
+      + Helper.customLocalize("generic.busy"),
+  };
 
   /**
    * Class constructor.
    *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * @param {views.ViewConfig} [options={}] Options for the view.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
+  constructor(options: views.ViewConfig = {}) {
+    super(CameraView.#domain);
 
-    this.initializeViewConfig(CameraView.getDefaultConfig(), customConfiguration, CameraView.getViewHeaderCardConfig());
+    this.config = Object.assign(this.config, this.#defaultConfig, options);
+
+    // Create a Controller card to switch all entities of the domain.
+    this.viewControllerCard = new ControllerCard(
+      {},
+      {
+        ...this.#viewControllerCardConfig,
+        ...("controllerCardOptions" in this.config ? this.config.controllerCardOptions : {}) as cards.ControllerCardConfig,
+      }).createCard();
   }
 }
 
-export default CameraView;
+export {CameraView};
