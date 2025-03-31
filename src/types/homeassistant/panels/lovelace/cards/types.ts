@@ -1,12 +1,26 @@
 import {ActionConfig, LovelaceCardConfig} from "../../../data/lovelace";
 
 /**
+ * Home Assistant Area Card Config.
+ *
+ * @see https://www.home-assistant.io/dashboards/area/
+ */
+export interface AreaCardConfig extends LovelaceCardConfig {
+  area: string;
+  navigation_path?: string;
+  show_camera?: boolean;
+  camera_view?: "live" | "auto";
+  aspect_ratio?: string;
+}
+
+/**
  * Home Assistant Picture Entity Config.
  *
  * @property {string} entity An entity_id used for the picture.
  * @property {string} [name] Overwrite entity name.
  * @property {string} [image] URL of an image.
- * @property {string} [camera_image] Camera entity_id to use. (not required if entity is already a camera-entity).
+ * @property {string} [camera_image] Camera entity_id to use.
+ *                                   (not required if the entity is already a camera-entity).
  * @property {string} [camera_view=auto] “live” will show the live view if stream is enabled.
  * @property {Record<string, unknown>} [state_image] Map entity states to images (state: image URL).
  * @property {string[]} [state_filter] State-based CSS filters.
@@ -38,4 +52,18 @@ export interface PictureEntityCardConfig extends LovelaceCardConfig {
   show_name?: boolean;
   show_state?: boolean;
   theme?: string;
+}
+
+/**
+ * Home Assistant Stack Card Config.
+ *
+ * @property {string} type The stack type.
+ * @property {Object[]} cards The content of the stack.
+ *
+ * @see https://www.home-assistant.io/dashboards/horizontal-stack/
+ * @see https://www.home-assistant.io/dashboards/vertical-stack/
+ */
+export interface StackCardConfig extends LovelaceCardConfig {
+  cards: LovelaceCardConfig[];
+  title?: string;
 }

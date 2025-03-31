@@ -8,6 +8,14 @@ import {generic} from "./types/strategy/generic";
 import setupCustomLocalize from "./localize";
 import {applyEntityCategoryFilters} from "./utillties/filters";
 import StrategyArea = generic.StrategyArea;
+import ViewConfig = generic.StrategyViewConfig;
+import SupportedDomains = generic.SupportedDomains;
+import supportedViews = generic.SupportedViews;
+import isSortable = generic.isSortable;
+import AllDomainsConfig = generic.AllDomainsConfig;
+import SingleDomainConfig = generic.SingleDomainConfig;
+import isSupportedView = generic.isSupportedView;
+import isSupportedDomain = generic.isSupportedDomain;
 
 /**
  * Helper Class
@@ -40,7 +48,7 @@ class Helper {
   static #areas: StrategyArea[] = [];
 
   /**
-   * An array of state entities from Home Assistant's Hass object.
+   * An array of state entities from Home Assistant's Hass-object.
    *
    * @type {HassEntities}
    * @private
@@ -137,11 +145,11 @@ class Helper {
   /**
    * Initialize this module.
    *
-   * @param {generic.DashBoardInfo} info Strategy information object.
+   * @param {generic.DashboardInfo} info Strategy information object.
    * @returns {Promise<void>}
    * @static
    */
-  static async initialize(info: generic.DashBoardInfo): Promise<void> {
+  static async initialize(info: generic.DashboardInfo): Promise<void> {
     // Initialize properties.
     this.customLocalize = setupCustomLocalize(info.hass);
 
@@ -191,16 +199,27 @@ class Helper {
     // Sort custom and default views of the strategy options by order first and then by title.
     this.#strategyOptions.views = Object.fromEntries(
       Object.entries(this.#strategyOptions.views).sort(([, a], [, b]) => {
-        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? "undefined").localeCompare(b.title ?? "undefined");
+        const viewA = a as ViewConfig;
+        const viewB = b as ViewConfig;
+
+        return (viewA.order ?? Infinity) - (viewB.order ?? Infinity)
+          || (viewA.title ?? "undefined").localeCompare(viewB.title ?? "undefined");
       }),
-    );
+    ) as Record<supportedViews, ViewConfig>;
 
     // Sort custom and default domains of the strategy options by order first and then by title.
     this.#strategyOptions.domains = Object.fromEntries(
       Object.entries(this.#strategyOptions.domains).sort(([, a], [, b]) => {
-        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? "undefined").localeCompare(b.title ?? "undefined");
+        if (isSortable(a) && isSortable(b)) {
+          const orderA = ('order' in a) ? a.order ?? Infinity : Infinity;
+          const orderB = ('order' in b) ? b.order ?? Infinity : Infinity;
+
+          return orderA - orderB || (a.title ?? "undefined").localeCompare(b.title ?? "undefined");
+        }
+
+        return 0;
       }),
-    );
+    ) as { [K in SupportedDomains]: K extends "_" ? AllDomainsConfig : SingleDomainConfig; };
 
     this.#initialized = true;
   }
@@ -228,7 +247,8 @@ class Helper {
    * @return {string} The template string.
    * @static
    */
-  static getCountTemplate(domain: string, operator: string, value: string): string {
+  static getCountTemplate(domain: SupportedDomains, operator: string, value: string): string {
+    // noinspection JSMismatchedCollectionQueryUpdate
     /**
      * Array of entity state-entries, filtered by domain.
      *
@@ -390,27 +410,31 @@ class Helper {
   /**
    * Get the ids of the views which aren't set to hidden in the strategy options.
    *
-   * @return {string[]} An array of view ids.
+   * @return {SupportedViews[]} An array of view ids.
    */
-  static getExposedViewIds(): string[] {
+  static getExposedViewIds(): supportedViews[] {
     if (!this.isInitialized()) {
       console.warn("Helper class should be initialized before calling this method!");
     }
 
-    return this.#getObjectKeysByPropertyValue(this.#strategyOptions.views, "hidden", false);
+    const ids = this.#getObjectKeysByPropertyValue(this.#strategyOptions.views, "hidden", false);
+
+    return ids.filter(isSupportedView);
   }
 
   /**
    * Get the ids of the domain ids which aren't set to hidden in the strategy options.
    *
-   * @return {string[]} An array of domain ids.
+   * @return {SupportedDomains[]} An array of domain ids.
    */
-  static getExposedDomainIds(): string[] {
+  static getExposedDomainIds(): SupportedDomains[] {
     if (!this.isInitialized()) {
       console.warn("Helper class should be initialized before calling this method!");
     }
 
-    return this.#getObjectKeysByPropertyValue(this.#strategyOptions.domains, "hidden", false);
+    const ids = this.#getObjectKeysByPropertyValue(this.#strategyOptions.domains, "hidden", false);
+
+    return ids.filter(isSupportedDomain);
   }
 
   /**

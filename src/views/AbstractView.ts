@@ -1,12 +1,15 @@
 import {Helper} from "../Helper";
 import {ControllerCard} from "../cards/ControllerCard";
-import {StackCardConfig} from "../types/homeassistant/lovelace/cards/types";
-import {LovelaceCardConfig, LovelaceViewConfig} from "../types/homeassistant/data/lovelace";
+import {LovelaceCardConfig} from "../types/homeassistant/data/lovelace";
 import {cards} from "../types/strategy/cards";
 import {TitleCardConfig} from "../types/lovelace-mushroom/cards/title-card-config";
 import {HassServiceTarget} from "home-assistant-js-websocket";
 import {applyEntityCategoryFilters} from "../utillties/filters";
+import {LovelaceViewConfig} from "../types/homeassistant/data/lovelace/config/view";
+import {StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
+import {generic} from "../types/strategy/generic";
 import abstractCardConfig = cards.AbstractCardConfig;
+import SupportedDomains = generic.SupportedDomains;
 
 /**
  * Abstract View Class.
@@ -40,20 +43,21 @@ abstract class AbstractView {
   /**
    * The domain of which we operate the devices.
    *
+   * @type {SupportedDomains | "home"}
    * @private
    * @readonly
    */
-  readonly #domain: string;
+  readonly #domain: SupportedDomains | "home";
 
   /**
    * Class constructor.
    *
-   * @param {string} domain The domain which the view is representing.
+   * @param {SupportedDomains} domain The domain which the view is representing.
    *
    * @throws {Error} If trying to instantiate this class.
    * @throws {Error} If the Helper module isn't initialized.
    */
-  protected constructor(domain: string) {
+  protected constructor(domain: SupportedDomains | "home") {
     if (!Helper.isInitialized()) {
       throw new Error("The Helper module must be initialized before using this one.");
     }
@@ -67,6 +71,13 @@ abstract class AbstractView {
    * @return {Promise<(StackCardConfig | TitleCardConfig)[]>} An array of card objects.
    */
   async createViewCards(): Promise<(StackCardConfig | TitleCardConfig)[]> {
+    if (this.#domain === "home") {
+      // The home domain should override this method because it hasn't entities on its own.
+      // The method override creates its own cards to show at the home view.
+
+      return [];
+    }
+
     const viewCards: LovelaceCardConfig[] = [];
 
     // Create cards for each area.

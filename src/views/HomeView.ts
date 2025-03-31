@@ -3,11 +3,13 @@ import {AbstractView} from "./AbstractView";
 import {views} from "../types/strategy/views";
 import {LovelaceChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
 import {ChipsCardConfig} from "../types/lovelace-mushroom/cards/chips-card";
-import {AreaCardConfig, StackCardConfig} from "../types/homeassistant/lovelace/cards/types";
 import {TemplateCardConfig} from "../types/lovelace-mushroom/cards/template-card-config";
 import {ActionConfig} from "../types/homeassistant/data/lovelace";
 import {TitleCardConfig} from "../types/lovelace-mushroom/cards/title-card-config";
 import {PersonCardConfig} from "../types/lovelace-mushroom/cards/person-card-config";
+import {AreaCardConfig, StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
+import {generic} from "../types/strategy/generic";
+import supportedChips = generic.SupportedChips;
 
 
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
@@ -76,27 +78,26 @@ class HomeView extends AbstractView {
         } as StackCardConfig);
       }
 
-      if (!Helper.strategyOptions.home_view.hidden.includes("greeting")) {
-        const greeting =
-                homeViewCards.push({
-                  type: "custom:mushroom-template-card",
-                  primary:
-                    `{% set time = now().hour %} {% if (time >= 18) %} ${Helper.customLocalize("generic.good_evening")},{{user}}!
-                     {% elif (time >= 12) %} ${Helper.customLocalize("generic.good_afternoon")}, {{user}}!
-                     {% elif (time >= 5) %} ${Helper.customLocalize("generic.good_morning")}, {{user}}!
-                     {% else %} ${Helper.customLocalize("generic.hello")}, {{user}}! {% endif %}`,
-                  icon: "mdi:hand-wave",
-                  icon_color: "orange",
-                  tap_action: {
-                    action: "none",
-                  } as ActionConfig,
-                  double_tap_action: {
-                    action: "none",
-                  } as ActionConfig,
-                  hold_action: {
-                    action: "none",
-                  } as ActionConfig,
-                } as TemplateCardConfig);
+      if (!(Helper.strategyOptions.home_view.hidden as string[]).includes("greeting")) {
+        homeViewCards.push({
+          type: "custom:mushroom-template-card",
+          primary:
+            `{% set time = now().hour %} {% if (time >= 18) %} ${Helper.customLocalize("generic.good_evening")},{{user}}!
+             {% elif (time >= 12) %} ${Helper.customLocalize("generic.good_afternoon")}, {{user}}!
+             {% elif (time >= 5) %} ${Helper.customLocalize("generic.good_morning")}, {{user}}!
+             {% else %} ${Helper.customLocalize("generic.hello")}, {{user}}! {% endif %}`,
+          icon: "mdi:hand-wave",
+          icon_color: "orange",
+          tap_action: {
+            action: "none",
+          } as ActionConfig,
+          double_tap_action: {
+            action: "none",
+          } as ActionConfig,
+          hold_action: {
+            action: "none",
+          } as ActionConfig,
+        } as TemplateCardConfig);
       }
 
       // Add quick access cards.
@@ -125,8 +126,8 @@ class HomeView extends AbstractView {
    * @return {Promise<LovelaceChipConfig[]>} Promise a chip array.
    */
   async #createChips(): Promise<LovelaceChipConfig[]> {
-    if (Helper.strategyOptions.home_view.hidden.includes("chips")) {
-      // Chips section is hidden.
+    if ((Helper.strategyOptions.home_view.hidden as string[]).includes("chips")) {
+      // The Chip section is hidden.
 
       return [];
     }
@@ -135,14 +136,14 @@ class HomeView extends AbstractView {
     const chipOptions = Helper.strategyOptions.chips;
 
     // TODO: Get domains from config.
-    const exposedChips = ["light", "fan", "cover", "switch", "climate"];
+    const exposedChips: supportedChips[] = ["light", "fan", "cover", "switch", "climate"];
     // Create a list of area-ids, used for switching all devices via chips
     const areaIds = Helper.areas.map(area => area.area_id ?? "");
 
     let chipModule;
 
     // Weather chip.
-    const weatherEntityId = chipOptions?.weather_entity ?? Helper.entities.find(
+    const weatherEntityId = chipOptions.weather_entity ?? Helper.entities.find(
       (entity) => entity.entity_id.startsWith("weather.") && entity.disabled_by === null && entity.hidden_by === null,
     )?.entity_id;
 
@@ -159,7 +160,7 @@ class HomeView extends AbstractView {
 
     // Numeric chips.
     for (let chipType of exposedChips) {
-      if (chipOptions?.[`${chipType}_count` as string] ?? true) {
+      if (chipType !== "weather" && (chipOptions?.[(`${chipType}_count`)] ?? true)) {
         const className = Helper.sanitizeClassName(chipType + "Chip");
         try {
           chipModule = await import((`../chips/${className}`));
@@ -187,8 +188,8 @@ class HomeView extends AbstractView {
    * @return {PersonCardConfig[]} A Person Card array.
    */
   #createPersonCards(): PersonCardConfig[] {
-    if (Helper.strategyOptions.home_view.hidden.includes("persons")) {
-      // Person section is hidden.
+    if ((Helper.strategyOptions.home_view.hidden as string[]).includes("persons")) {
+      // The Person section is hidden.
 
       return [];
     }
@@ -216,7 +217,7 @@ class HomeView extends AbstractView {
    * @return {Promise<(TitleCardConfig | StackCardConfig)[]>} Promise an Area Card Section.
    */
   async #createAreaSection(): Promise<(TitleCardConfig | StackCardConfig)[]> {
-    if (Helper.strategyOptions.home_view.hidden.includes("areas")) {
+    if ((Helper.strategyOptions.home_view.hidden as string[]).includes("areas")) {
       // Areas section is hidden.
 
       return [];
@@ -226,7 +227,7 @@ class HomeView extends AbstractView {
 
     let areaCards: (TemplateCardConfig | AreaCardConfig)[] = [];
 
-    if (!Helper.strategyOptions.home_view.hidden.includes("areasTitle")) {
+    if (!(Helper.strategyOptions.home_view.hidden as string[]).includes("areasTitle")) {
       groupedCards.push({
           type: "custom:mushroom-title-card",
           title: Helper.customLocalize("generic.areas"),

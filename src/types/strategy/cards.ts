@@ -5,11 +5,10 @@ import {AppearanceSharedConfig} from "../lovelace-mushroom/shared/config/appeara
 import {ActionsSharedConfig} from "../lovelace-mushroom/shared/config/actions-config";
 import {TemplateCardConfig} from "../lovelace-mushroom/cards/template-card-config";
 import {EntityCardConfig} from "../lovelace-mushroom/cards/entity-card-config";
-import {PictureEntityCardConfig} from "../homeassistant/panels/lovelave/cards/types";
+import {AreaCardConfig, PictureEntityCardConfig} from "../homeassistant/panels/lovelace/cards/types";
 import {ClimateCardConfig} from "../lovelace-mushroom/cards/climate-card-config";
 import {CoverCardConfig} from "../lovelace-mushroom/cards/cover-card-config";
 import {FanCardConfig} from "../lovelace-mushroom/cards/fan-card-config";
-import {AreaCardConfig} from "../homeassistant/lovelace/cards/types";
 import {LightCardConfig} from "../lovelace-mushroom/cards/light-card-config";
 import {LockCardConfig} from "../lovelace-mushroom/cards/lock-card-config";
 import {MediaPlayerCardConfig} from "../lovelace-mushroom/cards/media-player-card-config";
