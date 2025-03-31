@@ -1,13 +1,18 @@
 import {Helper} from "./Helper";
 import {SensorCard} from "./cards/SensorCard";
 import {ControllerCard} from "./cards/ControllerCard";
-import {generic} from "./types/strategy/generic";
-import {LovelaceCardConfig, LovelaceConfig, LovelaceViewConfig} from "./types/homeassistant/data/lovelace";
-import {StackCardConfig} from "./types/homeassistant/lovelace/cards/types";
 import {EntityCardConfig} from "./types/lovelace-mushroom/cards/entity-card-config";
 import {HassServiceTarget} from "home-assistant-js-websocket";
 import {applyEntityCategoryFilters} from "./utillties/filters";
+import {LovelaceConfig} from "./types/homeassistant/data/lovelace/config/types";
+import {LovelaceViewConfig, LovelaceViewRawConfig} from "./types/homeassistant/data/lovelace/config/view";
+import {LovelaceCardConfig} from "./types/homeassistant/data/lovelace";
+import {StackCardConfig} from "./types/homeassistant/panels/lovelace/cards/types";
+import {generic} from "./types/strategy/generic";
+import {views} from "./types/strategy/views";
+import ViewConfig = views.ViewConfig;
 import StrategyArea = generic.StrategyArea;
+import SupportedDomains = generic.SupportedDomains;
 
 /**
  * Mushroom Dashboard Strategy.<br>
@@ -28,14 +33,14 @@ class MushroomStrategy extends HTMLTemplateElement {
    *
    * Called when opening a dashboard.
    *
-   * @param {generic.DashBoardInfo} info Dashboard strategy information object.
+   * @param {generic.DashboardInfo} info Dashboard strategy information object.
    * @return {Promise<LovelaceConfig>}
    */
-  static async generateDashboard(info: generic.DashBoardInfo): Promise<LovelaceConfig> {
+  static async generateDashboard(info: generic.DashboardInfo): Promise<LovelaceConfig> {
     await Helper.initialize(info);
 
     // Create views.
-    const views: LovelaceViewConfig[] = info.config?.views ?? [];
+    const views: LovelaceViewRawConfig[] = [];
 
     let viewModule;
 
@@ -44,7 +49,7 @@ class MushroomStrategy extends HTMLTemplateElement {
       try {
         const viewType = Helper.sanitizeClassName(viewId + "View");
         viewModule = await import(`./views/${viewType}`);
-        const view: LovelaceViewConfig = await new viewModule[viewType](Helper.strategyOptions.views[viewId]).getView();
+        const view: ViewConfig = await new viewModule[viewType](Helper.strategyOptions.views[viewId]).getView();
 
         if (view.cards?.length) {
           views.push(view);
@@ -216,7 +221,7 @@ class MushroomStrategy extends HTMLTemplateElement {
       // Create cards for any other domain.
       // Collect entities of the current area and unexposed domains.
       let miscellaneousEntities = Helper.getDeviceEntities(area).filter(
-        entity => !exposedDomainIds.includes(entity.entity_id.split(".", 1)[0])
+        entity => !exposedDomainIds.includes(entity.entity_id.split(".", 1)[0] as SupportedDomains)
       );
 
       // Exclude hidden Config and Diagnostic entities.
@@ -234,7 +239,6 @@ class MushroomStrategy extends HTMLTemplateElement {
 
             for (const entity of miscellaneousEntities) {
               let cardOptions = Helper.strategyOptions.card_options?.[entity.entity_id];
-              let deviceOptions = Helper.strategyOptions.card_options?.[entity.device_id ?? "null"];
 
               miscellaneousCards.push(new cardModule.MiscellaneousCard(entity, cardOptions).getCard());
             }
@@ -261,7 +265,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
 customElements.define("ll-strategy-mushroom-strategy", MushroomStrategy);
 
-const version = "v2.2.0";
+const version = "v2.2.1";
 console.info(
   "%c Mushroom Strategy %c ".concat(version, " "),
   "color: white; background: coral; font-weight: 700;", "color: coral; background: white; font-weight: 700;"

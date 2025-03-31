@@ -3,6 +3,8 @@ import {ControllerCard} from "../cards/ControllerCard";
 import {AbstractView} from "./AbstractView";
 import {views} from "../types/strategy/views";
 import {cards} from "../types/strategy/cards";
+import {generic} from "../types/strategy/generic";
+import SupportedDomains = generic.SupportedDomains;
 
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 /**
@@ -17,11 +19,11 @@ class CoverView extends AbstractView {
   /**
    * Domain of the view's entities.
    *
-   * @type {string}
+   * @type {SupportedDomains}
    * @static
    * @private
    */
-  static #domain: string = "cover";
+  static #domain: SupportedDomains = "cover";
 
   /**
    * Default configuration of the view.

@@ -1,5 +1,7 @@
 import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
 import {Helper} from "../Helper";
+import {generic} from "../types/strategy/generic";
+import SupportedDomains = generic.SupportedDomains;
 
 /**
  * Filter an array of entities by property/value pair
@@ -20,7 +22,7 @@ export function filterEntitiesByPropertyValue(
   return entities.filter(entity => exclude ? entity[property] !== value : entity[property] === value);
 }
 
-export function applyEntityCategoryFilters(entities: EntityRegistryEntry[], domain: string) {
+export function applyEntityCategoryFilters(entities: EntityRegistryEntry[], domain: SupportedDomains) {
   if (!Helper.isInitialized()) {
     throw new Error("The Helper module must be initialized before using this one.");
   }
@@ -48,5 +50,15 @@ export function applyEntityCategoryFilters(entities: EntityRegistryEntry[], doma
 
   return entities;
 }
+
+/*export function filterHiddenEntities(entities: EntityRegistryEntry[]) {
+  entities = entities.filter(
+    function (entity) {
+      return entity.hidden_by === null // entity is not hidden by HASS settings.
+      && entity.disabled_by === null // entity is not disabled by HASS settings.
+      && Helper.strategyOptions.card_options.[entity.entity_id] // entity is not hidden by strategy options.
+    }
+  );
+}*/
 
 

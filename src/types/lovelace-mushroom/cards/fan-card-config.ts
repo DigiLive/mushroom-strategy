@@ -9,6 +9,7 @@ import {AppearanceSharedConfig} from "../shared/config/appearance-config";
  * @property {boolean} [icon_animation=false] Animate the icon when fan is on.
  * @property {boolean} [show_percentage_control=false] Show a slider to control speed.
  * @property {boolean} [show_oscillate_control=false] Show a button to control oscillation.
+ * @property {boolean} [show_direction_control=false] Show a button to control the direction.
  * @property {boolean} [icon_animation=false] Animate the icon when fan is on.
  *
  * @see https://github.com/piitaya/lovelace-mushroom/blob/main/docs/cards/fan.md
@@ -20,5 +21,6 @@ export type FanCardConfig = LovelaceCardConfig &
   icon_animation?: boolean;
   show_percentage_control?: boolean;
   show_oscillate_control?: boolean;
+  show_direction_control?: boolean;
   collapsible_controls?: boolean;
 };

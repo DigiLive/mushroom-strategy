@@ -1,6 +1,8 @@
 import {Helper} from "../Helper";
 import {AbstractView} from "./AbstractView";
 import {views} from "../types/strategy/views";
+import {generic} from "../types/strategy/generic";
+import SupportedDomains = generic.SupportedDomains;
 
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 /**
@@ -15,11 +17,11 @@ class SceneView extends AbstractView {
   /**
    * Domain of the view's entities.
    *
-   * @type {string}
+   * @type {SupportedDomains}
    * @static
    * @private
    */
-  static #domain: string = "scene";
+  static #domain: SupportedDomains = "scene";
 
   /**
    * Default configuration of the view.

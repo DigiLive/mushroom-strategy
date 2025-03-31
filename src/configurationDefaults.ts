@@ -8,24 +8,69 @@ export const getConfigurationDefaults = (localize: Function): StrategyDefaults =
   return {
     areas: {
       undisclosed: {
+        aliases: [],
         area_id: "undisclosed",
+        created_at: 0,
         floor_id: null,
-        name: "Undisclosed",
-        picture: null,
+        hidden: false,
+        humidity_entity_id: null,
         icon: "mdi:floor-plan",
         labels: [],
-        aliases: [],
-        hidden: false,
+        modified_at: 0,
+        name: "Undisclosed",
+        picture: null,
+        temperature_entity_id: null,
       }
     },
+    card_options: {},
+    chips: {},
     debug: false,
     domains: {
       _: {
         hide_config_entities: true,
         hide_diagnostic_entities: true,
       },
+      binary_sensor: {
+        title: `${localize("sensor.binary")} ` + localize("sensor.sensors"),
+        showControls: false,
+        hidden: false,
+      },
+      camera: {
+        title: localize("camera.cameras"),
+        showControls: false,
+        hidden: false,
+      },
+      climate: {
+        title: localize("climate.climates"),
+        showControls: false,
+        hidden: false,
+      },
+      cover: {
+        title: localize("cover.covers"),
+        showControls: true,
+        iconOn: "mdi:arrow-up",
+        iconOff: "mdi:arrow-down",
+        onService: "cover.open_cover",
+        offService: "cover.close_cover",
+        hidden: false,
+      },
       default: {
         title: localize("generic.miscellaneous"),
+        showControls: false,
+        hidden: false,
+      },
+      fan: {
+        title: localize("fan.fans"),
+        showControls: true,
+        iconOn: "mdi:fan",
+        iconOff: "mdi:fan-off",
+        onService: "fan.turn_on",
+        offService: "fan.turn_off",
+        hidden: false,
+      },
+
+      input_select: {
+        title: localize("input_select.input_selects"),
         showControls: false,
         hidden: false,
       },
@@ -38,28 +83,35 @@ export const getConfigurationDefaults = (localize: Function): StrategyDefaults =
         offService: "light.turn_off",
         hidden: false,
       },
+      lock: {
+        title: localize("lock.locks"),
+        showControls: false,
+        hidden: false,
+      },
+      media_player: {
+        title: localize("media_player.media_players"),
+        showControls: false,
+        hidden: false,
+      },
+      number: {
+        title: localize("generic.numbers"),
+        showControls: false,
+        hidden: false,
+      },
       scene: {
         title: localize("scene.scenes"),
         showControls: false,
         onService: "scene.turn_on",
         hidden: false,
       },
-      fan: {
-        title: localize("fan.fans"),
-        showControls: true,
-        iconOn: "mdi:fan",
-        iconOff: "mdi:fan-off",
-        onService: "fan.turn_on",
-        offService: "fan.turn_off",
+      select: {
+        title: localize("select.selects"),
+        showControls: false,
         hidden: false,
       },
-      cover: {
-        title: localize("cover.covers"),
-        showControls: true,
-        iconOn: "mdi:arrow-up",
-        iconOff: "mdi:arrow-down",
-        onService: "cover.open_cover",
-        offService: "cover.close_cover",
+      sensor: {
+        title: localize("sensor.sensors"),
+        showControls: false,
         hidden: false,
       },
       switch: {
@@ -71,61 +123,34 @@ export const getConfigurationDefaults = (localize: Function): StrategyDefaults =
         offService: "switch.turn_off",
         hidden: false,
       },
-      camera: {
-        title: localize("camera.cameras"),
-        showControls: false,
-        hidden: false,
-      },
-      lock: {
-        title: localize("lock.locks"),
-        showControls: false,
-        hidden: false,
-      },
-      climate: {
-        title: localize("climate.climates"),
-        showControls: false,
-        hidden: false,
-      },
-      media_player: {
-        title: localize("media_player.media_players"),
-        showControls: false,
-        hidden: false,
-      },
-      sensor: {
-        title: localize("sensor.sensors"),
-        showControls: false,
-        hidden: false,
-      },
-      binary_sensor: {
-        title: `${localize("sensor.binary")} ` + localize("sensor.sensors"),
-        showControls: false,
-        hidden: false,
-      },
-      number: {
-        title: localize("generic.numbers"),
-        showControls: false,
-        hidden: false,
-      },
       vacuum: {
         title: localize("vacuum.vacuums"),
         showControls: true,
         hidden: false,
       },
-      select: {
-        title: localize("select.selects"),
-        showControls: false,
-        hidden: false,
-      },
-      input_select: {
-        title: localize("input_select.input_selects"),
-        showControls: false,
-        hidden: false,
-      },
     },
+    extra_cards: [],
+    extra_views: [],
     home_view: {
       hidden: [],
     },
     views: {
+      camera: {
+        order: 7,
+        hidden: false,
+      },
+      climate: {
+        order: 6,
+        hidden: false,
+      },
+      cover: {
+        order: 4,
+        hidden: false,
+      },
+      fan: {
+        order: 3,
+        hidden: false,
+      },
       home: {
         order: 1,
         hidden: false,
@@ -134,34 +159,19 @@ export const getConfigurationDefaults = (localize: Function): StrategyDefaults =
         order: 2,
         hidden: false,
       },
-      fan: {
-        order: 3,
-        hidden: false,
-      },
-      cover: {
-        order: 4,
+      scene: {
+        order: 9,
         hidden: false,
       },
       switch: {
         order: 5,
         hidden: false,
       },
-      climate: {
-        order: 6,
-        hidden: false,
-      },
-      camera: {
-        order: 7,
-        hidden: false,
-      },
       vacuum: {
         order: 8,
         hidden: false,
       },
-      scene: {
-        order: 9,
-        hidden: false,
-      },
-    }
+    },
+    quick_access_cards: []
   };
 };

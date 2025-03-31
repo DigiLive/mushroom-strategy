@@ -9,11 +9,3 @@ export const HVAC_MODES = [
 ] as const;
 
 export type HvacMode = (typeof HVAC_MODES)[number];
-
-HVAC_MODES.reduce(
-  (order, mode, index) => {
-    order[mode] = index;
-    return order;
-  },
-  {} as Record<HvacMode, number>
-);

@@ -5,13 +5,16 @@ type EntityCategory = "config" | "diagnostic";
 export interface EntityRegistryDisplayEntry {
   entity_id: string;
   name?: string;
+  icon?: string;
   device_id?: string;
   area_id?: string;
+  labels: string[];
   hidden?: boolean;
   entity_category?: EntityCategory;
   translation_key?: string;
   platform?: string;
   display_precision?: number;
+  has_entity_name?: boolean;
 }
 
 /**
@@ -23,8 +26,10 @@ export interface EntityRegistryDisplayEntry {
  * @property {string | null} icon
  * @property {string | null} platform
  * @property {string | null} config_entry_id
+ * @property {string | null} config_subentry_id
  * @property {string | null} device_id The id of the device to which this entity is linked.
  * @property {string | null} area_id The id of the area to which this entity is linked.
+ * @property {string[]} labels
  * @property {string | null} disabled_by Indicates by what this entity is disabled.
  * @property {Object} hidden_by Indicates by what this entity is hidden.
  * @property {EntityCategory | null} entity_category
@@ -33,6 +38,7 @@ export interface EntityRegistryDisplayEntry {
  * @property {string} unique_id
  * @property {string} [translation_key]
  * @property {EntityRegistryOptions | null} options
+ * @property {Record<string, string>} categories
  */
 export interface EntityRegistryEntry {
   id: string;
@@ -41,8 +47,10 @@ export interface EntityRegistryEntry {
   icon: string | null;
   platform: string;
   config_entry_id: string | null;
+  config_subentry_id: string | null;
   device_id: string | null;
   area_id: string | null;
+  labels: string[];
   disabled_by: "user" | "device" | "integration" | "config_entry" | null;
   hidden_by: Exclude<EntityRegistryEntry["disabled_by"], "config_entry">;
   entity_category: EntityCategory | null;
@@ -51,6 +59,7 @@ export interface EntityRegistryEntry {
   unique_id: string;
   translation_key?: string;
   options: EntityRegistryOptions | null;
+  categories: Record<string, string>;
 }
 
 export interface SensorEntityOptions {
@@ -71,6 +80,10 @@ export interface LockEntityOptions {
   default_code?: string | null;
 }
 
+export interface AlarmControlPanelEntityOptions {
+  default_code?: string | null;
+}
+
 export interface WeatherEntityOptions {
   precipitation_unit?: string | null;
   pressure_unit?: string | null;
@@ -81,11 +94,13 @@ export interface WeatherEntityOptions {
 
 export interface SwitchAsXEntityOptions {
   entity_id: string;
+  invert: boolean;
 }
 
 export interface EntityRegistryOptions {
   number?: NumberEntityOptions;
   sensor?: SensorEntityOptions;
+  alarm_control_panel?: AlarmControlPanelEntityOptions;
   lock?: LockEntityOptions;
   weather?: WeatherEntityOptions;
   light?: LightEntityOptions;

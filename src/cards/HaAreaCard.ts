@@ -1,7 +1,7 @@
 import {AbstractCard} from "./AbstractCard";
 import {cards} from "../types/strategy/cards";
 import {AreaRegistryEntry} from "../types/homeassistant/data/area_registry";
-import {AreaCardConfig} from "../types/homeassistant/lovelace/cards/types";
+import {AreaCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
 
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 /**

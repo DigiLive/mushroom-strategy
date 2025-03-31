@@ -1,54 +1,17 @@
 import {HassServiceTarget} from "home-assistant-js-websocket";
-
-export type LovelaceStrategyConfig = {
-  type: string;
-  [key: string]: any;
-};
-
-export interface LovelaceConfig {
-  title?: string;
-  strategy?: LovelaceStrategyConfig;
-  views: LovelaceViewConfig[];
-  background?: string;
-}
-
-/**
- * View Config.
- *
- * @see https://www.home-assistant.io/dashboards/views/
- */
-export interface LovelaceViewConfig {
-  index?: number;
-  title?: string;
-  type?: string;
-  strategy?: LovelaceStrategyConfig;
-  badges?: Array<string | LovelaceBadgeConfig>;
-  cards?: LovelaceCardConfig[];
-  path?: string;
-  icon?: string;
-  theme?: string;
-  panel?: boolean;
-  background?: string;
-  visible?: boolean | ShowViewConfig[];
-  subview?: boolean;
-  back_path?: string;
-}
-
-export interface ShowViewConfig {
-  user?: string;
-}
-
-export interface LovelaceBadgeConfig {
-  type?: string;
-  [key: string]: any;
-}
+import {LovelaceGridOptions, LovelaceLayoutOptions} from "../panels/lovelace/types";
+import {Condition} from "../panels/common/validate-condition";
 
 export interface LovelaceCardConfig {
   index?: number;
   view_index?: number;
   view_layout?: any;
+  /** @deprecated Use `grid_options` instead */
+  layout_options?: LovelaceLayoutOptions;
+  grid_options?: LovelaceGridOptions;
   type: string;
   [key: string]: any;
+  visibility?: Condition[];
 }
 
 export interface ToggleActionConfig extends BaseActionConfig {

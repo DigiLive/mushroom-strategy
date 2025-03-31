@@ -1,7 +1,7 @@
 import {cards} from "../types/strategy/cards";
-import {StackCardConfig} from "../types/homeassistant/lovelace/cards/types";
 import {LovelaceCardConfig} from "../types/homeassistant/data/lovelace";
 import {HassServiceTarget} from "home-assistant-js-websocket";
+import {StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
 
 /**
  * Controller Card class.
