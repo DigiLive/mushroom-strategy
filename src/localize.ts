@@ -1,8 +1,8 @@
-import {HomeAssistant} from "./types/homeassistant/types";
+import * as de from "./translations/de.json";
 import * as en from "./translations/en.json";
 import * as es from "./translations/es.json";
 import * as nl from "./translations/nl.json";
-import * as de from "./translations/de.json";
+import {HomeAssistant} from "./types/homeassistant/types";
 
 /* Registry of currently supported languages */
 const languages: Record<string, unknown> = {
@@ -21,7 +21,7 @@ const DEFAULT_LANG = "en";
  * @param {string} key The keyword to look for in object notation (E.g. generic.home).
  * @param {string} lang The language to get the string from (E.g. en).
  *
- * @return {string | undefined} The requested string or undefined if the keyword doesn't exist/on error.
+ * @returns {string | undefined} The requested string or undefined if the keyword doesn't exist/on error.
  */
 function getTranslatedString(key: string, lang: string): string | undefined {
   try {
@@ -46,7 +46,7 @@ function getTranslatedString(key: string, lang: string): string | undefined {
  * If the keyword is undefined, or on error, the keyword itself is returned.
  *
  * @param {HomeAssistant} hass The Home Assistant object.
- * @return {(key: string) => string} The function to call for translating strings.
+ * @returns {(key: string) => string} The function to call for translating strings.
  */
 export default function setupCustomLocalize(hass?: HomeAssistant): (key: string) => string {
   return function (key: string) {

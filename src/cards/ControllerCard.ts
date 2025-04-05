@@ -1,7 +1,7 @@
-import {cards} from "../types/strategy/cards";
-import {LovelaceCardConfig} from "../types/homeassistant/data/lovelace";
 import {HassServiceTarget} from "home-assistant-js-websocket";
+import {LovelaceCardConfig} from "../types/homeassistant/data/lovelace";
 import {StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
+import {cards} from "../types/strategy/cards";
 
 /**
  * Controller Card class.
@@ -49,7 +49,7 @@ class ControllerCard {
   /**
    * Create a Controller card.
    *
-   * @return {StackCardConfig} A Controller card.
+   * @returns {StackCardConfig} A Controller card.
    */
   createCard(): StackCardConfig {
     const cards: LovelaceCardConfig[] = [

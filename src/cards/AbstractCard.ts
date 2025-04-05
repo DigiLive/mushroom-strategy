@@ -1,7 +1,7 @@
 import {Helper} from "../Helper";
+import {EntityCardConfig} from "../types/lovelace-mushroom/cards/entity-card-config";
 import {cards} from "../types/strategy/cards";
 import {generic} from "../types/strategy/generic";
-import {EntityCardConfig} from "../types/lovelace-mushroom/cards/entity-card-config";
 
 /**
  * Abstract Card Class
@@ -46,7 +46,7 @@ abstract class AbstractCard {
   /**
    * Get a card.
    *
-   * @return {cards.AbstractCardConfig} A card object.
+   * @returns {cards.AbstractCardConfig} A card object.
    */
   getCard(): cards.AbstractCardConfig {
     return {
