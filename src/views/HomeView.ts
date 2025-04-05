@@ -49,7 +49,7 @@ class HomeView extends AbstractView {
   /**
    * Create the cards to include in the view.
    *
-   * @return {Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]>} Promise a View Card array.
+   * @returns {Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]>} Promise a View Card array.
    * @override
    */
   async createViewCards(): Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]> {
@@ -123,7 +123,7 @@ class HomeView extends AbstractView {
   /**
    * Create the chips to include in the view.
    *
-   * @return {Promise<LovelaceChipConfig[]>} Promise a chip array.
+   * @returns {Promise<LovelaceChipConfig[]>} Promise a chip array.
    */
   async #createChips(): Promise<LovelaceChipConfig[]> {
     if ((Helper.strategyOptions.home_view.hidden as string[]).includes("chips")) {
@@ -185,7 +185,7 @@ class HomeView extends AbstractView {
   /**
    * Create the person cards to include in the view.
    *
-   * @return {PersonCardConfig[]} A Person Card array.
+   * @returns {PersonCardConfig[]} A Person Card array.
    */
   #createPersonCards(): PersonCardConfig[] {
     if ((Helper.strategyOptions.home_view.hidden as string[]).includes("persons")) {
@@ -214,7 +214,7 @@ class HomeView extends AbstractView {
    *
    * Area cards are grouped into two areas per row.
    *
-   * @return {Promise<(TitleCardConfig | StackCardConfig)[]>} Promise an Area Card Section.
+   * @returns {Promise<(TitleCardConfig | StackCardConfig)[]>} Promise an Area Card Section.
    */
   async #createAreaSection(): Promise<(TitleCardConfig | StackCardConfig)[]> {
     if ((Helper.strategyOptions.home_view.hidden as string[]).includes("areas")) {

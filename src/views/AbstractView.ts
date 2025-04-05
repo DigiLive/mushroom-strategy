@@ -68,7 +68,7 @@ abstract class AbstractView {
   /**
    * Create the cards to include in the view.
    *
-   * @return {Promise<(StackCardConfig | TitleCardConfig)[]>} An array of card objects.
+   * @returns {Promise<(StackCardConfig | TitleCardConfig)[]>} An array of card objects.
    */
   async createViewCards(): Promise<(StackCardConfig | TitleCardConfig)[]> {
     if (this.#domain === "home") {
@@ -154,7 +154,7 @@ abstract class AbstractView {
    * Get a target of entity IDs for the given domain.
    *
    * @param {string} domain - The target domain to retrieve entity IDs from.
-   * @return {HassServiceTarget} - A target for a service call.
+   * @returns {HassServiceTarget} - A target for a service call.
    */
   targetDomain(domain: string): HassServiceTarget {
     return {
