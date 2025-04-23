@@ -3,35 +3,29 @@
     "src/**/*"
   ],
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig to read more about this file */
-
-    /* Language and Environment */
+    // 1. Language and Environment
     "target": "ES2020",
     "jsx": "react",
-
-    /* Modules */
+    // 2. Module System
     "module": "ES2020",
     "moduleResolution": "Node",
-
-    /* JavaScript Support */
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    // 3. JavaScript and Source Maps
     "allowJs": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    // 4. Interop and Imports
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-
-    /* Type Checking */
+    // 5. Type Checking and Strictness
     "strict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
-
-    /* Completeness */
-    "skipLibCheck": true,
-
-    "resolveJsonModule": true,
+    // 6. Project Structure and Build Integrity
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
   },
   "ts-node": {
     "compilerOptions": {
