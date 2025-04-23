@@ -3,7 +3,6 @@
 import { Registry } from '../Registry';
 import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
 import AbstractChip from './AbstractChip';
-import RegistryFilter from '../utilities/RegistryFilter';
 
 /**
  * Light Chip class.
@@ -19,13 +18,8 @@ class LightChip extends AbstractChip {
       icon_color: 'amber',
       content: Registry.getCountTemplate('light', 'eq', 'on'),
       tap_action: {
-        action: 'perform-action',
+        action: 'call-service',
         perform_action: 'light.turn_off',
-        target: {
-          entity_id: new RegistryFilter(Registry.entities)
-            .whereDomain('light')
-            .getValuesByProperty('entity_id') as string[],
-        },
       },
       hold_action: {
         action: 'navigate',
