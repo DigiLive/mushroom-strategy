@@ -18,40 +18,40 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [ 18.x ]
 
     # Checkout Repository
     steps:
-    - uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
 
-    # Build steps
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      # Build steps
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Node Install
-      run: npm ci
+      - name: Node Install
+        run: npm ci
 
-    - name: Build Distribution
-      run: |
-        npm run build
+      - name: Build Distribution
+        run: |
+          npm run build
 
-    - name: Check for file changes
-      id: checkDiff
-      run: |
-        git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
+      - name: Check for file changes
+        id: checkDiff
+        run: |
+          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
 
-      # Commit and push all changed files.
-    # Must only affect files that are listed in "paths-ignore".
-    - name: GIT Commit Distribution Build
-      # Only run on main branch push (e.g., pull request merge).
-      if: github.event_name == 'push' && steps.checkDiff.outputs.changed == 'true'
-      run: |
-        git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-        git config --global user.email "ci_activity@noreply.github.com"
-        git add dist
-        git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
-        git push
+        # Commit and push all changed files.
+      # Must only affect files that are listed in "paths-ignore".
+      - name: GIT Commit Distribution Build
+        # Only run on a main branch push (e.g., pull request merge).
+        if: github.event_name == 'push' && steps.checkDiff.outputs.changed == 'true'
+        run: |
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "ci_activity@noreply.github.com"
+          git add dist
+          git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git push
