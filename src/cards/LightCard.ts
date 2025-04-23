@@ -2,7 +2,7 @@
 
 import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
 import { LightCardConfig } from '../types/lovelace-mushroom/cards/light-card-config';
-import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
+import { isCallServiceActionConfig, isCallServiceActionTarget } from '../types/strategy/strategy-generics';
 import AbstractCard from './AbstractCard';
 
 /**
@@ -44,8 +44,11 @@ class LightCard extends AbstractCard {
 
     const configuration = LightCard.getDefaultConfig();
 
-    if (isCallServiceActionConfig(configuration.double_tap_action)) {
-      configuration.double_tap_action.target = { entity_id: entity.entity_id };
+    if (
+      isCallServiceActionConfig(configuration.double_tap_action) &&
+      isCallServiceActionTarget(configuration.double_tap_action.target)
+    ) {
+      configuration.double_tap_action.target.entity_id = entity.entity_id;
     }
 
     this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
