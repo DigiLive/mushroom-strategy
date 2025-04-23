@@ -31,14 +31,14 @@
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
-    "home-assistant-js-websocket": "^9",
-    "superstruct": "^1",
-    "ts-loader": "^9.5.0",
-    "ts-node": "^10",
-    "typescript": "^5",
+    "home-assistant-js-websocket": "^9.5.0",
+    "superstruct": "^2.0.2",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
     "version-bump-prompt": "^6",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
+    "webpack": "^5.99.6",
+    "webpack-cli": "^6.0.1"
   },
   "scripts": {
     "build-dev": "webpack --config webpack.dev.config.ts",
