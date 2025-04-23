@@ -1,8 +1,11 @@
-import deepmerge from 'deepmerge';
-import { HassEntities } from 'home-assistant-js-websocket';
-import { AreaRegistryEntry } from './types/homeassistant/data/area_registry';
-import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
-import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
+import deepmerge from "deepmerge";
+import {HassEntities} from "home-assistant-js-websocket";
+import {ConfigurationDefaults} from "./configurationDefaults";
+import {AreaRegistryEntry} from "./types/homeassistant/data/area_registry";
+import {DeviceRegistryEntry} from "./types/homeassistant/data/device_registry";
+import {EntityRegistryEntry} from "./types/homeassistant/data/entity_registry";
+import {LovelaceCardConfig} from "./types/homeassistant/data/lovelace/config/card";
+import {StackCardConfig} from "./types/homeassistant/panels/lovelace/cards/types";
 import {
   AllDomainsConfig,
   DashboardInfo,
@@ -13,10 +16,10 @@ import {
   StrategyViewConfig,
   SupportedDomains,
   SupportedViews,
-} from './types/strategy/strategy-generics';
-import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
-import setupCustomLocalize from './utilities/localize';
-import RegistryFilter from './utilities/RegistryFilter';
+} from "./types/strategy/strategy-generics";
+import {logMessage, lvlDebug, lvlFatal, lvlOff, lvlWarn, setDebugLevel} from "./utilities/debug";
+import setupCustomLocalize from "./utilities/localize";
+import RegistryFilter from "./utilities/RegistryFilter";
 
 /**
  * Registry Class
@@ -104,11 +107,11 @@ class Registry {
    * @param {DashboardInfo} info Strategy information object.
    */
   static async initialize(info: DashboardInfo): Promise<void> {
+    setDebugLevel(lvlFatal);
     setupCustomLocalize(info.hass);
 
     // Import the Hass States and strategy options.
     Registry._hassStates = info.hass.states;
-    const { ConfigurationDefaults } = await import('./configurationDefaults');
 
     try {
       Registry._strategyOptions = deepmerge(ConfigurationDefaults, info.config?.strategy?.options ?? {});
@@ -116,7 +119,7 @@ class Registry {
       logMessage(lvlFatal, 'Error importing strategy options!', e);
     }
 
-    setDebugLevel(Registry.strategyOptions.debug ? lvlFatal : lvlOff);
+    setDebugLevel(Registry.strategyOptions.debug ? lvlDebug : lvlOff);
 
     // Import the registries of Home Assistant.
     try {
@@ -129,12 +132,6 @@ class Registry {
     } catch (e) {
       logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
     }
-
-    // Process the entries of the Strategy Options.
-    Registry._strategyOptions.extra_views.map((view) => ({
-      ...view,
-      subview: false,
-    }));
 
     // Process entries of the HASS entity registry.
     Registry._entities = new RegistryFilter(Registry.entities)
@@ -165,9 +162,7 @@ class Registry {
     }));
 
     // Process entries of the HASS area registry.
-    if (Registry.strategyOptions.areas._?.hidden) {
-      Registry._areas = [];
-    } else {
+    if (!Registry.strategyOptions.areas._?.hidden) {
       // Create and add the undisclosed area if not hidden in the strategy options.
       if (!Registry.strategyOptions.areas.undisclosed?.hidden) {
         Registry.areas.push(ConfigurationDefaults.areas.undisclosed);
@@ -185,14 +180,16 @@ class Registry {
       // Remove hidden areas if configured as so and sort them by name.
 
       Registry._areas = new RegistryFilter(Registry.areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
+    } else {
+      Registry._areas = [];
     }
 
     // Sort views by order first and then by title.
     const sortViews = () => {
-      const entries = Object.entries(Registry.strategyOptions.views);
+      const viewEntries = Object.entries(Registry.strategyOptions.views);
 
       Registry.strategyOptions.views = Object.fromEntries(
-        entries.sort(([_, a], [__, b]) => {
+        viewEntries.sort(([_, a], [__, b]) => {
           return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
         }),
       ) as Record<SupportedViews, StrategyViewConfig>;
@@ -202,9 +199,9 @@ class Registry {
 
     // Sort domains by order first and then by title.
     const sortDomains = () => {
-      const entries = Object.entries(Registry.strategyOptions.domains);
+      const domainEntries = Object.entries(Registry.strategyOptions.domains);
       Registry.strategyOptions.domains = Object.fromEntries(
-        entries.sort(([, a], [, b]) => {
+        domainEntries.sort(([, a], [, b]) => {
           if (isSortable(a) && isSortable(b)) {
             return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
           }
@@ -215,16 +212,6 @@ class Registry {
     };
 
     sortDomains();
-
-    // Sort extra views by order first and then by title.
-    // TODO: Add sorting to the wiki.
-    const sortExtraViews = () => {
-      Registry.strategyOptions.extra_views.sort((a, b) => {
-        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
-      });
-    };
-
-    sortExtraViews();
 
     Registry._initialized = true;
   }
@@ -258,7 +245,6 @@ class Registry {
     states.push(
       ...new RegistryFilter(Registry.entities)
         .whereDomain(domain)
-        .where((entity) => !entity.entity_id.endsWith('_stateful_scene'))
         .toList()
         .map((entity) => `states['${entity.entity_id}']`),
     );
@@ -271,6 +257,27 @@ class Registry {
           | list
           | count
         }}`;
+  }
+
+  /**
+   * Splits an array of card configurations into horizontal stack card configurations.
+   *
+   * Each horizontal stack contains a specified number of cards.
+   *
+   * @param {LovelaceCardConfig[]} cardConfigurations - Array of card configurations to be stacked.
+   * @param {number} columnCount - Number of cards per horizontal stack.
+   */
+  static stackHorizontal(cardConfigurations: LovelaceCardConfig[], columnCount: number): StackCardConfig[] {
+    const stackedCardConfigurations: StackCardConfig[] = [];
+
+    for (let i = 0; i < cardConfigurations.length; i += columnCount) {
+      stackedCardConfigurations.push({
+        type: 'horizontal-stack',
+        cards: cardConfigurations.slice(i, i + columnCount),
+      } as StackCardConfig);
+    }
+
+    return stackedCardConfigurations;
   }
 
   /**
