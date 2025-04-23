@@ -1,15 +1,6 @@
 {
   "root": true,
-  "env": {
-    "es2020": true,
-    "node": true
-  },
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "project": "./tsconfig.json",
-    "sourceType": "module"
-  },
   "plugins": [
     "@typescript-eslint"
   ],
@@ -18,6 +9,35 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
+  "env": {
+    "es2020": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": "warn",
+    "semi": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ]
+  },
   "ignorePatterns": [
     "dist/",
     "node_modules/",
@@ -35,38 +55,5 @@
         "project": null
       }
     }
-  ],
-  "rules": {
-    "@typescript-eslint/no-empty-function": "warn",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
-    "max-len": [
-      "warn",
-      {
-        "code": 120
-      }
-    ],
-    "no-console": "off",
-    "no-empty-function": "off",
-    "no-unused-vars": "off",
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true
-      }
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
-  }
+  ]
 }
