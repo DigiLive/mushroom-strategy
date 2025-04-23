@@ -1,48 +1,43 @@
-import {Helper} from "../Helper";
-import {chips} from "../types/strategy/chips";
-import {AbstractChip} from "./AbstractChip";
-import {TemplateChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
+import AbstractChip from './AbstractChip';
+
 /**
  * Fan Chip class.
  *
- * Used to create a chip to indicate how many fans are on and to turn all off.
+ * Used to create a chip to indicate how many fans are on and to switch them all off.
  */
 class FanChip extends AbstractChip {
-  /**
-   * Default configuration of the chip.
-   *
-   * @type {TemplateChipConfig}
-   *
-   * @readonly
-   * @private
-   */
-  readonly #defaultConfig: TemplateChipConfig = {
-    type: "template",
-    icon: "mdi:fan",
-    icon_color: "green",
-    content: Helper.getCountTemplate("fan", "eq", "on"),
-    tap_action: {
-      action: "call-service",
-      service: "fan.turn_off",
-    },
-    hold_action: {
-      action: "navigate",
-      navigation_path: "fans",
-    },
-  };
+  /** Returns the default configuration object for the chip. */
+  static getDefaultConfig(): TemplateChipConfig {
+    return {
+      type: 'template',
+      icon: 'mdi:fan',
+      icon_color: 'green',
+      content: Registry.getCountTemplate('fan', 'eq', 'on'),
+      tap_action: {
+        action: 'call-service',
+        perform_action: 'fan.turn_off',
+      },
+      hold_action: {
+        action: 'navigate',
+        navigation_path: 'fans',
+      },
+    };
+  }
 
   /**
    * Class Constructor.
    *
-   * @param {chips.TemplateChipOptions} options The chip options.
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
    */
-  constructor(options: chips.TemplateChipOptions = {}) {
+  constructor(customConfiguration?: TemplateChipConfig) {
     super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...FanChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {FanChip};
+export default FanChip;

@@ -1,42 +1,35 @@
-import {chips} from "../types/strategy/chips";
-import {WeatherChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
-import {AbstractChip} from "./AbstractChip";
-
 // noinspection JSUnusedGlobalSymbols False positive.
+
+import { WeatherChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
+import AbstractChip from './AbstractChip';
+
 /**
  * Weather Chip class.
  *
- * Used to create a chip for showing the weather.
+ * Used to create a chip configuration to indicate the current weather.
  */
 class WeatherChip extends AbstractChip {
-  /**
-   * Default configuration of the chip.
-   *
-   * @private
-   * @readonly
-   */
-  readonly #defaultConfig: WeatherChipConfig = {
-    type: "weather",
-    show_temperature: true,
-    show_conditions: true,
-  };
+  /** Returns the default configuration object for the chip. */
+  static getDefaultConfig(entityId: string): WeatherChipConfig {
+    return {
+      type: 'weather',
+      entity: entityId,
+      show_temperature: true,
+      show_conditions: true,
+    };
+  }
 
   /**
    * Class Constructor.
    *
    * @param {string} entityId Id of a weather entity.
-   * @param {chips.WeatherChipOptions} options Weather Chip options.
+   * @param {WeatherChipConfig} [customConfiguration] Custom chip configuration.
    */
-  constructor(entityId: string, options: chips.WeatherChipOptions = {}) {
+  constructor(entityId: string, customConfiguration?: WeatherChipConfig) {
     super();
-    this.#defaultConfig = {
-      ...this.#defaultConfig,
-      ...{entity: entityId},
-      ...options,
-    };
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...WeatherChip.getDefaultConfig(entityId), ...customConfiguration };
   }
 }
 
-export {WeatherChip};
+export default WeatherChip;

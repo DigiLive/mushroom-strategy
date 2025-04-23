@@ -1,47 +1,42 @@
-import {Helper} from "../Helper";
-import {AbstractChip} from "./AbstractChip";
-import {chips} from "../types/strategy/chips";
-import {TemplateChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
+import AbstractChip from './AbstractChip';
+
 /**
  * Climate Chip class.
  *
- * Used to create a chip to indicate how many climates are operating.
+ * Used to create a chip configuration to indicate how many climates are operating.
  */
 class ClimateChip extends AbstractChip {
-  /**
-   * Default configuration of the chip.
-   *
-   * @type {TemplateChipConfig}
-   *
-   * @readonly
-   * @private
-   */
-  readonly #defaultConfig: TemplateChipConfig = {
-    type: "template",
-    icon: "mdi:thermostat",
-    icon_color: "orange",
-    content: Helper.getCountTemplate("climate", "ne", "off"),
-    tap_action: {
-      action: "none",
-    },
-    hold_action: {
-      action: "navigate",
-      navigation_path: "climates",
-    },
-  };
+  /** Returns the default configuration object for the chip. */
+  static getDefaultConfig(): TemplateChipConfig {
+    return {
+      type: 'template',
+      icon: 'mdi:thermostat',
+      icon_color: 'orange',
+      content: Registry.getCountTemplate('climate', 'ne', 'off'),
+      tap_action: {
+        action: 'none',
+      },
+      hold_action: {
+        action: 'navigate',
+        navigation_path: 'climates',
+      },
+    };
+  }
 
   /**
    * Class Constructor.
    *
-   * @param {chips.TemplateChipOptions} options The chip options.
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
    */
-  constructor(options: chips.TemplateChipOptions = {}) {
+  constructor(customConfiguration?: TemplateChipConfig) {
     super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...ClimateChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {ClimateChip};
+export default ClimateChip;

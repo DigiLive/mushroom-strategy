@@ -1,47 +1,42 @@
-import {Helper} from "../Helper";
-import {chips} from "../types/strategy/chips";
-import {AbstractChip} from "./AbstractChip";
-import {TemplateChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
+import AbstractChip from './AbstractChip';
+
 /**
  * Cover Chip class.
  *
- * Used to create a chip to indicate how many covers aren't closed.
+ * Used to create a chip configuration to indicate how many covers aren't closed.
  */
 class CoverChip extends AbstractChip {
-  /**
-   * Default configuration of the chip.
-   *
-   * @type {TemplateChipConfig}
-   *
-   * @readonly
-   * @private
-   */
-  readonly #defaultConfig: TemplateChipConfig = {
-    type: "template",
-    icon: "mdi:window-open",
-    icon_color: "cyan",
-    content: Helper.getCountTemplate("cover", "search", "(open|opening|closing)"),
-    tap_action: {
-      action: "none",
-    },
-    hold_action: {
-      action: "navigate",
-      navigation_path: "covers",
-    },
-  };
+  /** Returns the default configuration object for the chip. */
+  static getDefaultConfig(): TemplateChipConfig {
+    return {
+      type: 'template',
+      icon: 'mdi:window-open',
+      icon_color: 'cyan',
+      content: Registry.getCountTemplate('cover', 'search', '(open|opening|closing)'),
+      tap_action: {
+        action: 'none',
+      },
+      hold_action: {
+        action: 'navigate',
+        navigation_path: 'covers',
+      },
+    };
+  }
 
   /**
    * Class Constructor.
    *
-   * @param {chips.TemplateChipOptions} options The chip options.
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
    */
-  constructor(options: chips.TemplateChipOptions = {}) {
+  constructor(customConfiguration?: TemplateChipConfig) {
     super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...CoverChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {CoverChip};
+export default CoverChip;

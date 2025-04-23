@@ -1,48 +1,43 @@
-import {Helper} from "../Helper";
-import {chips} from "../types/strategy/chips";
-import {AbstractChip} from "./AbstractChip";
-import {TemplateChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
+import AbstractChip from './AbstractChip';
+
 /**
  * Light Chip class.
  *
- * Used to create a chip to indicate how many lights are on and to turn all off.
+ * Used to create a chip configuration to indicate how many lights are on and to switch them all off.
  */
 class LightChip extends AbstractChip {
-  /**
-   * Default configuration of the chip.
-   *
-   * @type {TemplateChipConfig}
-   *
-   * @readonly
-   * @private
-   */
-  readonly #defaultConfig: TemplateChipConfig = {
-    type: "template",
-    icon: "mdi:lightbulb-group",
-    icon_color: "amber",
-    content: Helper.getCountTemplate("light", "eq", "on"),
-    tap_action: {
-      action: "call-service",
-      service: "light.turn_off",
-    },
-    hold_action: {
-      action: "navigate",
-      navigation_path: "lights",
-    },
-  };
+  /** Returns the default configuration object for the chip. */
+  static getDefaultConfig(): TemplateChipConfig {
+    return {
+      type: 'template',
+      icon: 'mdi:lightbulb-group',
+      icon_color: 'amber',
+      content: Registry.getCountTemplate('light', 'eq', 'on'),
+      tap_action: {
+        action: 'call-service',
+        perform_action: 'light.turn_off',
+      },
+      hold_action: {
+        action: 'navigate',
+        navigation_path: 'lights',
+      },
+    };
+  }
 
   /**
    * Class Constructor.
    *
-   * @param {chips.TemplateChipOptions} options The chip options.
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
    */
-  constructor(options: chips.TemplateChipOptions = {}) {
+  constructor(customConfiguration?: TemplateChipConfig) {
     super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...LightChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {LightChip};
+export default LightChip;
