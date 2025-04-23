@@ -29,10 +29,8 @@
     "off": "Off",
     "on": "On",
     "open": "Open",
-    "unavailable": "Unavailable",
     "unclosed": "Unclosed",
-    "undisclosed": "Other",
-    "unknown": "Unknown"
+    "undisclosed": "Other"
   },
   "input_select": {
     "input_selects": "Input Selects"
@@ -42,10 +40,7 @@
     "lights": "Lights"
   },
   "lock": {
-    "all_locks": "All Locks",
-    "locked": "Locked",
-    "locks": "Locks",
-    "unlocked": "Unlocked"
+    "locks": "Locks"
   },
   "media_player": {
     "media_players": "Media Players"
@@ -67,14 +62,5 @@
   "vacuum": {
     "all_vacuums": "All Vacuums",
     "vacuums": "Vacuums"
-  },
-  "valve": {
-    "all_valves": "All Valves",
-    "valves": "Valves",
-    "open": "Open",
-    "opening": "Opening",
-    "closed": "Closed",
-    "closing": "Closing",
-    "stopped": "Stopped"
   }
 }

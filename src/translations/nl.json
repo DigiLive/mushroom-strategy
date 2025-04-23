@@ -29,10 +29,8 @@
     "off": "Uit",
     "on": "Aan",
     "open": "Open",
-    "unavailable": "Onbeschikbaar",
-    "unclosed": "Niet Gesloten",
-    "undisclosed": "Overige",
-    "unknown": "Onbekend"
+    "unclosed": "Ongesloten",
+    "undisclosed": "Overige"
   },
   "input_select": {
     "input_selects": "Lijsten"
@@ -42,10 +40,7 @@
     "lights": "Lampen"
   },
   "lock": {
-    "all_locks": "Alle Sloten",
-    "locked": "Vergrendeld",
-    "locks": "Sloten",
-    "unlocked": "Ontgrendeld"
+    "locks": "Sloten"
   },
   "media_player": {
     "media_players": "Mediaspelers"
@@ -67,14 +62,5 @@
   "vacuum": {
     "all_vacuums": "Alle Afzuiging",
     "vacuums": "Afzuiging"
-  },
-  "valve": {
-    "all_valves": "Alle kleppen",
-    "valves": "Kleppen",
-    "open": "Open",
-    "opening": "Openen",
-    "closed": "Gesloten",
-    "closing": "Sluiten",
-    "stopped": "Gestopt"
   }
 }

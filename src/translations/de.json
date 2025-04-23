@@ -29,10 +29,8 @@
     "off": "Aus",
     "on": "Ein",
     "open": "Offen",
-    "unavailable": "Nicht verfügbar",
     "unclosed": "Nicht Geschlossen",
-    "undisclosed": "Sonstiges",
-    "unknown": "Unbekannt"
+    "undisclosed": "Sonstiges"
   },
   "input_select": {
     "input_selects": "Auswahl-Eingaben"
@@ -42,10 +40,7 @@
     "lights": "Leuchten"
   },
   "lock": {
-    "locked": "Gesperrt",
-    "all_locks": "Alle Schlösser",
-    "locks": "Schlösser",
-    "unlocked": "Entsperrt"
+    "locks": "Schlösser"
   },
   "media_player": {
     "media_players": "Wiedergabegeräte"
@@ -67,14 +62,5 @@
   "vacuum": {
     "all_vacuums": "Alle Staubsauger",
     "vacuums": "Staubsauger"
-  },
-  "valve": {
-    "all_valves": "Alle Ventile",
-    "valves": "Ventile",
-    "open": "Offen",
-    "opening": "Öffnet",
-    "closed": "Geschlossen",
-    "closing": "Schließt",
-    "stopped": "Gestoppt"
   }
 }
