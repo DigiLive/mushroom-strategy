@@ -189,7 +189,21 @@ export type SpacerChipConfig = {
   type: 'spacer';
 };
 
-/** Lovelace Chip Config */
+/**
+ * Lovelace Chip Config
+ *
+ * A Lovelace chip configuration can be one of the following types:
+ * - Action chip configuration
+ * - Alarm control panel chip configuration
+ * - Back chip configuration
+ * - Entity chip configuration
+ * - Menu chip configuration
+ * - Weather chip configuration
+ * - Template chip configuration
+ * - Conditional chip configuration
+ * - Light chip configuration
+ * - Spacer chip configuration
+ */
 export type LovelaceChipConfig =
   | ActionChipConfig
   | AlarmControlPanelChipConfig

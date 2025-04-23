@@ -1,3 +1,4 @@
+import { HassServiceTarget } from 'home-assistant-js-websocket';
 import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from '../homeassistant/data/device_registry';
 import { EntityRegistryEntry } from '../homeassistant/data/entity_registry';
@@ -44,18 +45,7 @@ const SUPPORTED_DOMAINS = [
  *
  * This constant array defines the views that are supported by the strategy.
  */
-const SUPPORTED_VIEWS = [
-  'camera',
-  'climate',
-  'cover',
-  'fan',
-  'home',
-  'light',
-  'lock',
-  'scene',
-  'switch',
-  'vacuum',
-] as const;
+const SUPPORTED_VIEWS = ['camera', 'climate', 'cover', 'fan', 'home', 'light', 'scene', 'switch', 'vacuum'] as const;
 
 /**
  * List of supported chips.
@@ -255,7 +245,7 @@ export interface StrategyArea extends AreaRegistryEntry {
  * @property {boolean} fan_count - Chip to display the number of fans on.
  * @property {boolean} light_count - Chip to display the number of lights on.
  * @property {boolean} switch_count - Chip to display the number of switches on.
- * @property {'auto' | `weather.${string}`} weather_entity - Entity id for the weather chip to use.
+ * @property {"auto" | `weather.${string}`} weather_entity - Entity id for the weather chip to use.
  *                                                           Accepts `weather.` ids or `auto` only.
  */
 export interface ChipConfiguration {
@@ -296,9 +286,17 @@ export function isSortable(object: object): object is Sortable {
  * @returns {boolean} - True if the object represents a valid service action configuration.
  */
 export function isCallServiceActionConfig(object?: ActionConfig): object is CallServiceActionConfig {
-  return (
-    !!object && (object.action === 'perform-action' || object.action === 'call-service') && 'perform_action' in object
-  );
+  return !!object && object.action === 'call-service' && ['action', 'service'].every((key) => key in object);
+}
+
+/**
+ * Type guard to check if an object matches the HassServiceTarget interface.
+ *
+ * @param {any} [object] - The object to check.
+ * @returns {boolean} - True if the object represents a valid service action target.
+ */
+export function isCallServiceActionTarget(object?: HassServiceTarget): object is HassServiceTarget {
+  return !!object && ['entity_id', 'device_id', 'area_id'].some((key) => key in object);
 }
 
 /**
