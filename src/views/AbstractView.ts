@@ -1,171 +1,159 @@
-import {Helper} from "../Helper";
-import {ControllerCard} from "../cards/ControllerCard";
-import {LovelaceCardConfig} from "../types/homeassistant/data/lovelace";
-import {cards} from "../types/strategy/cards";
-import {TitleCardConfig} from "../types/lovelace-mushroom/cards/title-card-config";
-import {HassServiceTarget} from "home-assistant-js-websocket";
-import {applyEntityCategoryFilters} from "../utillties/filters";
-import {LovelaceViewConfig} from "../types/homeassistant/data/lovelace/config/view";
-import {StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
-import {generic} from "../types/strategy/generic";
-import abstractCardConfig = cards.AbstractCardConfig;
-import SupportedDomains = generic.SupportedDomains;
+import { HassServiceTarget } from 'home-assistant-js-websocket';
+import HeaderCard from '../cards/HeaderCard';
+import { Registry } from '../Registry';
+import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
+import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
+import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
+import { AbstractCardConfig, CustomHeaderCardConfig, StrategyHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SupportedDomains } from '../types/strategy/strategy-generics';
+import { ViewConfig, ViewConstructor } from '../types/strategy/strategy-views';
+import { sanitizeClassName } from '../utilities/auxiliaries';
+import { logMessage, lvlFatal } from '../utilities/debug';
+import RegistryFilter from '../utilities/RegistryFilter';
 
 /**
  * Abstract View Class.
  *
- * To create a new view, extend the new class with this one.
+ * To create a view configuration, this class should be extended by a child class.
+ * Child classes should override the default configuration so the view correctly reflects the entities of a domain.
  *
- * @class
- * @abstract
+ * @remarks
+ * Before this class can be used, the Registry module must be initialized by calling {@link Registry.initialize}.
  */
 abstract class AbstractView {
-  /**
-   * Configuration of the view.
-   *
-   * @type {LovelaceViewConfig}
-   */
-  config: LovelaceViewConfig = {
-    icon: "mdi:view-dashboard",
+  /** The base configuration of a view. */
+  protected baseConfiguration: LovelaceViewConfig = {
+    icon: 'mdi:view-dashboard',
     subview: false,
   };
 
-  /**
-   * A card to switch all entities in the view.
-   *
-   * @type {StackCardConfig}
-   */
-  viewControllerCard: StackCardConfig = {
+  /** A card configuration to control all entities in the view. */
+  private viewHeaderCardConfiguration: StackCardConfig = {
     cards: [],
-    type: "",
+    type: '',
   };
 
-  /**
-   * The domain of which we operate the devices.
-   *
-   * @type {SupportedDomains | "home"}
-   * @private
-   * @readonly
-   */
-  readonly #domain: SupportedDomains | "home";
+  protected get domain(): SupportedDomains | 'home' {
+    return (this.constructor as unknown as ViewConstructor).domain;
+  }
 
   /**
    * Class constructor.
    *
-   * @param {SupportedDomains} domain The domain which the view is representing.
-   *
-   * @throws {Error} If trying to instantiate this class.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @remarks
+   * Before this class can be used, the Registry module must be initialized by calling {@link Registry.initialize}.
    */
-  protected constructor(domain: SupportedDomains | "home") {
-    if (!Helper.isInitialized()) {
-      throw new Error("The Helper module must be initialized before using this one.");
+  protected constructor() {
+    if (!Registry.initialized) {
+      logMessage(lvlFatal, 'Registry not initialized!');
     }
-
-    this.#domain = domain;
   }
 
   /**
-   * Create the cards to include in the view.
-   *
-   * @returns {Promise<(StackCardConfig | TitleCardConfig)[]>} An array of card objects.
+   * Create the configuration of the cards to include in the view.
    */
-  async createViewCards(): Promise<(StackCardConfig | TitleCardConfig)[]> {
-    if (this.#domain === "home") {
-      // The home domain should override this method because it hasn't entities on its own.
-      // The method override creates its own cards to show at the home view.
+  protected async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
+    if (this.domain === 'home') {
+      // The home domain should override this method because it hasn't entities of its own.
+      // The method override creates its own configurations for cards to show at the home view.
 
       return [];
     }
 
     const viewCards: LovelaceCardConfig[] = [];
+    const domainEntities = new RegistryFilter(Registry.entities).whereDomain(this.domain).toList();
+    const moduleName = sanitizeClassName(this.domain + 'Card');
+    const DomainCard = (await import(`../cards/${moduleName}`)).default;
 
-    // Create cards for each area.
-    for (const area of Helper.areas) {
-      const areaCards: abstractCardConfig[] = [];
-      const className = Helper.sanitizeClassName(this.#domain + "Card");
-      const cardModule = await import(`../cards/${className}`);
+    // Create card configurations for each area.
+    for (const area of Registry.areas) {
+      const areaCards: AbstractCardConfig[] = [];
 
-      // Set the target for controller cards to the current area.
+      // Set the target of the Header card to the current area.
       let target: HassServiceTarget = {
         area_id: [area.area_id],
       };
+      const areaEntities = new RegistryFilter(domainEntities).whereAreaId(area.area_id).toList();
 
-      let entities = Helper.getDeviceEntities(area, this.#domain);
-      // Exclude hidden Config and Diagnostic entities.
-      entities = applyEntityCategoryFilters(entities, this.#domain);
-
-      // Set the target for controller cards to entities without an area.
-      if (area.area_id === "undisclosed") {
+      // Set the target of the Header card to entities without an area.
+      if (area.area_id === 'undisclosed') {
         target = {
-          entity_id: entities.map(entity => entity.entity_id),
-        }
+          entity_id: areaEntities.map((entity) => entity.entity_id),
+        };
       }
 
-      // Create a card for each domain-entity of the current area.
-      for (const entity of entities) {
-        let cardOptions = Helper.strategyOptions.card_options?.[entity.entity_id];
-        let deviceOptions = Helper.strategyOptions.card_options?.[entity.device_id ?? "null"];
+      // Create a card configuration for each entity in the current area.
+      areaCards.push(
+        ...areaEntities.map((entity) =>
+          new DomainCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard(),
+        ),
+      );
 
-        if (cardOptions?.hidden || deviceOptions?.hidden) {
-          continue;
-        }
-
-        areaCards.push(new cardModule[className](entity, cardOptions).getCard());
-      }
-
-      // Vertical stack the area cards if it has entities.
+      // Vertically stack the cards of the current area.
       if (areaCards.length) {
-        const titleCardOptions = ("controllerCardOptions" in this.config) ? this.config.controllerCardOptions : {};
+        const areaHeaderCardOptions = (
+          'headerCardConfiguration' in this.baseConfiguration ? this.baseConfiguration.headerCardConfiguration : {}
+        ) as CustomHeaderCardConfig;
 
-        // Create and insert a Controller card.
-        areaCards.unshift(new ControllerCard(target, Object.assign({title: area.name}, titleCardOptions)).createCard());
+        // Create and insert a Header card.
+        areaCards.unshift(new HeaderCard(target, { title: area.name, ...areaHeaderCardOptions }).createCard());
 
-        viewCards.push({
-          type: "vertical-stack",
-          cards: areaCards,
-        } as StackCardConfig);
+        viewCards.push({ type: 'vertical-stack', cards: areaCards });
       }
     }
 
-    // Add a Controller Card for all the entities in the view.
-    if (this.viewControllerCard.cards.length && viewCards.length) {
-      viewCards.unshift(this.viewControllerCard);
+    // Add a Header Card to control all the entities in the view.
+    if (this.viewHeaderCardConfiguration.cards.length && viewCards.length) {
+      viewCards.unshift(this.viewHeaderCardConfiguration);
     }
 
     return viewCards;
   }
 
   /**
-   * Get a view object.
+   * Get a view configuration.
    *
-   * The view includes the cards which are created by method createViewCards().
-   *
-   * @returns {Promise<LovelaceViewConfig>} The view object.
+   * The configuration includes the card configurations which are created by createCardConfigurations().
    */
   async getView(): Promise<LovelaceViewConfig> {
     return {
-      ...this.config,
-      cards: await this.createViewCards(),
+      ...this.baseConfiguration,
+      cards: await this.createCardConfigurations(),
     };
   }
 
   /**
-   * Get a target of entity IDs for the given domain.
-   *
-   * @param {string} domain - The target domain to retrieve entity IDs from.
-   * @returns {HassServiceTarget} - A target for a service call.
+   * Get the domain's entity ids to target for a HASS service call.
    */
-  targetDomain(domain: string): HassServiceTarget {
+  private getDomainTargets(): HassServiceTarget {
     return {
-      entity_id: Helper.entities.filter(
-        entity =>
-          entity.entity_id.startsWith(domain + ".")
-          && !entity.hidden_by
-          && !Helper.strategyOptions.card_options?.[entity.entity_id]?.hidden
-      ).map(entity => entity.entity_id),
+      entity_id: Registry.entities
+        .filter((entity) => entity.entity_id.startsWith(this.domain + '.'))
+        .map((entity) => entity.entity_id),
     };
+  }
+
+  /**
+   * Initialize the view configuration with defaults and custom settings.
+   *
+   * @param viewConfiguration The view's default configuration for the view.
+   * @param customConfiguration The view's custom configuration to apply.
+   * @param headerCardConfig The view's Header card configuration.
+   */
+  protected initializeViewConfig(
+    viewConfiguration: ViewConfig,
+    customConfiguration: ViewConfig = {},
+    headerCardConfig: CustomHeaderCardConfig,
+  ): void {
+    this.baseConfiguration = { ...this.baseConfiguration, ...viewConfiguration, ...customConfiguration };
+
+    this.viewHeaderCardConfiguration = new HeaderCard(this.getDomainTargets(), {
+      ...(('headerCardConfiguration' in this.baseConfiguration
+        ? this.baseConfiguration.headerCardConfiguration
+        : {}) as StrategyHeaderCardConfig),
+      ...headerCardConfig,
+    }).createCard();
   }
 }
 
-export {AbstractView};
+export default AbstractView;

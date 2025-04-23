@@ -1,65 +1,71 @@
-import {Helper} from "../Helper";
-import {AbstractView} from "./AbstractView";
-import {views} from "../types/strategy/views";
-import {LovelaceChipConfig} from "../types/lovelace-mushroom/utils/lovelace/chip/types";
-import {ChipsCardConfig} from "../types/lovelace-mushroom/cards/chips-card";
-import {TemplateCardConfig} from "../types/lovelace-mushroom/cards/template-card-config";
-import {ActionConfig} from "../types/homeassistant/data/lovelace";
-import {TitleCardConfig} from "../types/lovelace-mushroom/cards/title-card-config";
-import {PersonCardConfig} from "../types/lovelace-mushroom/cards/person-card-config";
-import {AreaCardConfig, StackCardConfig} from "../types/homeassistant/panels/lovelace/cards/types";
-import {generic} from "../types/strategy/generic";
-import supportedChips = generic.SupportedChips;
-
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
+import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
+import { AreaCardConfig, StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
+import { ChipsCardConfig } from '../types/lovelace-mushroom/cards/chips-card';
+import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
+import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
+import { LovelaceChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
+import { HomeViewSections, isSupportedChip } from '../types/strategy/strategy-generics';
+import { ViewConfig } from '../types/strategy/strategy-views';
+import { sanitizeClassName } from '../utilities/auxiliaries';
+import { logMessage, lvlError } from '../utilities/debug';
+import { localize } from '../utilities/localize';
+import AbstractView from './AbstractView';
+
 /**
  * Home View Class.
  *
  * Used to create a Home view.
- *
- * @class HomeView
- * @extends AbstractView
  */
 class HomeView extends AbstractView {
-  /**
-   * Default configuration of the view.
-   *
-   * @type {views.ViewConfig}
-   * @private
-   */
-  #defaultConfig: views.ViewConfig = {
-    title: Helper.customLocalize("generic.home"),
-    icon: "mdi:home-assistant",
-    path: "home",
-    subview: false,
-  };
+  /** The domain of the entities that the view is representing. */
+  static readonly domain = 'home' as const;
+
+  /** Returns the default configuration object for the view. */
+  static getDefaultConfig(): ViewConfig {
+    return {
+      title: localize('generic.home'),
+      icon: 'mdi:home-assistant',
+      path: 'home',
+      subview: false,
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {views.ViewConfig} [options={}] Options for the view.
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
    */
-  constructor(options: views.ViewConfig = {}) {
-    super("home");
+  constructor(customConfiguration?: ViewConfig) {
+    super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.baseConfiguration = { ...this.baseConfiguration, ...HomeView.getDefaultConfig(), ...customConfiguration };
   }
 
   /**
-   * Create the cards to include in the view.
+   * Create the configuration of the cards to include in the view.
    *
-   * @returns {Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]>} Promise a View Card array.
    * @override
    */
-  async createViewCards(): Promise<(StackCardConfig | TemplateCardConfig | ChipsCardConfig)[]> {
-    return await Promise.all([
-      this.#createChips(),
-      this.#createPersonCards(),
-      this.#createAreaSection(),
-    ]).then(([chips, personCards, areaCards]) => {
-      const options = Helper.strategyOptions;
-      const homeViewCards = [];
+  async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
+    const homeViewCards: LovelaceCardConfig[] = [];
+
+    let chipsSection, personsSection, areasSection;
+
+    try {
+      [chipsSection, personsSection, areasSection] = await Promise.all([
+        this.createChipsSection(),
+        this.createPersonsSection(),
+        this.createAreasSection(),
+      ]);
+    } catch (e) {
+      logMessage(lvlError, 'Error importing created sections!', e);
+
+      return homeViewCards;
+    }
 
       if (chips.length) {
         // TODO: Create the Chip card at this.#createChips()

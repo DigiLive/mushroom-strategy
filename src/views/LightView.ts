@@ -1,12 +1,11 @@
-import {Helper} from "../Helper";
-import {ControllerCard} from "../cards/ControllerCard";
-import {AbstractView} from "./AbstractView";
-import {views} from "../types/strategy/views";
-import {cards} from "../types/strategy/cards";
-import {generic} from "../types/strategy/generic";
-import SupportedDomains = generic.SupportedDomains;
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { ViewConfig } from '../types/strategy/strategy-views';
+import { localize } from '../utilities/localize';
+import AbstractView from './AbstractView';
+
 /**
  * Light View Class.
  *
@@ -16,65 +15,40 @@ import SupportedDomains = generic.SupportedDomains;
  * @extends AbstractView
  */
 class LightView extends AbstractView {
-  /**
-   * Domain of the view's entities.
-   *
-   * @type {SupportedDomains}
-   * @static
-   * @private
-   */
-  static #domain: SupportedDomains = "light";
+  /** The domain of the entities that the view is representing. */
+  static readonly domain = 'light' as const;
 
-  /**
-   * Default configuration of the view.
-   *
-   * @type {views.ViewConfig}
-   * @private
-   */
-  #defaultConfig: views.ViewConfig = {
-    title: Helper.customLocalize("light.lights"),
-    path: "lights",
-    icon: "mdi:lightbulb-group",
-    subview: false,
-    controllerCardOptions: {
-      iconOn: "mdi:lightbulb",
-      iconOff: "mdi:lightbulb-off",
-      onService: "light.turn_on",
-      offService: "light.turn_off",
-    },
-  };
+  /** Returns the default configuration object for the view. */
+  static getDefaultConfig(): ViewConfig {
+    return {
+      title: localize('light.lights'),
+      path: 'lights',
+      icon: 'mdi:lightbulb-group',
+      subview: false,
+      headerCardConfiguration: {
+        iconOn: 'mdi:lightbulb',
+        iconOff: 'mdi:lightbulb-off',
+        onService: 'light.turn_on',
+        offService: 'light.turn_off',
+      },
+    };
+  }
 
-  /**
-   * Default configuration of the view's Controller card.
-   *
-   * @type {cards.ControllerCardOptions}
-   * @private
-   */
-  #viewControllerCardConfig: cards.ControllerCardOptions = {
-    title: Helper.customLocalize("light.all_lights"),
-    subtitle:
-      `${Helper.getCountTemplate(LightView.#domain, "eq", "on")} ${Helper.customLocalize("light.lights")} `
-      + Helper.customLocalize("generic.on"),
-  };
+  /** Returns the default configuration of the view's Header card. */
+  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+    return {
+      title: localize('light.all_lights'),
+      subtitle:
+        `${Registry.getCountTemplate(LightView.domain, 'eq', 'on')} ${localize('light.lights')} ` +
+        localize('generic.on'),
+    };
+  }
 
-  /**
-   * Class constructor.
-   *
-   * @param {views.ViewConfig} [options={}] Options for the view.
-   */
-  constructor(options: views.ViewConfig = {}) {
-    super(LightView.#domain);
+  constructor(customConfiguration?: ViewConfig) {
+    super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
-
-    // Create a Controller card to switch all entities of the domain.
-    this.viewControllerCard = new ControllerCard(
-      this.targetDomain(LightView.#domain),
-      {
-        ...this.#viewControllerCardConfig,
-        ...("controllerCardOptions" in this.config ? this.config.controllerCardOptions : {}) as cards.ControllerCardConfig,
-      }).createCard();
+    this.initializeViewConfig(LightView.getDefaultConfig(), customConfiguration, LightView.getViewHeaderCardConfig());
   }
 }
 
-export {LightView};
+export default LightView;
