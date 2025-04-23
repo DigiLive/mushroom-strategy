@@ -1,80 +1,56 @@
-import {Helper} from "../Helper";
-import {ControllerCard} from "../cards/ControllerCard";
-import {AbstractView} from "./AbstractView";
-import {views} from "../types/strategy/views";
-import {cards} from "../types/strategy/cards";
-import {generic} from "../types/strategy/generic";
-import SupportedDomains = generic.SupportedDomains;
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { ViewConfig } from '../types/strategy/strategy-views';
+import { localize } from '../utilities/localize';
+import AbstractView from './AbstractView';
+
 /**
  * Switch View Class.
  *
- * Used to create a view for entities of the switch domain.
- *
- * @class SwitchView
- * @extends AbstractView
+ * Used to create a view configuration for entities of the switch domain.
  */
 class SwitchView extends AbstractView {
-  /**
-   * Domain of the view's entities.
-   *
-   * @type {SupportedDomains}
-   * @static
-   * @private
-   */
-  static #domain: SupportedDomains = "switch";
+  /** The domain of the entities that the view is representing. */
+  static readonly domain = 'switch' as const;
 
-  /**
-   * Default configuration of the view.
-   *
-   * @type {views.ViewConfig}
-   * @private
-   */
-  #defaultConfig: views.ViewConfig = {
-    title: Helper.customLocalize("switch.switches"),
-    path: "switches",
-    icon: "mdi:dip-switch",
-    subview: false,
-    controllerCardOptions: {
-      iconOn: "mdi:power-plug",
-      iconOff: "mdi:power-plug-off",
-      onService: "switch.turn_on",
-      offService: "switch.turn_off",
-    },
-  };
+  /** Returns the default configuration object for the view. */
+  static getDefaultConfig(): ViewConfig {
+    return {
+      title: localize('switch.switches'),
+      path: 'switches',
+      icon: 'mdi:dip-switch',
+      subview: false,
+      headerCardConfiguration: {
+        iconOn: 'mdi:power-plug',
+        iconOff: 'mdi:power-plug-off',
+        onService: 'switch.turn_on',
+        offService: 'switch.turn_off',
+      },
+    };
+  }
 
-  /**
-   * Default configuration of the view's Controller card.
-   *
-   * @type {cards.ControllerCardOptions}
-   * @private
-   */
-  #viewControllerCardConfig: cards.ControllerCardOptions = {
-    title: Helper.customLocalize("switch.all_switches"),
-    subtitle:
-      `${Helper.getCountTemplate(SwitchView.#domain, "eq", "on")} ${Helper.customLocalize("switch.switches")} `
-      + Helper.customLocalize("generic.on"),
-  };
+  /** Returns the default configuration of the view's Header card. */
+  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+    return {
+      title: localize('switch.all_switches'),
+      subtitle:
+        `${Registry.getCountTemplate(SwitchView.domain, 'eq', 'on')} ${localize('switch.switches')} ` +
+        localize('generic.on'),
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {views.ViewConfig} [options={}] Options for the view.
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
    */
-  constructor(options: views.ViewConfig = {}) {
-    super(SwitchView.#domain);
+  constructor(customConfiguration?: ViewConfig) {
+    super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
-
-    // Create a Controller card to switch all entities of the domain.
-    this.viewControllerCard = new ControllerCard(
-      this.targetDomain(SwitchView.#domain),
-      {
-        ...this.#viewControllerCardConfig,
-        ...("controllerCardOptions" in this.config ? this.config.controllerCardOptions : {}) as cards.ControllerCardConfig,
-      }).createCard();
+    this.initializeViewConfig(SwitchView.getDefaultConfig(), customConfiguration, SwitchView.getViewHeaderCardConfig());
   }
 }
 
-export {SwitchView};
+export default SwitchView;

@@ -1,80 +1,58 @@
-import {Helper} from "../Helper";
-import {ControllerCard} from "../cards/ControllerCard";
-import {AbstractView} from "./AbstractView";
-import {views} from "../types/strategy/views";
-import {cards} from "../types/strategy/cards";
-import {generic} from "../types/strategy/generic";
-import SupportedDomains = generic.SupportedDomains;
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SupportedDomains } from '../types/strategy/strategy-generics';
+import { ViewConfig } from '../types/strategy/strategy-views';
+import { localize } from '../utilities/localize';
+import AbstractView from './AbstractView';
+
 /**
  * Cover View Class.
  *
- * Used to create a view for entities of the cover domain.
- *
- * @class CoverView
- * @extends AbstractView
+ * Used to create a view configuration for entities of the cover domain.
  */
 class CoverView extends AbstractView {
-  /**
-   * Domain of the view's entities.
-   *
-   * @type {SupportedDomains}
-   * @static
-   * @private
-   */
-  static #domain: SupportedDomains = "cover";
+  /** The domain of the entities that the view is representing. */
+  static readonly domain: SupportedDomains = 'cover' as const;
 
-  /**
-   * Default configuration of the view.
-   *
-   * @type {views.ViewConfig}
-   * @private
-   */
-  #defaultConfig: views.ViewConfig = {
-    title: Helper.customLocalize("cover.covers"),
-    path: "covers",
-    icon: "mdi:window-open",
-    subview: false,
-    controllerCardOptions: {
-      iconOn: "mdi:arrow-up",
-      iconOff: "mdi:arrow-down",
-      onService: "cover.open_cover",
-      offService: "cover.close_cover",
-    },
-  };
+  /** Returns the default configuration object for the view. */
+  static getDefaultConfig(): ViewConfig {
+    return {
+      title: localize('cover.covers'),
+      path: 'covers',
+      icon: 'mdi:window-open',
+      subview: false,
+      headerCardConfiguration: {
+        iconOn: 'mdi:arrow-up',
+        iconOff: 'mdi:arrow-down',
+        onService: 'cover.open_cover',
+        offService: 'cover.close_cover',
+      },
+    };
+  }
 
-  /**
-   * Default configuration of the view's Controller card.
-   *
-   * @type {cards.ControllerCardOptions}
-   * @private
-   */
-  #viewControllerCardConfig: cards.ControllerCardOptions = {
-    title: Helper.customLocalize("cover.all_covers"),
-    subtitle:
-      `${Helper.getCountTemplate(CoverView.#domain, "search", "(open|opening|closing)")} ${Helper.customLocalize("cover.covers")} `
-      + Helper.customLocalize("generic.unclosed"),
-  };
+  /** Returns the default configuration of the view's Header card. */
+  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+    return {
+      title: localize('cover.all_covers'),
+      subtitle:
+        `${Registry.getCountTemplate(CoverView.domain, 'search', '(open|opening|closing)')} ` +
+        `${localize('cover.covers')} ` +
+        `${localize('generic.unclosed')}`,
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {views.ViewConfig} [options={}] Options for the view.
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
    */
-  constructor(options: views.ViewConfig = {}) {
-    super(CoverView.#domain);
+  constructor(customConfiguration?: ViewConfig) {
+    super();
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
-
-    // Create a Controller card to switch all entities of the domain.
-    this.viewControllerCard = new ControllerCard(
-      this.targetDomain(CoverView.#domain),
-      {
-        ...this.#viewControllerCardConfig,
-        ...("controllerCardOptions" in this.config ? this.config.controllerCardOptions : {}) as cards.ControllerCardConfig,
-      }).createCard();
+    this.initializeViewConfig(CoverView.getDefaultConfig(), customConfiguration, CoverView.getViewHeaderCardConfig());
   }
 }
 
-export {CoverView};
+export default CoverView;
