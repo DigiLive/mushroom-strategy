@@ -11,6 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **Versions**
+
 * Mushroom-Strategy:
 * HACS:
 * Mushroom:

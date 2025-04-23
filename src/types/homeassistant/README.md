@@ -7,7 +7,7 @@ This means properties are added/removed from the originals and subtypes may have
 The [Apache 2.0 License](https://github.com/home-assistant/frontend/blob/dev/LICENSE.md) applies to all files in this
 directory.
 
-Copyright 2023 Ferry Cools
+Copyright 2023 Ferry Cools
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
