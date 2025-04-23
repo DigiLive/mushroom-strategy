@@ -1,5 +1,6 @@
 {
-    "name": "Auto generating Mushroom dashboard strategy",
-    "render_readme": true,
-    "filename": "mushroom-strategy.js"
+  "name": "Mushroom Dashboard Strategy ",
+  "render_readme": true,
+  "filename": "mushroom-strategy.js",
+  "homeassistant": "2024.7.0"
 }
