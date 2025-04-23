@@ -1,8 +1,9 @@
 {
   "name": "mushroom-strategy",
-  "version": "2.2.1",
-  "description": "Automatically create a dashboard using Mushroom cards",
+  "version": "2.3.0-alpha.1",
+  "description": "Automatically generate a dashboard of Mushroom cards.",
   "keywords": [
+    "dashboard",
     "strategy",
     "mushroom"
   ],
