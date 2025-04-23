@@ -1,10 +1,8 @@
-// noinspection JSUnusedGlobalSymbols
-
 import { Registry } from '../Registry';
 import { DeviceRegistryEntry } from '../types/homeassistant/data/device_registry';
 import { EntityCategory, EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
 import { RegistryEntry, StrategyConfig } from '../types/strategy/strategy-generics';
-import { logMessage, lvlWarn } from './debug';
+import { logMessage, lvlDebug } from './debug';
 
 /**
  * A class for filtering and sorting arrays of Home Assistant's registry entries.
@@ -27,7 +25,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   constructor(entries: T[]) {
     this.entries = entries;
     this.entryIdentifier = (
-      entries.length === 0 || 'entity_id' in entries[0] ? 'entity_id' : 'floor_id' in entries[0] ? 'floor_id' : 'id'
+      entries.length == 0 || 'entity_id' in entries[0] ? 'entity_id' : 'floor_id' in entries[0] ? 'floor_id' : 'id'
     ) as ('entity_id' | 'floor_id' | 'id') & K;
   }
 
@@ -70,36 +68,25 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
    * Filters entries **strictly** by their `area_id`.
    *
    * - Entries with a matching `area_id` are kept.
-   * - If `expandToDevice` is `true`, the device's `area_id` is evaluated if the entry's area_id doesn't match.
    * - If `areaId` is `undefined` (or omitted), entries without an `area_id` property are kept.
+   * - If `expandToDevice` is `true` and the entry's `area_id` is `undisclosed`, the device's `area_id` is used.
    *
    * @param {string | undefined} areaId - The area id to match.
-   * @param {boolean} [expandToDevice=true] - Whether to use the device's `area_id` if the entry's doesn't match.
-   *
-   * @remarks
-   * For area id `undisclosed`, the `area_id` of the entry's device may be `undisclosed` or `undefined`.
+   * @param {boolean} [expandToDevice=true] - Whether to use the device's `area_id` if the entry has none.
    */
   whereAreaId(areaId?: string, expandToDevice: boolean = true): this {
     const predicate = (entry: T) => {
       let deviceAreaId: string | null | undefined = undefined;
       const entryObject = entry as EntityRegistryEntry;
 
-      // Retrieve the device area ID only if expandToDevice is true
       if (expandToDevice && entryObject.device_id) {
         deviceAreaId = Registry.devices.find((device) => device.id === entryObject.device_id)?.area_id;
       }
 
-      // Logic for 'undisclosed' areaId
-      if (areaId === 'undisclosed') {
-        return entry.area_id === areaId && (deviceAreaId === areaId || deviceAreaId === undefined);
+      if (areaId === 'undisclosed' || areaId === undefined) {
+        return entry.area_id === areaId && (!expandToDevice || deviceAreaId === areaId);
       }
 
-      // Logic for undefined areaId
-      if (areaId === undefined) {
-        return entry.area_id === undefined && (!expandToDevice || deviceAreaId === undefined);
-      }
-
-      // Logic for any other areaId
       return entry.area_id === areaId || (expandToDevice && deviceAreaId === areaId);
     };
 
@@ -420,18 +407,6 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
-   * Retrieves an array of values for a specified property from the filtered entries.
-   *
-   * @param {keyof T} propertyName - The name of the property whose values are to be retrieved.
-   * @returns {Array<T[keyof T]>} An array of values corresponding to the specified property.
-   *                               If the property does not exist in any entry, those entries will be filtered out.
-   */
-  getValuesByProperty(propertyName: keyof T): Array<T[keyof T]> {
-    const entries = this.toList(); // Call toList to get the full entries
-    return entries.map((entry) => entry[propertyName]).filter((value) => value !== undefined) as Array<T[keyof T]>;
-  }
-
-  /**
    * Applies all the accumulated filters to the entries and returns the first remaining entry.
    *
    * @remarks
@@ -466,7 +441,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
       return result[0];
     }
 
-    logMessage(lvlWarn, `Expected a single element, but found ${result.length}.`);
+    logMessage(lvlDebug, `Expected a single element, but found ${result.length}.`);
 
     return undefined;
   }

@@ -62,6 +62,7 @@ export default function setupCustomLocalize(hass?: HomeAssistant): void {
 
 /**
  * Translate a key using the globally configured localize function.
+ * Throws if not initialized.
  */
 export function localize(key: string): string {
   if (!_localize) {
