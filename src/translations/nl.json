@@ -19,9 +19,9 @@
     "all": "Alle",
     "areas": "Ruimtes",
     "busy": "Bezig",
-    "good_afternoon": "Goede middag",
-    "good_evening": "Goede avond",
-    "good_morning": "Goede morgen",
+    "good_afternoon": "Goedemiddag",
+    "good_evening": "Goedeavond",
+    "good_morning": "Goedemorgen",
     "hello": "Hallo",
     "home": "Start",
     "miscellaneous": "Overige",
@@ -29,7 +29,8 @@
     "off": "Uit",
     "on": "Aan",
     "open": "Open",
-    "unclosed": "Ongesloten"
+    "unclosed": "Ongesloten",
+    "undisclosed": "Overige"
   },
   "input_select": {
     "input_selects": "Lijsten"

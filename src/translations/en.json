@@ -29,7 +29,8 @@
     "off": "Off",
     "on": "On",
     "open": "Open",
-    "unclosed": "Unclosed"
+    "unclosed": "Unclosed",
+    "undisclosed": "Other"
   },
   "input_select": {
     "input_selects": "Input Selects"
@@ -42,7 +43,7 @@
     "locks": "Locks"
   },
   "media_player": {
-    "media_players": "Mediaplayers"
+    "media_players": "Media Players"
   },
   "scene": {
     "scenes": "Scenes"

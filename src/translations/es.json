@@ -29,7 +29,8 @@
     "off": "Apagado",
     "on": "Encendido",
     "open": "Abierto",
-    "unclosed": "Sin Cerrar"
+    "unclosed": "Sin Cerrar",
+    "undisclosed": "Varios"
   },
   "input_select": {
     "input_selects": "Selecciones de Entrada"
@@ -43,6 +44,9 @@
   },
   "media_player": {
     "media_players": "Reproductores Multimedia"
+  },
+  "scene": {
+    "scenes": "Scenas"
   },
   "select": {
     "selects": "Seleccionar"

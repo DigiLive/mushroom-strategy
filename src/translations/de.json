@@ -29,7 +29,8 @@
     "off": "Aus",
     "on": "Ein",
     "open": "Offen",
-    "unclosed": "Nicht Geschlossen"
+    "unclosed": "Nicht Geschlossen",
+    "undisclosed": "Sonstiges"
   },
   "input_select": {
     "input_selects": "Auswahl-Eingaben"
