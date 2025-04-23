@@ -18,6 +18,10 @@
       "name": "Ferry Cools"
     }
   ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/DigiLive"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AalianKhan/mushroom-strategy"
