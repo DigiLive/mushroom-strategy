@@ -1,46 +1,39 @@
-import {AbstractCard} from "./AbstractCard";
-import {cards} from "../types/strategy/cards";
-import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
-import {VACUUM_COMMANDS, VacuumCardConfig} from "../types/lovelace-mushroom/cards/vacuum-card-config";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
+import { VACUUM_COMMANDS, VacuumCardConfig } from '../types/lovelace-mushroom/cards/vacuum-card-config';
+import AbstractCard from './AbstractCard';
+
 /**
  * Vacuum Card Class
  *
- * Used to create a card for controlling an entity of the vacuum domain.
- *
- * @class
- * @extends AbstractCard
+ * Used to create a card configuration to control an entity of the vacuum domain.
  */
 class VacuumCard extends AbstractCard {
-  /**
-   * Default configuration of the card.
-   *
-   * @type {VacuumCardConfig}
-   * @private
-   */
-  #defaultConfig: VacuumCardConfig = {
-    type: "custom:mushroom-vacuum-card",
-    icon: undefined,
-    icon_animation: true,
-    commands: [...VACUUM_COMMANDS],
-    tap_action: {
-      action: "more-info",
-    }
-  };
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): VacuumCardConfig {
+    return {
+      type: 'custom:mushroom-vacuum-card',
+      icon: undefined,
+      icon_animation: true,
+      commands: [...VACUUM_COMMANDS],
+      tap_action: {
+        action: 'more-info',
+      },
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {EntityRegistryEntry} entity The hass entity to create a card for.
-   * @param {cards.VacuumCardOptions} [options={}] Options for the card.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {VacuumCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, options: cards.VacuumCardOptions = {}) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: VacuumCardConfig) {
     super(entity);
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...VacuumCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {VacuumCard};
+export default VacuumCard;

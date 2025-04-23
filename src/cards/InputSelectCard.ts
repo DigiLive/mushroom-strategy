@@ -1,41 +1,34 @@
-import {cards} from "../types/strategy/cards";
-import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
-import {SelectCardConfig} from "../types/lovelace-mushroom/cards/select-card-config";
-import {SelectCard} from './SelectCard';
+// noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-// noinspection JSUnusedGlobalSymbols Class is dynamically imported
+import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
+import { SelectCardConfig } from '../types/lovelace-mushroom/cards/select-card-config';
+import SelectCard from './SelectCard';
+
 /**
  * InputSelect Card Class
  *
- * Used to create a card for controlling an entity of the input_select domain.
- *
- * @class
- * @extends AbstractCard
+ * Used to create a card configuration to control an entity of the input_select domain.
  */
 class InputSelectCard extends SelectCard {
-  /**
-   * Default configuration of the card.
-   *
-   * @type {SelectCardConfig}
-   * @private
-   */
-  #defaultConfig: SelectCardConfig = {
-    type: "custom:mushroom-select-card",
-    icon: undefined,
-  };
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): SelectCardConfig {
+    return {
+      type: 'custom:mushroom-select-card',
+      icon: undefined,
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {EntityRegistryEntry} entity The hass entity to create a card for.
-   * @param {cards.InputSelectCardOptions} [options={}] Options for the card.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {SelectCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, options: cards.InputSelectCardOptions = {}) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: SelectCardConfig) {
     super(entity);
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...InputSelectCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {InputSelectCard};
+export default InputSelectCard;

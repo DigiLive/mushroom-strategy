@@ -1,63 +1,54 @@
-import {AbstractCard} from "./AbstractCard";
-import {cards} from "../types/strategy/cards";
-import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
-import {generic} from "../types/strategy/generic";
-import {EntityCardConfig} from "../types/lovelace-mushroom/cards/entity-card-config";
-import {Helper} from "../Helper";
-import isCallServiceActionConfig = generic.isCallServiceActionConfig;
-import isCallServiceActionTarget = generic.isCallServiceActionTarget;
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { Registry } from '../Registry';
+import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
+import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+import { isCallServiceActionConfig, isCallServiceActionTarget } from '../types/strategy/strategy-generics';
+import AbstractCard from './AbstractCard';
+
 /**
  * Scene Card Class
  *
- * Used to create a card for an entity of the scene domain.
- *
- * @class
- * @extends AbstractCard
+ * Used to create a card configuration to control an entity of the scene domain.
  */
 class SceneCard extends AbstractCard {
-  /**
-   * Default configuration of the card.
-   *
-   * @type {EntityCardConfig}
-   * @private
-   */
-  #defaultConfig: EntityCardConfig = {
-    type: "custom:mushroom-entity-card",
-    icon: "mdi:palette",
-    icon_color: "blue",
-    tap_action: {
-      action: "call-service",
-      service: "scene.turn_on",
-      target: {
-        entity_id: undefined,
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon: 'mdi:palette',
+      icon_color: 'blue',
+      tap_action: {
+        action: 'call-service',
+        perform_action: 'scene.turn_on',
+        target: {
+          entity_id: undefined,
+        },
       },
-    },
-  };
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {EntityRegistryEntry} entity The hass entity to create a card for.
-   * @param {cards.EntityCardOptions} [options={}] Options for the card.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {EntityCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, options: cards.EntityCardOptions = {}) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: EntityCardConfig) {
     super(entity);
 
-    // Set the target for tap action.
+    const configuration = SceneCard.getDefaultConfig();
+
     if (
-      isCallServiceActionConfig(this.#defaultConfig.tap_action)
-      && isCallServiceActionTarget(this.#defaultConfig.tap_action.target)
+      isCallServiceActionConfig(configuration.tap_action) &&
+      isCallServiceActionTarget(configuration.tap_action.target)
     ) {
-      this.#defaultConfig.tap_action.target.entity_id = entity.entity_id;
+      configuration.tap_action.target.entity_id = entity.entity_id;
     }
+    configuration.icon = Registry.hassStates[entity.entity_id]?.attributes.icon ?? configuration.icon;
 
-    this.#defaultConfig.icon = Helper.getEntityState(entity)?.attributes.icon ?? this.#defaultConfig.icon;
-
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
   }
 }
 
-export {SceneCard};
+export default SceneCard;

@@ -1,43 +1,35 @@
-import {AbstractCard} from "./AbstractCard";
-import {cards} from "../types/strategy/cards";
-import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
-import {PersonCardConfig} from "../types/lovelace-mushroom/cards/person-card-config";
+import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
+import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
+import AbstractCard from './AbstractCard';
 
 /**
  * Person Card Class
  *
- * Used to create a card for an entity of the Person domain.
- *
- * @class
- * @extends AbstractCard
+ * Used to create a card configuration to control an entity of the person domain.
  */
 class PersonCard extends AbstractCard {
-  /**
-   * Default configuration of the card.
-   *
-   * @type {PersonCardConfig}
-   * @private
-   */
-  #defaultConfig: PersonCardConfig = {
-    type: "custom:mushroom-person-card",
-    layout: "vertical",
-    primary_info: "none",
-    secondary_info: "none",
-    icon_type: "entity-picture",
-  };
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): PersonCardConfig {
+    return {
+      type: 'custom:mushroom-person-card',
+      layout: 'vertical',
+      primary_info: 'none',
+      secondary_info: 'none',
+      icon_type: 'entity-picture',
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {EntityRegistryEntry} entity The hass entity to create a card for.
-   * @param {cards.PersonCardOptions} [options={}] Options for the card.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {PersonCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, options: cards.PersonCardOptions = {}) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: PersonCardConfig) {
     super(entity);
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...PersonCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {PersonCard};
+export default PersonCard;

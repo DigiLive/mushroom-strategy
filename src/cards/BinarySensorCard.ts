@@ -1,42 +1,35 @@
-import {SensorCard} from "./SensorCard";
-import {cards} from "../types/strategy/cards";
-import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
-import {EntityCardConfig} from "../types/lovelace-mushroom/cards/entity-card-config";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
+import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+import SensorCard from './SensorCard';
+
 /**
  * Sensor Card Class
  *
- * Used to create a card for controlling an entity of the binary_sensor domain.
- *
- * @class
- * @extends SensorCard
+ * Used to create a card configuration to control an entity of the binary_sensor domain.
  */
 class BinarySensorCard extends SensorCard {
-  /**
-   * Default configuration of the card.
-   *
-   * @type {EntityCardConfig}
-   * @private
-   */
-  #defaultConfig: EntityCardConfig = {
-    type: "custom:mushroom-entity-card",
-    icon: "mdi:power-cycle",
-    icon_color: "green",
-  };
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon: 'mdi:power-cycle',
+      icon_color: 'green',
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {EntityRegistryEntry} entity The hass entity to create a card for.
-   * @param {cards.EntityCardOptions} [options={}] Options for the card.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {EntityCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, options: cards.EntityCardOptions = {}) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: EntityCardConfig) {
     super(entity);
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...BinarySensorCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {BinarySensorCard};
+export default BinarySensorCard;

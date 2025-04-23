@@ -1,48 +1,36 @@
-import {AbstractCard} from "./AbstractCard";
-import {cards} from "../types/strategy/cards";
-import {EntityRegistryEntry} from "../types/homeassistant/data/entity_registry";
-import {ClimateCardConfig} from "../types/lovelace-mushroom/cards/climate-card-config";
-
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
+import { ClimateCardConfig } from '../types/lovelace-mushroom/cards/climate-card-config';
+import AbstractCard from './AbstractCard';
+
 /**
  * Climate Card Class
  *
- * Used to create a card for controlling an entity of the climate domain.
- *
- * @class
- * @extends AbstractCard
+ * Used to create a card configuration to control an entity of the climate domain.
  */
 class ClimateCard extends AbstractCard {
-  /**
-   * Default configuration of the card.
-   *
-   * @type {ClimateCardConfig}
-   * @private
-   */
-  #defaultConfig: ClimateCardConfig = {
-    type: "custom:mushroom-climate-card",
-    icon: undefined,
-    hvac_modes: [
-      "off",
-      "cool",
-      "heat",
-      "fan_only",
-    ],
-    show_temperature_control: true,
-  };
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): ClimateCardConfig {
+    return {
+      type: 'custom:mushroom-climate-card',
+      icon: undefined,
+      hvac_modes: ['off', 'cool', 'heat', 'fan_only'],
+      show_temperature_control: true,
+    };
+  }
 
   /**
    * Class constructor.
    *
-   * @param {EntityRegistryEntry} entity The hass entity to create a card for.
-   * @param {cards.ClimateCardOptions} [options={}] Options for the card.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {ClimateCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, options: cards.ClimateCardOptions = {}) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: ClimateCardConfig) {
     super(entity);
 
-    this.config = Object.assign(this.config, this.#defaultConfig, options);
+    this.configuration = { ...this.configuration, ...ClimateCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 
-export {ClimateCard};
+export default ClimateCard;

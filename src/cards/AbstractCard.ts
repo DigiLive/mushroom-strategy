@@ -1,59 +1,59 @@
-import {Helper} from "../Helper";
-import {EntityCardConfig} from "../types/lovelace-mushroom/cards/entity-card-config";
-import {cards} from "../types/strategy/cards";
-import {generic} from "../types/strategy/generic";
+import { Registry } from '../Registry';
+import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+import { AbstractCardConfig } from '../types/strategy/strategy-cards';
+import { RegistryEntry } from '../types/strategy/strategy-generics';
+import { logMessage, lvlFatal } from '../utilities/debug';
 
 /**
  * Abstract Card Class
  *
- * To create a new card, extend the new class with this one.
+ * To create a card configuration, this class should be extended by a child class.
+ * Child classes should override the default configuration so the card correctly reflects the entity.
  *
- * @class
- * @abstract
+ * @remarks
+ * Before using this class, the Registry module must be initialized by calling {@link Registry.initialize}.
  */
 abstract class AbstractCard {
-  /**
-   * Entity to create the card for.
-   *
-   * @type {generic.RegistryEntry}
-   */
-  entity: generic.RegistryEntry;
+  /** The registry entry this card represents. */
+  readonly entity: RegistryEntry;
 
   /**
-   * Configuration of the card.
+   * The card configuration for this entity.
    *
-   * @type {EntityCardConfig}
+   * Child classes should override this property to reflect their own card type and options.
    */
-  config: EntityCardConfig = {
-    type: "custom:mushroom-entity-card",
-    icon: "mdi:help-circle",
+  configuration: EntityCardConfig = {
+    type: 'custom:mushroom-entity-card',
+    icon: 'mdi:help-circle',
   };
 
   /**
    * Class constructor.
    *
-   * @param {generic.RegistryEntry} entity The hass entity to create a card for.
-   * @throws {Error} If the Helper module isn't initialized.
+   * @param {RegistryEntry} entity The registry entry to create a card configuration for.
+   *
+   * @remarks
+   * Before this class can be used, the Registry module must be initialized by calling {@link Registry.initialize}.
    */
-  protected constructor(entity: generic.RegistryEntry) {
-    if (!Helper.isInitialized()) {
-      throw new Error("The Helper module must be initialized before using this one.");
+  protected constructor(entity: RegistryEntry) {
+    if (!Registry.initialized) {
+      logMessage(lvlFatal, 'Registry not initialized!');
     }
 
     this.entity = entity;
   }
 
   /**
-   * Get a card.
+   * Get a card configuration.
    *
-   * @returns {cards.AbstractCardConfig} A card object.
+   * The configuration should be set by any of the child classes so the card correctly reflects an entity.
    */
-  getCard(): cards.AbstractCardConfig {
+  getCard(): AbstractCardConfig {
     return {
-      ...this.config,
-      entity: "entity_id" in this.entity ? this.entity.entity_id : undefined,
+      ...this.configuration,
+      entity: 'entity_id' in this.entity ? this.entity.entity_id : undefined,
     };
   }
 }
 
-export {AbstractCard};
+export default AbstractCard;
