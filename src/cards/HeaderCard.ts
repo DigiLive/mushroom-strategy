@@ -18,7 +18,7 @@ class HeaderCard {
   /** Returns the default configuration object for the card. */
   static getDefaultConfig(): StrategyHeaderCardConfig {
     return {
-      type: 'custom:mushroom-title-card',
+      type: 'mushroom-title-card',
       showControls: true,
       iconOn: 'mdi:power-on',
       iconOff: 'mdi:power-off',
