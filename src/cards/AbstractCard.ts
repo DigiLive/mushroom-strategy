@@ -1,5 +1,5 @@
 import { Registry } from '../Registry';
-import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { AbstractCardConfig } from '../types/strategy/strategy-cards';
 import { RegistryEntry } from '../types/strategy/strategy-generics';
 import { logMessage, lvlFatal } from '../utilities/debug';
@@ -22,7 +22,7 @@ abstract class AbstractCard {
    *
    * Child classes should override this property to reflect their own card type and options.
    */
-  configuration: EntityCardConfig = {
+  configuration: LovelaceCardConfig = {
     type: 'custom:mushroom-entity-card',
     icon: 'mdi:help-circle',
   };
