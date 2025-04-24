@@ -40,7 +40,10 @@
     "lights": "Lights"
   },
   "lock": {
-    "locks": "Locks"
+    "all_locks": "All Locks",
+    "locked": "Locked",
+    "locks": "Locks",
+    "unlocked": "Unlocked"
   },
   "media_player": {
     "media_players": "Media Players"

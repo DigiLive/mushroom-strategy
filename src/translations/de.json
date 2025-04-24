@@ -40,7 +40,10 @@
     "lights": "Leuchten"
   },
   "lock": {
-    "locks": "Schlösser"
+    "locked": "Gesperrt",
+    "all_locks": "Alle Schlösser",
+    "locks": "Schlösser",
+    "unlocked": "Entsperrt"
   },
   "media_player": {
     "media_players": "Wiedergabegeräte"

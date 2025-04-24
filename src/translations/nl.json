@@ -40,7 +40,10 @@
     "lights": "Lampen"
   },
   "lock": {
-    "locks": "Sloten"
+    "all_locks": "Alle Sloten",
+    "locked": "Vergrendeld",
+    "locks": "Sloten",
+    "unlocked": "Ontgrendeld"
   },
   "media_player": {
     "media_players": "Mediaspelers"
