@@ -166,6 +166,10 @@ export const ConfigurationDefaults: StrategyDefaults = {
       order: 2,
       hidden: false,
     },
+    lock: {
+      order: 10,
+      hidden: false,
+    },
     scene: {
       order: 9,
       hidden: false,

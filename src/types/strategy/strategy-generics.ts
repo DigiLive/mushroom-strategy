@@ -45,7 +45,18 @@ const SUPPORTED_DOMAINS = [
  *
  * This constant array defines the views that are supported by the strategy.
  */
-const SUPPORTED_VIEWS = ['camera', 'climate', 'cover', 'fan', 'home', 'light', 'scene', 'switch', 'vacuum'] as const;
+const SUPPORTED_VIEWS = [
+  'camera',
+  'climate',
+  'cover',
+  'fan',
+  'home',
+  'light',
+  'lock',
+  'scene',
+  'switch',
+  'vacuum',
+] as const;
 
 /**
  * List of supported chips.
@@ -245,7 +256,7 @@ export interface StrategyArea extends AreaRegistryEntry {
  * @property {boolean} fan_count - Chip to display the number of fans on.
  * @property {boolean} light_count - Chip to display the number of lights on.
  * @property {boolean} switch_count - Chip to display the number of switches on.
- * @property {"auto" | `weather.${string}`} weather_entity - Entity id for the weather chip to use.
+ * @property {'auto' | `weather.${string}`} weather_entity - Entity id for the weather chip to use.
  *                                                           Accepts `weather.` ids or `auto` only.
  */
 export interface ChipConfiguration {

@@ -40,7 +40,10 @@
     "lights": "Luces"
   },
   "lock": {
-    "locks": "Candados"
+    "all_locks": "Todas las Candados",
+    "locked": "Locked",
+    "locks": "Candados",
+    "unlocked": "Desbloqueado"
   },
   "media_player": {
     "media_players": "Reproductores Multimedia"
