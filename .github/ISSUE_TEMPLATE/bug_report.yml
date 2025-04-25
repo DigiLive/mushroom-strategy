@@ -1,0 +1,103 @@
+name: Bug Report
+description: File a bug report to help us improve the project.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug!  
+        Please fill out the requested information to help us understand and reproduce the issue.
+
+  - type: input
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Briefly describe the bug you encountered.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Please provide clear and concise steps to reproduce the issue. Be as detailed as possible.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: Please provide the versions you use of the items below
+      placeholder: |
+        - Mushroom Dashboard: 
+        - Lovelace Mushroom: 
+        - Home Assistant:
+      value: |
+        - Mushroom Dashboard: 
+        - Lovelace Mushroom: 
+        - Home Assistant:
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: What environment were you using when you encountered the bug?
+      options:
+        - "Web Browser (specify name and version)"
+        - "Mobile Application (specify OS and version)"
+        - "Other (please specify, including version)"
+    validations:
+      required: true
+
+  - type: input
+    id: environment-version
+    attributes:
+      label: Environment and Version
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-logs
+    attributes:
+      label: Error Logs (if applicable)
+      description: If you encountered any error messages or logs, please include them here.
+      render: plain text
+
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Please provide any other relevant information or attachments that might help in understanding the issue.
+      placeholder: |
+        Add additional information or drop files here.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Guidelines
+      description: By submitting this issue, you agree to abide by our [contribution guidelines](blob/main/CONTRIBUTING.md).
+      options:
+        - label: I have read and agree to the guidelines.
+          required: true

@@ -1,0 +1,88 @@
+name: Feature Request
+description: Suggest a new feature or improvement for the project.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to suggest a new feature!  
+        Please provide as much detail as possible so we can understand your idea and its potential impact.
+
+  - type: input
+    id: feature-title
+    attributes:
+      label: Feature Title
+      description: Briefly and clearly describe your proposed feature.
+      placeholder: e.g., Add support for...
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-is-it
+    attributes:
+      label: What is the feature?
+      description: Describe the feature in detail. What would it do? How would it work?
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-it-solves
+    attributes:
+      label: What problem does this feature solve?
+      description: Explain the user need or pain point that this feature addresses. Why is it important?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution (Optional)
+      description: |
+        If you have specific ideas on how this feature could be implemented, please share them here.
+        Include any technical details or UI/UX suggestions.
+
+  - type: dropdown
+    id: affected-area
+    attributes:
+      label: Affected Area (Optional)
+      description: If this feature primarily relates to a specific part of the project, please indicate it.
+      options:
+        - User Interface (UI)
+        - User Experience (UX)
+        - Performance
+        - Security
+        - Documentation
+        - Other (please specify below)
+      default: 0
+
+  - type: input
+    id: affected-area-other
+    attributes:
+      label: Other Affected Area (if selected above)
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: Alternatives Considered (Optional)
+      description: |
+        Have you considered any alternative solutions or workarounds?
+        If so, please describe them and why you think this proposed feature is better.
+
+  - type: textarea
+    id: mockups-designs
+    attributes:
+      label: Mockups or Designs (Optional)
+      description: |
+        If you have any mockups, wireframes, or design ideas to illustrate your feature,
+        you can describe them here or attach them to the issue.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Guidelines
+      description: By submitting this issue, you agree to abide by our [contribution guidelines](blob/main/CONTRIBUTING.md).
+      options:
+        - label: I have read and agree to the guidelines.
+          required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Wiki
+    url: [https://github.com/AalianKhan/mushroom-strategy/wiki](https://github.com/AalianKhan/mushroom-strategy/wiki)
+    about: Please consult to Wiki for more information about the strategy and how to configure it.
+  - name: Discussions
+    url: [https://github.com/AalianKhan/mushroom-strategy/discussions](https://github.com/AalianKhan/mushroom-strategy/discussions)
+    about: Discuss any other topic about the strategy over here.
