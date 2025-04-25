@@ -29,8 +29,10 @@
     "off": "Apagado",
     "on": "Encendido",
     "open": "Abierto",
+    "unavailable": "No Disponible",
     "unclosed": "Sin Cerrar",
-    "undisclosed": "Varios"
+    "undisclosed": "Varios",
+    "unknown": "Desconocido"
   },
   "input_select": {
     "input_selects": "Selecciones de Entrada"
@@ -65,5 +67,14 @@
   "vacuum": {
     "all_vacuums": "Todas las Aspiradoras",
     "vacuums": "Aspiradoras"
+  },
+  "valve": {
+    "all_valves": "Todas las válvulas",
+    "valves": "Válvulas",
+    "open": "Abierta",
+    "opening": "Abriendo",
+    "closed": "Cerrada",
+    "closing": "Cerrando",
+    "stopped": "Detenida"
   }
 }
