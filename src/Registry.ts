@@ -1,11 +1,11 @@
-import deepmerge from "deepmerge";
-import {HassEntities} from "home-assistant-js-websocket";
-import {ConfigurationDefaults} from "./configurationDefaults";
-import {AreaRegistryEntry} from "./types/homeassistant/data/area_registry";
-import {DeviceRegistryEntry} from "./types/homeassistant/data/device_registry";
-import {EntityRegistryEntry} from "./types/homeassistant/data/entity_registry";
-import {LovelaceCardConfig} from "./types/homeassistant/data/lovelace/config/card";
-import {StackCardConfig} from "./types/homeassistant/panels/lovelace/cards/types";
+import deepmerge from 'deepmerge';
+import { HassEntities } from 'home-assistant-js-websocket';
+import { ConfigurationDefaults } from './configurationDefaults';
+import { AreaRegistryEntry } from './types/homeassistant/data/area_registry';
+import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
+import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
+import { LovelaceCardConfig } from './types/homeassistant/data/lovelace/config/card';
+import { StackCardConfig } from './types/homeassistant/panels/lovelace/cards/types';
 import {
   AllDomainsConfig,
   DashboardInfo,
@@ -16,10 +16,10 @@ import {
   StrategyViewConfig,
   SupportedDomains,
   SupportedViews,
-} from "./types/strategy/strategy-generics";
-import {logMessage, lvlDebug, lvlFatal, lvlOff, lvlWarn, setDebugLevel} from "./utilities/debug";
-import setupCustomLocalize from "./utilities/localize";
-import RegistryFilter from "./utilities/RegistryFilter";
+} from './types/strategy/strategy-generics';
+import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
+import setupCustomLocalize from './utilities/localize';
+import RegistryFilter from './utilities/RegistryFilter';
 
 /**
  * Registry Class
@@ -119,7 +119,7 @@ class Registry {
       logMessage(lvlFatal, 'Error importing strategy options!', e);
     }
 
-    setDebugLevel(Registry.strategyOptions.debug ? lvlDebug : lvlOff);
+    setDebugLevel(Registry.strategyOptions.debug ? lvlFatal : lvlOff);
 
     // Import the registries of Home Assistant.
     try {
