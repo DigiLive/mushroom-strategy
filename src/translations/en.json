@@ -29,8 +29,10 @@
     "off": "Off",
     "on": "On",
     "open": "Open",
+    "unavailable": "Unavailable",
     "unclosed": "Unclosed",
-    "undisclosed": "Other"
+    "undisclosed": "Other",
+    "unknown": "Unknown"
   },
   "input_select": {
     "input_selects": "Input Selects"
@@ -65,5 +67,14 @@
   "vacuum": {
     "all_vacuums": "All Vacuums",
     "vacuums": "Vacuums"
+  },
+  "valve": {
+    "all_valves": "All Valves",
+    "valves": "Valves",
+    "open": "Open",
+    "opening": "Opening",
+    "closed": "Closed",
+    "closing": "Closing",
+    "stopped": "Stopped"
   }
 }

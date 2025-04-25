@@ -29,8 +29,10 @@
     "off": "Aus",
     "on": "Ein",
     "open": "Offen",
+    "unavailable": "Nicht verfügbar",
     "unclosed": "Nicht Geschlossen",
-    "undisclosed": "Sonstiges"
+    "undisclosed": "Sonstiges",
+    "unknown": "Unbekannt"
   },
   "input_select": {
     "input_selects": "Auswahl-Eingaben"
@@ -65,5 +67,14 @@
   "vacuum": {
     "all_vacuums": "Alle Staubsauger",
     "vacuums": "Staubsauger"
+  },
+  "valve": {
+    "all_valves": "Alle Ventile",
+    "valves": "Ventile",
+    "open": "Offen",
+    "opening": "Öffnet",
+    "closed": "Geschlossen",
+    "closing": "Schließt",
+    "stopped": "Gestoppt"
   }
 }
