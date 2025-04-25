@@ -2,7 +2,7 @@ import { Registry } from '../Registry';
 import { DeviceRegistryEntry } from '../types/homeassistant/data/device_registry';
 import { EntityCategory, EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
 import { RegistryEntry, StrategyConfig } from '../types/strategy/strategy-generics';
-import { logMessage, lvlDebug } from './debug';
+import { logMessage, lvlWarn } from './debug';
 
 /**
  * A class for filtering and sorting arrays of Home Assistant's registry entries.
@@ -441,7 +441,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
       return result[0];
     }
 
-    logMessage(lvlDebug, `Expected a single element, but found ${result.length}.`);
+    logMessage(lvlWarn, `Expected a single element, but found ${result.length}.`);
 
     return undefined;
   }
