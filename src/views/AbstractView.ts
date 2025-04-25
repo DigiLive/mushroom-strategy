@@ -53,13 +53,6 @@ abstract class AbstractView {
    * Create the configuration of the cards to include in the view.
    */
   protected async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
-    if (this.domain === 'home') {
-      // The home domain should override this method because it hasn't entities of its own.
-      // The method override creates its own configurations for cards to show at the home view.
-
-      return [];
-    }
-
     const viewCards: LovelaceCardConfig[] = [];
     const domainEntities = new RegistryFilter(Registry.entities).whereDomain(this.domain).toList();
     const moduleName = sanitizeClassName(this.domain + 'Card');
