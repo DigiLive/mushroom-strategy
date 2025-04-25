@@ -43,6 +43,48 @@ export const {
 let currentLevel: DebugLevel = DebugLevel.Off;
 
 /**
+ * Extracts the name of the function or method that called the logger from a stack trace string.
+ *
+ * Handles both Chrome and Firefox stack trace formats:
+ * - Chrome: "at ClassName.methodName (url:line:column)"
+ * - Firefox: "methodName@url:line:column"
+ *
+ * Returns the full caller (including class, if available), or "unknown" if not found.
+ *
+ * @param stack - The stack trace string, typically from new Error().stack
+ * @returns The caller's function/method name (with class if available), or "unknown"
+ */
+function getCallerName(stack?: string): string {
+  if (!stack) {
+    return 'unknown';
+  }
+
+  const lines = stack.split('\n').filter(Boolean);
+
+  // Find the first line that contains '@' and is not logMessage itself
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.includes('@') && !line.startsWith('logMessage')) {
+      return line.split('@')[0] || 'anonymous';
+    }
+    // Fallback for anonymous functions
+    if (line.startsWith('@')) {
+      return 'anonymous function';
+    }
+  }
+
+  // Chrome fallback
+  for (let i = 1; i < lines.length; i++) {
+    const match = lines[i].match(/at ([^( ]+)/);
+    if (match && match[1] && match[1] !== 'logMessage') {
+      return match[1];
+    }
+  }
+
+  return 'unknown function';
+}
+
+/**
  * Sets the global log level.
  *
  * @param {DebugLevel} level - The maximum level to log.
@@ -71,22 +113,23 @@ export function logMessage(level: DebugLevel, message: string, ...details: unkno
   const frontEndMessage: string = 'Mushroom Strategy - An error occurred. Check the console (F12) for details.';
   const prefix = `[${DebugLevel[level].toUpperCase()}]`;
   const safeDetails = details.map(deepClone);
+  const caller = `[at ${getCallerName(new Error().stack)}]`;
 
   switch (level) {
     case DebugLevel.Debug:
-      console.debug(`${prefix} ${message}`, ...safeDetails);
+      console.debug(`${prefix}${caller} ${message}`, ...safeDetails);
       break;
     case DebugLevel.Info:
-      console.info(`${prefix} ${message}`, ...safeDetails);
+      console.info(`${prefix}${caller} ${message}`, ...safeDetails);
       break;
     case DebugLevel.Warn:
-      console.warn(`${prefix} ${message}`, ...safeDetails);
+      console.warn(`${prefix}${caller} ${message}`, ...safeDetails);
       break;
     case DebugLevel.Error:
-      console.error(`${prefix} ${message}`, ...safeDetails);
+      console.error(`${prefix}${caller} ${message}`, ...safeDetails);
       throw frontEndMessage;
     case DebugLevel.Fatal:
-      console.error(`${prefix} ${message}`, ...safeDetails);
+      console.error(`${prefix}${caller} ${message}`, ...safeDetails);
       alert?.(`${prefix} ${message}`);
       throw frontEndMessage;
   }
