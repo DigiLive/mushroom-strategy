@@ -7,15 +7,15 @@
     "strategy",
     "mushroom"
   ],
-  "homepage": "https://github.com/AalianKhan/mushroom-strategy",
-  "bugs": "https://github.com/AalianKhan/mushroom-strategy/issues",
+  "homepage": "https://github.com/DigiLive/mushroom-strategy",
+  "bugs": "https://github.com/DigiLive/mushroom-strategy/issues",
   "license": "MIT",
   "author": {
-    "name": "Aalian Khan"
+    "name": "Ferry Cools"
   },
   "contributors": [
     {
-      "name": "Ferry Cools"
+      "name": "Aalian Khan"
     }
   ],
   "funding": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AalianKhan/mushroom-strategy"
+    "url": "https://github.com/DigiLive/mushroom-strategy"
   },
   "dependencies": {
     "deepmerge": "^4"
@@ -42,7 +42,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "version-bump-prompt": "^6",
-    "webpack": "^5.99.6",
+    "webpack": "^5.99.7",
     "webpack-cli": "^6.0.1"
   },
   "scripts": {
