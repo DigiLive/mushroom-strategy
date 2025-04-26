@@ -19,7 +19,7 @@ export type AbstractCardConfig = LovelaceCardConfig & EntitySharedConfig & Appea
  * @property {string} [offService=none] - Service to call for switching entities to the off state.
  */
 export interface StrategyHeaderCardConfig extends MushroomTitleCardConfig {
-  type: 'mushroom-title-card';
+  type: 'custom:mushroom-title-card';
   showControls?: boolean;
   iconOn?: string;
   iconOff?: string;
