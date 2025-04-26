@@ -20,14 +20,9 @@ import RegistryFilter from './utilities/RegistryFilter';
  * Mushroom Dashboard Strategy.<br>
  * <br>
  * Mushroom dashboard strategy provides a strategy for Home-Assistant to create a dashboard automatically.<br>
- * The strategy makes use Mushroom and Mini Graph cards to represent your entities.<br>
- * <br>
- * Features:<br>
- *     🛠️ Automatically create dashboard with three lines of yaml.<br>
- *     😍 Built-in Views for several standard domains.<br>
- *     🎨 Many options to customize to your needs.<br>
- * <br>
- * Check the [Repository]{@link https://github.com/AalianKhan/mushroom-strategy} for more information.
+ * The strategy makes use Mushroom and Mini Graph cards to represent your entities.
+ *
+ * @see https://github.com/DigiLive/mushroom-strategy
  */
 class MushroomStrategy extends HTMLTemplateElement {
   /**
