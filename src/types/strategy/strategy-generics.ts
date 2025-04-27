@@ -1,4 +1,3 @@
-import { HassServiceTarget } from 'home-assistant-js-websocket';
 import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from '../homeassistant/data/device_registry';
 import { EntityRegistryEntry } from '../homeassistant/data/entity_registry';
@@ -7,7 +6,13 @@ import { LovelaceCardConfig } from '../homeassistant/data/lovelace/config/card';
 import { LovelaceConfig } from '../homeassistant/data/lovelace/config/types';
 import { LovelaceViewConfig, LovelaceViewRawConfig } from '../homeassistant/data/lovelace/config/view';
 import { HomeAssistant } from '../homeassistant/types';
-import { LovelaceChipConfig } from '../lovelace-mushroom/utils/lovelace/chip/types';
+import {
+  BackChipConfig,
+  ConditionalChipConfig,
+  LovelaceChipConfig,
+  MenuChipConfig,
+  SpacerChipConfig,
+} from '../lovelace-mushroom/utils/lovelace/chip/types';
 import { StrategyHeaderCardConfig } from './strategy-cards';
 
 /**
@@ -303,13 +308,24 @@ export function isCallServiceActionConfig(object?: ActionConfig): object is Call
 }
 
 /**
- * Type guard to check if an object matches the HassServiceTarget interface.
- *
- * @param {any} [object] - The object to check.
- * @returns {boolean} - True if the object represents a valid service action target.
+ * List of chip types that are not considered "targetable".
+ * These chips do not support tap_action or similar targeting logic.
  */
-export function isCallServiceActionTarget(object?: HassServiceTarget): object is HassServiceTarget {
-  return !!object && ['entity_id', 'device_id', 'area_id'].some((key) => key in object);
+const NON_TARGETABLE_CHIP_TYPES = ['back', 'menu', 'conditional', 'spacer'] as const;
+
+/**
+ * Type guard to check if a LovelaceChipConfig is "targetable".
+ *
+ * A targetable chip supports actions like tap_action.
+ * This function excludes chips of type "back", "menu", "conditional", and "spacer".
+ *
+ * @param object - The chip configuration object to check.
+ * @returns True if the chip is targetable; false otherwise.
+ */
+export function isTargetableChip(
+  object: LovelaceChipConfig,
+): object is Exclude<LovelaceChipConfig, BackChipConfig | MenuChipConfig | ConditionalChipConfig | SpacerChipConfig> {
+  return !NON_TARGETABLE_CHIP_TYPES.includes(object.type as (typeof NON_TARGETABLE_CHIP_TYPES)[number]);
 }
 
 /**
