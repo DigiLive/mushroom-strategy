@@ -20,7 +20,8 @@ abstract class AbstractChip {
    *
    * Child classes should override this property to reflect their own card type and options.
    */
-  configuration: LovelaceChipConfig = {
+  protected configuration: LovelaceChipConfig = {
+    // TODO: Check if this is correct vs custom:mushroom-template-badge. Also in child classes.
     type: 'template',
   };
 
