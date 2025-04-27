@@ -106,7 +106,6 @@ class Registry {
    * @param {DashboardInfo} info Strategy information object.
    */
   static async initialize(info: DashboardInfo): Promise<void> {
-    setDebugLevel(lvlFatal);
     setupCustomLocalize(info.hass);
 
     // Import the Hass States and strategy options.
