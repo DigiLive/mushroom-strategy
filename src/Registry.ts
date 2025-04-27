@@ -1,6 +1,5 @@
 import deepmerge from 'deepmerge';
 import { HassEntities } from 'home-assistant-js-websocket';
-import { ConfigurationDefaults } from './configurationDefaults';
 import { AreaRegistryEntry } from './types/homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
 import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
@@ -112,6 +111,7 @@ class Registry {
 
     // Import the Hass States and strategy options.
     Registry._hassStates = info.hass.states;
+    const { ConfigurationDefaults } = await import('./configurationDefaults');
 
     try {
       Registry._strategyOptions = deepmerge(ConfigurationDefaults, info.config?.strategy?.options ?? {});
