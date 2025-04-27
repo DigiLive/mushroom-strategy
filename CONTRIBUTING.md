@@ -6,17 +6,18 @@ All types of contributions are encouraged and valued.
 See the [Table of Contents](#table-of-contents) for different ways to help and details about how this project handles
 them.
 
-Please make sure to read the relevant section before making your contribution.
-It will make it a lot easier for us maintainers and smooth out the experience for all involved.
+Please make sure to read the relevant section before making your contribution.  
+It will make it a lot easier for us maintainers and smooth out the experience for all involved.  
 The community looks forward to your contributions.
 
 > And if you like the project but just don't have time to contribute, that's fine.
 > There are other easy ways to support the project and show your appreciation, which we would also be thrilled about:
-> - Star the project
-> - Tweet about it
-> - Refer this project at your project's readme
-> - Mention the project at local meetups and tell your friends/colleagues
-> - Sponsor the project at GitHub Sponsors
+>
+> - Star the project.
+> - Tweet about it.
+> - Refer to this project in the readme of your project.
+> - Mention the project at local meetups and tell your friends/colleagues.
+> - Sponsor the project at [GitHub Sponsors][sponsorUrl].
 
 ## Table of Contents
 
@@ -43,9 +44,9 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 > [!TIP]
 > Before you ask a question, we assume that you have read the [README](README.md) file or the
-> available [Documentation](../../wiki).
+> available resources at the [Wiki][wikiUrl] or [Discussions][discussionsUrl].
 
-Before you ask a question, it is best to search for existing [discussions](../../discussions) or [Issues](../../issues)
+Before you ask a question, it is best to search for existing [discussions][discussionsUrl] or [Issues][issuesUrl]
 that might
 help you.  
 In case you have found a suitable topic and still need clarification, you can address your question in that topic.
@@ -53,7 +54,7 @@ It is also advisable to search the internet for answers first.
 
 If you then still feel the need to ask a question and need clarification, we recommend the following:
 
-- Open a new [discussion](../../discussions/new/choose) or [issue](../../issues/new/choose).
+- Open a new discussion or issue.
 - Provide as much context as you can about what you're running into.
 - Provide project and platform versions (nodejs, npm, etc), depending on what seems relevant.
 
@@ -78,11 +79,11 @@ Please complete the following steps in advance to help us fix any potential bug 
 
 - Make sure that you are using the latest version.
 - Determine if your bug is really a bug and not an error on your side, e.g., using incompatible environment
-  components/versions (Make sure that you have read the [documentation](../../wiki).
+  components/versions (Make sure that you have read the [Wiki][wikiUrl].
   If you are looking for support, you might want to check [this section](#i-have-a-question)).
 - To see if other users have experienced (and potentially already solved) the same issue you are having, check if there
-  is not already a bug report existing for your bug or error in the [bug tracker](../../issues?q=label%3Abug).
-- Also make sure to search the internet (including Stack Overflow) to see if users outside the GitHub community have
+  is not already a report existing for your issue in the [issue tracker][issuesUrl].
+- Also, make sure to search the internet (including Stack Overflow) to see if users outside the GitHub community have
   discussed the issue.
 - Collect information about the bug:
   - Stack trace (Traceback).
@@ -91,16 +92,16 @@ Please complete the following steps in advance to help us fix any potential bug 
   - Possibly your input and the output.
   - Can you reliably reproduce the issue? And can you also reproduce it with older versions?
 
-#### How Do I Submit a Good Bug Report?
+#### How Do I Submit a Good Report?
 
 > [!CAUTION]
-> You must never report security related issues, vulnerabilities, or bugs including sensitive information to the issue
+> You must never report security-related issues, vulnerabilities, or bugs including sensitive information to the issue
 > tracker, or elsewhere in public.  
 > Instead, sensitive bugs must be sent by email to a project leader.
 
 We use GitHub issues to track bugs and errors. If you run into an issue with the project:
 
-- Open an [issue](../../issues/new/choose).
+- Open an [issue][issuesUrl].
 - Explain the behavior you would expect and the actual behavior.
 - Please provide as much context as possible and describe the *reproduction steps* that someone else can follow to
   recreate the issue on their own. This usually includes your code.  
@@ -127,19 +128,19 @@ suggestions.
 #### Before Submitting an Enhancement
 
 - Make sure that you are using the latest version.
-- Read the [documentation](../../wiki) carefully and find out if the functionality is already covered, maybe by an
-  individual
-  configuration.
-- Search the [issue tracker](../../issues) to see if the enhancement has already been suggested.  
+- Read the [Wiki][wikiUrl] carefully and find out if the functionality is already covered, maybe by an
+  individual configuration.
+- Search the [issue tracker][issuesUrl] or [Pull Requests][pullRequestUrl] to see if the enhancement has already been
+  suggested.  
   If it has, add a comment to the existing issue instead of opening a new one.
 - Find out whether your idea fits with the scope and aims of the project.  
-  It's up to you convince the developers of this feature's merits with a well-reasoned proposal.  
+  It's up to you to convince the developers of this feature's merits with a well-reasoned proposal.  
   Keep in mind that we want features that will be useful to the majority of our users and not just a small subset.
   If you're just targeting a minority of users, consider writing an add-on/plugin library.
 
 #### How Do I Submit a Good Enhancement Suggestion?
 
-Enhancement suggestions are tracked as [GitHub issues](../../issues).
+Enhancement suggestions are tracked as [GitHub issues][issuesUrl].
 
 - Use a **clear and descriptive title** for the issue to identify the suggestion.
 - Provide a **step-by-step description of the suggested enhancement** in as many details as possible.
@@ -209,3 +210,13 @@ Commit messages must follow [these](https://github.com/DigiLive/gitChangelog/wik
 ## Attribution
 
 This guide is based on the **contributing-gen**. [Make your own](https://github.com/bttger/contributing-gen)!
+
+[issuesUrl]: https://github.com/DigiLive/mushroom-strategy/issues
+
+[pullRequestUrl]: https://github.com/DigiLive/mushroom-strategy/pulls
+
+[discussionsUrl]: https://github.com/DigiLive/mushroom-strategy/discussions
+
+[wikiUrl]: https://github.com/DigiLive/mushroom-strategy/wiki
+
+[sponsorUrl]: https://github.com/sponsors/DigiLive
