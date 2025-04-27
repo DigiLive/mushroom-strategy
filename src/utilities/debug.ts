@@ -40,7 +40,7 @@ export const {
  *
  * @default DebugLevel.Off
  */
-let currentLevel: DebugLevel = DebugLevel.Off;
+let currentLevel: DebugLevel = DebugLevel.Fatal;
 
 /**
  * Extracts the name of the function or method that called the logger from a stack trace string.
