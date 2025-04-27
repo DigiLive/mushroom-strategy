@@ -297,7 +297,9 @@ export function isSortable(object: object): object is Sortable {
  * @returns {boolean} - True if the object represents a valid service action configuration.
  */
 export function isCallServiceActionConfig(object?: ActionConfig): object is CallServiceActionConfig {
-  return !!object && object.action === 'call-service' && ['action', 'service'].every((key) => key in object);
+  return (
+    !!object && (object.action === 'perform-action' || object.action === 'call-service') && 'perform_action' in object
+  );
 }
 
 /**
