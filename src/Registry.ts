@@ -244,6 +244,7 @@ class Registry {
     states.push(
       ...new RegistryFilter(Registry.entities)
         .whereDomain(domain)
+        .where((entity) => !entity.entity_id.endsWith('_stateful_scene'))
         .toList()
         .map((entity) => `states['${entity.entity_id}']`),
     );

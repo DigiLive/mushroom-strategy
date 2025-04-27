@@ -110,7 +110,11 @@ class MushroomStrategy extends HTMLTemplateElement {
     // Prepare promises for all supported domains
     const domainCardPromises = exposedDomainNames.filter(isSupportedDomain).map(async (domain) => {
       const moduleName = sanitizeClassName(domain + 'Card');
-      const entities = new RegistryFilter(areaEntities).whereDomain(domain).toList();
+
+      const entities = new RegistryFilter(areaEntities)
+        .whereDomain(domain)
+        .where((entity) => !(domain === 'switch' && entity.entity_id.endsWith('_stateful_scene')))
+        .toList();
 
       if (!entities.length) {
         return null;

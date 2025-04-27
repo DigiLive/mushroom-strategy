@@ -54,9 +54,12 @@ abstract class AbstractView {
    */
   protected async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
     const viewCards: LovelaceCardConfig[] = [];
-    const domainEntities = new RegistryFilter(Registry.entities).whereDomain(this.domain).toList();
     const moduleName = sanitizeClassName(this.domain + 'Card');
     const DomainCard = (await import(`../cards/${moduleName}`)).default;
+    const domainEntities = new RegistryFilter(Registry.entities)
+      .whereDomain(this.domain)
+      .where((entity) => !entity.entity_id.endsWith('_stateful_scene'))
+      .toList();
 
     // Create card configurations for each area.
     for (const area of Registry.areas) {
