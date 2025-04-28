@@ -7,13 +7,13 @@ import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
 
 /**
- * Vacuum View Class.
+ * Lock View Class.
  *
  * Used to create a view configuration for entities of the lock domain.
  */
 class LockView extends AbstractView {
   /** The domain of the entities that the view is representing. */
-  static readonly domain = 'vacuum' as const;
+  static readonly domain = 'lock' as const;
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
