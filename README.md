@@ -63,7 +63,7 @@ Visit the [issues][issuesUrl] page.
 
 [sponsorBadge]: https://img.shields.io/badge/Sponsor_him-%E2%9D%A4-%23db61a2.svg?&logo=github&color=%23fe8e86
 
-[releaseBadge]: https://img.shields.io/badge/Release-v2.3.0-alpha.1-blue
+[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.0-alpha.1&label=Release
 
 <!-- Repository References -->
 
