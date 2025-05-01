@@ -3,6 +3,7 @@
 import { Registry } from '../Registry';
 import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
 import AbstractChip from './AbstractChip';
+import RegistryFilter from '../utilities/RegistryFilter';
 
 /**
  * Fan Chip class.
@@ -18,8 +19,13 @@ class FanChip extends AbstractChip {
       icon_color: 'green',
       content: Registry.getCountTemplate('fan', 'eq', 'on'),
       tap_action: {
-        action: 'call-service',
+        action: 'perform-action',
         perform_action: 'fan.turn_off',
+        target: {
+          entity_id: new RegistryFilter(Registry.entities)
+            .whereDomain('fan')
+            .getValuesByProperty('entity_id') as string[],
+        },
       },
       hold_action: {
         action: 'navigate',
