@@ -409,6 +409,18 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
+   * Retrieves an array of values for a specified property from the filtered entries.
+   *
+   * @param {keyof T} propertyName - The name of the property whose values are to be retrieved.
+   * @returns {Array<T[keyof T]>} An array of values corresponding to the specified property.
+   *                               If the property does not exist in any entry, those entries will be filtered out.
+   */
+  getValuesByProperty(propertyName: keyof T): Array<T[keyof T]> {
+    const entries = this.toList(); // Call toList to get the full entries
+    return entries.map((entry) => entry[propertyName]).filter((value) => value !== undefined) as Array<T[keyof T]>;
+  }
+
+  /**
    * Applies all the accumulated filters to the entries and returns the first remaining entry.
    *
    * @remarks
