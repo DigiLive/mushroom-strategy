@@ -19,6 +19,7 @@ export enum DebugLevel {
   Fatal = 5,
 }
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Individually exported log level constants.
  *
