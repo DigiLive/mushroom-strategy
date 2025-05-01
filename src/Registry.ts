@@ -161,7 +161,9 @@ class Registry {
     }));
 
     // Process entries of the HASS area registry.
-    if (!Registry.strategyOptions.areas._?.hidden) {
+    if (Registry.strategyOptions.areas._?.hidden) {
+      Registry._areas = [];
+    } else {
       // Create and add the undisclosed area if not hidden in the strategy options.
       if (!Registry.strategyOptions.areas.undisclosed?.hidden) {
         Registry.areas.push(ConfigurationDefaults.areas.undisclosed);
@@ -179,8 +181,6 @@ class Registry {
       // Remove hidden areas if configured as so and sort them by name.
 
       Registry._areas = new RegistryFilter(Registry.areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
-    } else {
-      Registry._areas = [];
     }
 
     // Sort views by order first and then by title.

@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { Registry } from '../Registry';
 import { DeviceRegistryEntry } from '../types/homeassistant/data/device_registry';
 import { EntityCategory, EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
@@ -25,7 +27,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   constructor(entries: T[]) {
     this.entries = entries;
     this.entryIdentifier = (
-      entries.length == 0 || 'entity_id' in entries[0] ? 'entity_id' : 'floor_id' in entries[0] ? 'floor_id' : 'id'
+      entries.length === 0 || 'entity_id' in entries[0] ? 'entity_id' : 'floor_id' in entries[0] ? 'floor_id' : 'id'
     ) as ('entity_id' | 'floor_id' | 'id') & K;
   }
 
