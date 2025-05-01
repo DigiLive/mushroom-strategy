@@ -24,13 +24,14 @@ export const ConfigurationDefaults: StrategyDefaults = {
   },
   card_options: {},
   chips: {
-    climate_count: true,
-    cover_count: true,
-    extra_chips: [],
-    fan_count: true,
+    // TODO: Make chips sortable.
+    weather_entity: 'auto',
     light_count: true,
+    fan_count: true,
+    cover_count: true,
     switch_count: true,
-    weather_entity: 'auto', // TODO: Update Wiki
+    climate_count: true,
+    extra_chips: [],
   },
   debug: false,
   domains: {
