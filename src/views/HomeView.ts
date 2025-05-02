@@ -209,7 +209,7 @@ class HomeView extends AbstractView {
 
     return {
       type: 'vertical-stack',
-      cards: Registry.stackHorizontal(cardConfigurations, 8),
+      cards: Registry.stackHorizontal(cardConfigurations),
     };
   }
 
@@ -228,11 +228,15 @@ class HomeView extends AbstractView {
 
     const cardConfigurations: (TemplateCardConfig | AreaCardConfig)[] = [];
 
+    let onlyDefaultCards = true;
+
     for (const area of Registry.areas) {
       const moduleName =
         Registry.strategyOptions.areas[area.area_id]?.type ?? Registry.strategyOptions.areas['_']?.type ?? 'default';
 
       let AreaCard;
+
+      onlyDefaultCards = onlyDefaultCards && moduleName === 'default';
 
       try {
         AreaCard = (await import(`../cards/${moduleName}`)).default;
@@ -254,7 +258,7 @@ class HomeView extends AbstractView {
       title: (Registry.strategyOptions.home_view.hidden as HomeViewSections[]).includes('areasTitle')
         ? undefined
         : localize('generic.areas'),
-      cards: Registry.stackHorizontal(cardConfigurations, 2),
+      cards: Registry.stackHorizontal(cardConfigurations, { area: 1, 'custom:mushroom-template-card': 2 }),
     };
   }
 }
