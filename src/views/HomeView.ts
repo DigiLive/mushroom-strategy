@@ -11,9 +11,10 @@ import { LovelaceChipConfig } from '../types/lovelace-mushroom/utils/lovelace/ch
 import { HomeViewSections, isSupportedChip } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { sanitizeClassName } from '../utilities/auxiliaries';
-import { logMessage, lvlError } from '../utilities/debug';
+import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import registryFilter from '../utilities/RegistryFilter';
 
 /**
  * Home View Class.
@@ -147,13 +148,17 @@ class HomeView extends AbstractView {
 
         chipConfigurations.push(weatherChip.getChipConfiguration());
       } catch (e) {
-        logMessage(lvlError, 'Error creating the configuration for chip weather!', e);
+        logMessage(lvlError, 'Error importing chip weather!', e);
       }
+    } else {
+      logMessage(lvlInfo, 'Weather chip has no entities available.');
     }
 
     // Numeric chips.
     for (const chipName of exposedChips) {
-      if (!isSupportedChip(chipName)) {
+      if (!isSupportedChip(chipName) || !new registryFilter(Registry.entities).whereDomain(chipName).count()) {
+        logMessage(lvlInfo, `Chip for domain ${chipName} is unsupported or has no entities available.`);
+
         continue;
       }
 
@@ -165,7 +170,7 @@ class HomeView extends AbstractView {
 
         chipConfigurations.push(currentChip.getChipConfiguration());
       } catch (e) {
-        logMessage(lvlError, `Error creating the configuration for chip ${chipName}!`, e);
+        logMessage(lvlError, `Error importing chip ${chipName}!`, e);
       }
     }
 
