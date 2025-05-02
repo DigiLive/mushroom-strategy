@@ -6,13 +6,7 @@ import { LovelaceCardConfig } from '../homeassistant/data/lovelace/config/card';
 import { LovelaceConfig } from '../homeassistant/data/lovelace/config/types';
 import { LovelaceViewConfig, LovelaceViewRawConfig } from '../homeassistant/data/lovelace/config/view';
 import { HomeAssistant } from '../homeassistant/types';
-import {
-  BackChipConfig,
-  ConditionalChipConfig,
-  LovelaceChipConfig,
-  MenuChipConfig,
-  SpacerChipConfig,
-} from '../lovelace-mushroom/utils/lovelace/chip/types';
+import { LovelaceChipConfig } from '../lovelace-mushroom/utils/lovelace/chip/types';
 import { StrategyHeaderCardConfig } from './strategy-cards';
 
 /**
@@ -306,6 +300,7 @@ export function isCallServiceActionConfig(object?: ActionConfig): object is Call
     !!object && (object.action === 'perform-action' || object.action === 'call-service') && 'perform_action' in object
   );
 }
+
 /**
  * Type guard to check if a given identifier exists in a list of supported identifiers.
  *
