@@ -306,28 +306,6 @@ export function isCallServiceActionConfig(object?: ActionConfig): object is Call
     !!object && (object.action === 'perform-action' || object.action === 'call-service') && 'perform_action' in object
   );
 }
-
-/**
- * List of chip types that are not considered "targetable".
- * These chips do not support tap_action or similar targeting logic.
- */
-const NON_TARGETABLE_CHIP_TYPES = ['back', 'menu', 'conditional', 'spacer'] as const;
-
-/**
- * Type guard to check if a LovelaceChipConfig is "targetable".
- *
- * A targetable chip supports actions like tap_action.
- * This function excludes chips of type "back", "menu", "conditional", and "spacer".
- *
- * @param object - The chip configuration object to check.
- * @returns True if the chip is targetable; false otherwise.
- */
-export function isTargetableChip(
-  object: LovelaceChipConfig,
-): object is Exclude<LovelaceChipConfig, BackChipConfig | MenuChipConfig | ConditionalChipConfig | SpacerChipConfig> {
-  return !NON_TARGETABLE_CHIP_TYPES.includes(object.type as (typeof NON_TARGETABLE_CHIP_TYPES)[number]);
-}
-
 /**
  * Type guard to check if a given identifier exists in a list of supported identifiers.
  *

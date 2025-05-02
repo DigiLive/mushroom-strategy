@@ -130,7 +130,6 @@ class HomeView extends AbstractView {
 
     const chipConfigurations: LovelaceChipConfig[] = [];
     const exposedChips = Registry.getExposedNames('chip');
-    const areaIds = Registry.areas.map((area) => area.area_id ?? '');
 
     let Chip;
 
@@ -164,7 +163,6 @@ class HomeView extends AbstractView {
         Chip = (await import(`../chips/${moduleName}`)).default;
         const currentChip = new Chip();
 
-        currentChip.setTapActionTarget({ area_id: areaIds });
         chipConfigurations.push(currentChip.getChipConfiguration());
       } catch (e) {
         logMessage(lvlError, `Error creating the configuration for chip ${chipName}!`, e);
