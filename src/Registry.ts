@@ -265,7 +265,7 @@ class Registry {
    * Each horizontal stack contains a specified number of cards.
    *
    * @param {LovelaceCardConfig[]} cardConfigurations - Array of card configurations to be stacked.
-   * @param {number} columnCount - Number of cards per horizontal stack.
+   * @param {number} columnCount - Maximal number of cards per horizontal stack.
    */
   static stackHorizontal(cardConfigurations: LovelaceCardConfig[], columnCount: number): StackCardConfig[] {
     const stackedCardConfigurations: StackCardConfig[] = [];

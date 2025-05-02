@@ -207,10 +207,9 @@ class HomeView extends AbstractView {
         .map((person) => new PersonCard(person).getCard()),
     );
 
-    // FIXME: The columns are too narrow when having many persons.
     return {
       type: 'vertical-stack',
-      cards: Registry.stackHorizontal(cardConfigurations, 2),
+      cards: Registry.stackHorizontal(cardConfigurations, 8),
     };
   }
 
