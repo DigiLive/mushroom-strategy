@@ -152,7 +152,7 @@ class MushroomStrategy extends HTMLTemplateElement {
         });
 
         if (domain === 'binary_sensor') {
-          domainCards = Registry.stackHorizontal(domainCards, 2);
+          domainCards = Registry.stackHorizontal(domainCards);
         }
 
         return domainCards.length ? { type: 'vertical-stack', cards: [titleCard, ...domainCards] } : null;
