@@ -15,6 +15,7 @@ import {
 import { sanitizeClassName } from './utilities/auxiliaries';
 import { logMessage, lvlError } from './utilities/debug';
 import RegistryFilter from './utilities/RegistryFilter';
+import { stackHorizontal } from './utilities/cardStacking';
 
 /**
  * Mushroom Dashboard Strategy.<br>
@@ -152,7 +153,7 @@ class MushroomStrategy extends HTMLTemplateElement {
         });
 
         if (domain === 'binary_sensor') {
-          domainCards = Registry.stackHorizontal(domainCards);
+          domainCards = stackHorizontal(domainCards);
         }
 
         return domainCards.length ? { type: 'vertical-stack', cards: [titleCard, ...domainCards] } : null;

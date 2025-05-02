@@ -15,6 +15,7 @@ import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
 import registryFilter from '../utilities/RegistryFilter';
+import { stackHorizontal } from '../utilities/cardStacking';
 
 /**
  * Home View Class.
@@ -209,7 +210,7 @@ class HomeView extends AbstractView {
 
     return {
       type: 'vertical-stack',
-      cards: Registry.stackHorizontal(cardConfigurations),
+      cards: stackHorizontal(cardConfigurations),
     };
   }
 
@@ -258,7 +259,7 @@ class HomeView extends AbstractView {
       title: (Registry.strategyOptions.home_view.hidden as HomeViewSections[]).includes('areasTitle')
         ? undefined
         : localize('generic.areas'),
-      cards: Registry.stackHorizontal(cardConfigurations, { area: 1, 'custom:mushroom-template-card': 2 }),
+      cards: stackHorizontal(cardConfigurations, { area: 1, 'custom:mushroom-template-card': 2 }),
     };
   }
 }
