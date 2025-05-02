@@ -1,8 +1,6 @@
-import { HassServiceTarget } from 'home-assistant-js-websocket';
 import { Registry } from '../Registry';
 import { LovelaceChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
-import { isCallServiceActionConfig, isTargetableChip } from '../types/strategy/strategy-generics';
-import { logMessage, lvlFatal, lvlWarn } from '../utilities/debug';
+import { logMessage, lvlFatal } from '../utilities/debug';
 
 abstract class AbstractChip {
   /**
@@ -44,21 +42,6 @@ abstract class AbstractChip {
    */
   getChipConfiguration(): LovelaceChipConfig {
     return this.configuration;
-  }
-
-  /**
-   * Set the target for the tap action.
-   *
-   * @param {HassServiceTarget} target Target of the tap action.
-   */
-  setTapActionTarget(target: HassServiceTarget) {
-    if (isTargetableChip(this.configuration) && isCallServiceActionConfig(this.configuration.tap_action)) {
-      this.configuration.tap_action.target = target;
-
-      return;
-    }
-
-    logMessage(lvlWarn, 'Target not set: Invalid target or tap action.');
   }
 }
 
