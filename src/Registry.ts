@@ -3,8 +3,6 @@ import { HassEntities } from 'home-assistant-js-websocket';
 import { AreaRegistryEntry } from './types/homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
 import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
-import { LovelaceCardConfig } from './types/homeassistant/data/lovelace/config/card';
-import { StackCardConfig } from './types/homeassistant/panels/lovelace/cards/types';
 import {
   AllDomainsConfig,
   DashboardInfo,
@@ -132,6 +130,12 @@ class Registry {
       logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
     }
 
+    // Process the entries of the Strategy Options.
+    Registry._strategyOptions.extra_views.map((view) => ({
+      ...view,
+      subview: false,
+    }));
+
     // Process entries of the HASS entity registry.
     Registry._entities = new RegistryFilter(Registry.entities)
       .not()
@@ -185,10 +189,10 @@ class Registry {
 
     // Sort views by order first and then by title.
     const sortViews = () => {
-      const viewEntries = Object.entries(Registry.strategyOptions.views);
+      const entries = Object.entries(Registry.strategyOptions.views);
 
       Registry.strategyOptions.views = Object.fromEntries(
-        viewEntries.sort(([_, a], [__, b]) => {
+        entries.sort(([_, a], [__, b]) => {
           return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
         }),
       ) as Record<SupportedViews, StrategyViewConfig>;
@@ -198,9 +202,9 @@ class Registry {
 
     // Sort domains by order first and then by title.
     const sortDomains = () => {
-      const domainEntries = Object.entries(Registry.strategyOptions.domains);
+      const entries = Object.entries(Registry.strategyOptions.domains);
       Registry.strategyOptions.domains = Object.fromEntries(
-        domainEntries.sort(([, a], [, b]) => {
+        entries.sort(([, a], [, b]) => {
           if (isSortable(a) && isSortable(b)) {
             return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
           }
@@ -211,6 +215,16 @@ class Registry {
     };
 
     sortDomains();
+
+    // Sort extra views by order first and then by title.
+    // TODO: Add sorting to the wiki.
+    const sortExtraViews = () => {
+      Registry.strategyOptions.extra_views.sort((a, b) => {
+        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
+      });
+    };
+
+    sortExtraViews();
 
     Registry._initialized = true;
   }
