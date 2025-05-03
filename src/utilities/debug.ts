@@ -104,7 +104,11 @@ export function setDebugLevel(level: DebugLevel) {
  * @param {string} message - The message to log.
  * @param {unknown[]} [details] - Optional extra details (e.g., error object).
  *
- * @throws {Error} After logging, if the level is `Fatal` or `Error`.
+ * @throws {Error} After logging, if the level is `lvlError` or `lvlFatal`.
+ *
+ * @remarks
+ * It might be required to throw an additional Error after logging with `lvlError ` or `lvlFatal` to satify the
+ * TypeScript compiler.
  */
 export function logMessage(level: DebugLevel, message: string, ...details: unknown[]): void {
   if (currentLevel === DebugLevel.Off || level > currentLevel) {
