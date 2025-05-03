@@ -164,6 +164,7 @@ export interface ViewInfo {
   hass: HomeAssistant;
   view: LovelaceViewRawConfig & {
     strategy: {
+      parentEntry?: AreaRegistryEntry | DeviceRegistryEntry;
       options?: StrategyConfig & { area: StrategyArea };
     };
   };
