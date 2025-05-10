@@ -2,8 +2,8 @@
 
 import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
 import { LightCardConfig } from '../types/lovelace-mushroom/cards/light-card-config';
-import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
 import AbstractCard from './AbstractCard';
+import { isCallServiceActionConfig } from '../types/strategy/type-guards';
 
 /**
  * Light Card Class

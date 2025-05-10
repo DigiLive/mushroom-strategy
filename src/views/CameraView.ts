@@ -1,11 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
-import { SupportedDomains } from '../types/strategy/strategy-generics';
+import { SingleDomainConfig, SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
 
 /**
  * Camera View Class.
@@ -18,19 +18,23 @@ class CameraView extends AbstractView {
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
+    const domainConfig = Registry.strategyOptions.domains[CameraView.domain] as SingleDomainConfig;
+
     return {
-      title: localize('camera.cameras'),
+      title: domainConfig.title,
       path: 'cameras',
       icon: 'mdi:cctv',
       subview: false,
       headerCardConfiguration: {
-        showControls: false,
+        showControls: domainConfig.showControls,
+        on: domainConfig.on,
+        off: domainConfig.off,
       },
     };
   }
 
   /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  static getViewHeaderCardConfig(): HeaderCardConfig {
     return {
       title: localize('camera.all_cameras'),
       subtitle:

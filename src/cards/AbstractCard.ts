@@ -1,6 +1,5 @@
 import { Registry } from '../Registry';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
-import { AbstractCardConfig } from '../types/strategy/strategy-cards';
 import { RegistryEntry } from '../types/strategy/strategy-generics';
 import { logMessage, lvlFatal } from '../utilities/debug';
 
@@ -48,7 +47,7 @@ abstract class AbstractCard {
    *
    * The configuration should be set by any of the child classes so the card correctly reflects an entity.
    */
-  getCard(): AbstractCardConfig {
+  getCard(): LovelaceCardConfig {
     return {
       ...this.configuration,
       entity: 'entity_id' in this.entity ? this.entity.entity_id : undefined,

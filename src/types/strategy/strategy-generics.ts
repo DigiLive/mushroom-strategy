@@ -1,13 +1,13 @@
 import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from '../homeassistant/data/device_registry';
 import { EntityRegistryEntry } from '../homeassistant/data/entity_registry';
-import { ActionConfig, CallServiceActionConfig } from '../homeassistant/data/lovelace/config/action';
 import { LovelaceCardConfig } from '../homeassistant/data/lovelace/config/card';
 import { LovelaceConfig } from '../homeassistant/data/lovelace/config/types';
 import { LovelaceViewConfig, LovelaceViewRawConfig } from '../homeassistant/data/lovelace/config/view';
 import { HomeAssistant } from '../homeassistant/types';
 import { LovelaceChipConfig } from '../lovelace-mushroom/utils/lovelace/chip/types';
-import { StrategyHeaderCardConfig } from './strategy-cards';
+import { HeaderCardConfig } from './strategy-cards';
+import { ConfigEntry } from '../homeassistant/data/config_entries';
 
 /**
  * List of supported domains.
@@ -77,46 +77,9 @@ export type SupportedChips = (typeof SUPPORTED_CHIPS)[number];
 export type HomeViewSections = (typeof HOME_VIEW_SECTIONS)[number];
 
 /**
- * Base interface for sortable items.
- *
- * @property {number} order - Numeric value used for sorting items
- */
-interface SortableBase {
-  order: number;
-}
-
-/**
- * Sortable item that uses a title for identification.
- * Mutually exclusive with SortableWithName.
- *
- * @property {string} title - Display title of the item
- * @property {never} [name] - Prevents using name property
- */
-type SortableWithTitle = SortableBase & { title: string; name?: never };
-
-/**
- * Sortable item that uses a name for identification.
- * Mutually exclusive with SortableWithTitle.
- *
- * @property {string} name - Identifier name of the item
- * @property {never} [title] - Prevents using title property
- */
-type SortableWithName = SortableBase & { name: string; title?: never };
-
-/**
- * Union type for items that can be sorted.
- * Items must have either a title or a name property, but not both.
- *
- * @remarks
- * This type is used to sort objects by title or by name.
- * The `order` property is used to sort the items.
- */
-export type Sortable = SortableWithTitle | SortableWithName;
-
-/**
  * An entry of a Home Assistant Registry.
  */
-export type RegistryEntry = StrategyArea | DeviceRegistryEntry | EntityRegistryEntry;
+export type RegistryEntry = StrategyArea | DeviceRegistryEntry | EntityRegistryEntry | ConfigEntry;
 
 /**
  * View Configuration of the strategy.
@@ -189,46 +152,9 @@ export interface AllDomainsConfig {
  * @property {boolean} hidden - If True, all entities of the domain are hidden from the dashboard.
  * @property {number} [order] - Ordering position of the domains in a view.
  */
-export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
+export interface SingleDomainConfig extends Partial<HeaderCardConfig> {
   hidden: boolean;
   order?: number;
-}
-
-/**
- * Strategy Configuration.
- *
- * @property {Object.<K in keyof StrategyArea, StrategyArea>} areas - List of areas.
- * @property {Object.<K in keyof RegistryEntry, CustomCardConfig>} card_options - Card options for entities.
- * @property {ChipConfiguration} chips - The configuration of chips in the Home view.
- * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
- * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
- * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
- * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
- * @property {{ hidden: HomeViewSections[] | [] }} home_view - List of views to add to the dashboard.
- * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
- * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card
- *                                                       and rooms cards.
- */
-export interface StrategyConfig {
-  areas: { [S: string]: StrategyArea };
-  card_options: { [S: string]: CustomCardConfig };
-  chips: ChipConfiguration;
-  debug: boolean;
-  domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
-  extra_cards: LovelaceCardConfig[];
-  extra_views: StrategyViewConfig[];
-  home_view: {
-    hidden: HomeViewSections[] | [];
-  };
-  views: Record<SupportedViews, StrategyViewConfig>;
-  quick_access_cards: LovelaceCardConfig[];
-}
-
-/**
- * Represents the default configuration for a strategy.
- */
-export interface StrategyDefaults extends StrategyConfig {
-  areas: { undisclosed: StrategyArea } & { [S: string]: StrategyArea };
 }
 
 /**
@@ -279,28 +205,80 @@ export interface CustomCardConfig extends LovelaceCardConfig {
 }
 
 /**
- * Checks if the given object is of a sortable type.
+ * Strategy Configuration.
  *
- * Sortable types are objects that have an `order`, `title` or `name` property.
- *
- * @param {object} object - The object to check.
- * @returns {boolean} - True if the object is an instance of Sortable, false otherwise.
+ * @property {Object.<K in keyof StrategyArea, StrategyArea>} areas - List of areas.
+ * @property {Object.<K in keyof RegistryEntry, CustomCardConfig>} card_options - Card options for entities.
+ * @property {ChipConfiguration} chips - The configuration of chips in the Home view.
+ * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
+ * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
+ * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
+ * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
+ * @property {{ hidden: HomeViewSections[] | [] }} home_view - List of views to add to the dashboard.
+ * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
+ * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card
+ *                                                       and rooms cards.
  */
-export function isSortable(object: object): object is Sortable {
-  return object && ('order' in object || 'title' in object || 'name' in object);
+export interface StrategyConfig {
+  areas: { [S in AreaRegistryEntry['area_id']]: StrategyArea };
+  device_options: { [S in DeviceRegistryEntry['id']]: { hidden?: boolean; group_entities?: boolean } };
+  // TODO: Move device entries from card_options to device_options.
+  card_options: { [S in EntityRegistryEntry['entity_id']]: CustomCardConfig };
+  chips: ChipConfiguration;
+  debug: boolean;
+  domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
+  extra_cards: LovelaceCardConfig[];
+  extra_views: StrategyViewConfig[];
+  home_view: {
+    hidden: HomeViewSections[] | [];
+  };
+  views: Record<SupportedViews, StrategyViewConfig>;
+  quick_access_cards: LovelaceCardConfig[];
 }
 
 /**
- * Type guard to check if an object matches the CallServiceActionConfig interface.
- *
- * @param {ActionConfig} [object] - The object to check.
- * @returns {boolean} - True if the object represents a valid service action configuration.
+ * Represents the default configuration for a strategy.
  */
-export function isCallServiceActionConfig(object?: ActionConfig): object is CallServiceActionConfig {
-  return (
-    !!object && (object.action === 'perform-action' || object.action === 'call-service') && 'perform_action' in object
-  );
+export interface StrategyDefaults extends StrategyConfig {
+  areas: { undisclosed: StrategyArea } & { [S: string]: StrategyArea };
 }
+
+/**
+ * Base interface for sortable items.
+ *
+ * @property {number} order - Numeric value used for sorting items
+ */
+interface SortableBase {
+  order: number;
+}
+
+/**
+ * Sortable item that uses a title for identification.
+ * Mutually exclusive with SortableWithName.
+ *
+ * @property {string} title - Display title of the item
+ * @property {never} [name] - Prevents using name property
+ */
+type SortableWithTitle = SortableBase & { title: string; name?: never };
+
+/**
+ * Sortable item that uses a name for identification.
+ * Mutually exclusive with SortableWithTitle.
+ *
+ * @property {string} name - Identifier name of the item
+ * @property {never} [title] - Prevents using title property
+ */
+type SortableWithName = SortableBase & { name: string; title?: never };
+
+/**
+ * Union type for items that can be sorted.
+ * Items must have either a title or a name property, but not both.
+ *
+ * @remarks
+ * This type is used to sort objects by title or by name.
+ * The `order` property is used to sort the items.
+ */
+export type Sortable = SortableWithTitle | SortableWithName;
 
 /**
  * Type guard to check if a given identifier exists in a list of supported identifiers.

@@ -1,10 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SingleDomainConfig } from '../types/strategy/strategy-generics';
 
 /**
  * Switch View Class.
@@ -17,22 +18,23 @@ class SwitchView extends AbstractView {
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
+    const domainConfig = Registry.strategyOptions.domains[SwitchView.domain] as SingleDomainConfig;
+
     return {
-      title: localize('switch.switches'),
+      title: domainConfig.title,
       path: 'switches',
       icon: 'mdi:dip-switch',
       subview: false,
       headerCardConfiguration: {
-        iconOn: 'mdi:power-plug',
-        iconOff: 'mdi:power-plug-off',
-        onService: 'switch.turn_on',
-        offService: 'switch.turn_off',
+        showControls: domainConfig.showControls,
+        on: domainConfig.on,
+        off: domainConfig.off,
       },
     };
   }
 
   /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  static getViewHeaderCardConfig(): HeaderCardConfig {
     return {
       title: localize('switch.all_switches'),
       subtitle:

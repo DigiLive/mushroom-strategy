@@ -23,6 +23,11 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
   },
   card_options: {},
+  device_options: {
+    _: {
+      group_entities: false,
+    },
+  },
   chips: {
     // TODO: Make chips sortable.
     weather_entity: 'auto',
@@ -57,10 +62,14 @@ export const ConfigurationDefaults: StrategyDefaults = {
     cover: {
       title: localize('cover.covers'),
       showControls: true,
-      iconOn: 'mdi:arrow-up',
-      iconOff: 'mdi:arrow-down',
-      onService: 'cover.open_cover',
-      offService: 'cover.close_cover',
+      on: {
+        icon: 'mdi:arrow-up-drop-circle-outline',
+        service: 'cover.open_cover',
+      },
+      off: {
+        icon: 'mdi:arrow-up-down-circle-outline',
+        service: 'cover.close_cover',
+      },
       hidden: false,
     },
     default: {
@@ -71,10 +80,14 @@ export const ConfigurationDefaults: StrategyDefaults = {
     fan: {
       title: localize('fan.fans'),
       showControls: true,
-      iconOn: 'mdi:fan',
-      iconOff: 'mdi:fan-off',
-      onService: 'fan.turn_on',
-      offService: 'fan.turn_off',
+      on: {
+        icon: 'mdi:fan',
+        service: 'fan.turn_on',
+      },
+      off: {
+        icon: 'mdi:fan-off',
+        service: 'fan.turn_off',
+      },
       hidden: false,
     },
     input_select: {
@@ -85,10 +98,14 @@ export const ConfigurationDefaults: StrategyDefaults = {
     light: {
       title: localize('light.lights'),
       showControls: true,
-      iconOn: 'mdi:lightbulb',
-      iconOff: 'mdi:lightbulb-off',
-      onService: 'light.turn_on',
-      offService: 'light.turn_off',
+      on: {
+        icon: 'mdi:lightbulb',
+        service: 'light.turn_on',
+      },
+      off: {
+        icon: 'mdi:lightbulb-off',
+        service: 'light.turn_off',
+      },
       hidden: false,
     },
     lock: {
@@ -109,7 +126,6 @@ export const ConfigurationDefaults: StrategyDefaults = {
     scene: {
       title: localize('scene.scenes'),
       showControls: false,
-      onService: 'scene.turn_on',
       hidden: false,
     },
     select: {
@@ -125,15 +141,27 @@ export const ConfigurationDefaults: StrategyDefaults = {
     switch: {
       title: localize('switch.switches'),
       showControls: true,
-      iconOn: 'mdi:power-plug',
-      iconOff: 'mdi:power-plug-off',
-      onService: 'switch.turn_on',
-      offService: 'switch.turn_off',
+      on: {
+        icon: 'mdi:light-switch',
+        service: 'switch.turn_on',
+      },
+      off: {
+        icon: 'mdi:light-switch-off',
+        service: 'switch.turn_off',
+      },
       hidden: false,
     },
     vacuum: {
       title: localize('vacuum.vacuums'),
       showControls: true,
+      on: {
+        icon: 'mdi:robot-vacuum',
+        service: 'vacuum.start',
+      },
+      off: {
+        icon: 'mdi:robot-vacuum-off',
+        service: 'vacuum.stop',
+      },
       hidden: false,
     },
   },

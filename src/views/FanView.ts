@@ -1,11 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
-import { SupportedDomains } from '../types/strategy/strategy-generics';
+import { SingleDomainConfig, SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
 
 /**
  * Fan View Class.
@@ -18,22 +18,23 @@ class FanView extends AbstractView {
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
+    const domainConfig = Registry.strategyOptions.domains[FanView.domain] as SingleDomainConfig;
+
     return {
-      title: localize('fan.fans'),
+      title: domainConfig.title,
       path: 'fans',
       icon: 'mdi:fan',
       subview: false,
       headerCardConfiguration: {
-        iconOn: 'mdi:fan',
-        iconOff: 'mdi:fan-off',
-        onService: 'fan.turn_on',
-        offService: 'fan.turn_off',
+        showControls: domainConfig.showControls,
+        on: domainConfig.on,
+        off: domainConfig.off,
       },
     };
   }
 
   /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  static getViewHeaderCardConfig(): HeaderCardConfig {
     return {
       title: localize('fan.all_fans'),
       subtitle:

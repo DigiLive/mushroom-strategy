@@ -1,12 +1,13 @@
 import { Registry } from './Registry';
 import { LovelaceConfig } from './types/homeassistant/data/lovelace/config/types';
-import { LovelaceViewRawConfig } from './types/homeassistant/data/lovelace/config/view';
+import { LovelaceViewConfig } from './types/homeassistant/data/lovelace/config/view';
 import { DashboardInfo, isSupportedView } from './types/strategy/strategy-generics';
-import { sanitizeClassName } from './utilities/auxiliaries';
+import { filterNonNullValues, sanitizeClassName } from './utilities/auxiliaries';
 import { logMessage, lvlError, lvlFatal } from './utilities/debug';
+import AreaViewGenerator from './generators/AreaViewGenerator';
 import RegistryFilter from './utilities/RegistryFilter';
-import DeviceView from './generators/DeviceView';
-import AreaView from './generators/AreaView';
+import { localize } from './utilities/localize';
+import DeviceViewGenerator from './generators/DeviceViewGenerator';
 
 /**
  * Mushroom Dashboard Strategy.<br>
@@ -35,30 +36,53 @@ class MushroomStrategy extends HTMLTemplateElement {
       logMessage(lvlFatal, 'Error initializing the Registry!', e);
     }
 
-    const viewPromises = Registry.getExposedNames('view')
-      .filter(isSupportedView)
-      .map(async (viewName) => {
-        try {
-          const moduleName = sanitizeClassName(`${viewName}View`);
-          const View = (await import(`./views/${moduleName}`)).default;
-          const currentView = new View(Registry.strategyOptions.views[viewName]);
-          const viewConfiguration = await currentView.getView();
+    // Main views.
+    const viewPromises = [...Registry.getExposedNames('view')].filter(isSupportedView).map(async (viewName) => {
+      try {
+        const moduleName = sanitizeClassName(`${viewName}View`);
+        const View = (await import(`./views/${moduleName}`)).default;
+        const currentView = new View(Registry.strategyOptions.views[viewName]);
+        const viewConfiguration = await currentView.getView();
 
-          if (viewConfiguration.cards.length) {
-            return viewConfiguration;
-          }
-        } catch (e) {
-          logMessage(lvlError, `Error importing ${viewName} view!`, e);
+        if (viewConfiguration.cards.length) {
+          return viewConfiguration;
         }
+      } catch (e) {
+        logMessage(lvlError, `Error importing ${viewName} view!`, e);
+      }
 
-        return null;
-      });
+      return null;
+    });
 
-    const views = (await Promise.all(viewPromises)).filter(Boolean) as LovelaceViewRawConfig[];
+    const views = filterNonNullValues(await Promise.all(viewPromises)) as LovelaceViewConfig[];
 
-    views.push(...resolvedViews);
+    // Device views.
+    const devices = new RegistryFilter(Registry.devices)
+      .where((device) => Registry.groupingDeviceIds.has(device.id))
+      .toList();
 
-    // Subviews for areas
+    const deviceViews = devices.map((device) => {
+      const deviceName = device.name_by_user || device.name || localize('generic.unknown', 'title');
+
+      return {
+        title: `${localize('generic.device', 'title')}: ${deviceName}`,
+        path: device.id,
+        subview: true,
+        icon: 'mdi:devices',
+        strategy: {
+          type: 'custom:mushroom-strategy-device-view',
+          parentEntry: device,
+        },
+      };
+    });
+
+    views.push(...deviceViews);
+
+    if (devices.length && !customElements.get('ll-strategy-mushroom-strategy-device-view')) {
+      customElements.define('ll-strategy-mushroom-strategy-device-view', DeviceViewGenerator);
+    }
+
+    // Area views.
     views.push(
       ...Registry.areas.map((area) => ({
         title: area.name,
@@ -71,8 +95,8 @@ class MushroomStrategy extends HTMLTemplateElement {
       })),
     );
 
-    if (Registry.areas.length) {
-      customElements.define('ll-strategy-mushroom-strategy-area-view', AreaView);
+    if (Registry.areas.length && !customElements.get('ll-strategy-mushroom-strategy-area-view')) {
+      customElements.define('ll-strategy-mushroom-strategy-area-view', AreaViewGenerator);
     }
 
     // Extra views
@@ -100,4 +124,6 @@ async function main() {
   }
 }
 
-main();
+main().catch((error) => {
+  throw 'Mushroom Strategy - An error occurred. Check the console (F12) for details.';
+});

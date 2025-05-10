@@ -15,9 +15,11 @@ class FanCard extends AbstractCard {
     return {
       type: 'custom:mushroom-fan-card',
       icon: undefined,
-      show_percentage_control: true,
-      show_oscillate_control: true,
       icon_animation: true,
+      collapsible_controls: true,
+      show_direction_control: true,
+      show_oscillate_control: true,
+      show_percentage_control: true,
     };
   }
 

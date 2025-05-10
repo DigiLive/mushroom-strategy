@@ -36,3 +36,39 @@ export function deepClone<T>(obj: T): T {
     return obj;
   }
 }
+
+/**
+ * Get the keys of nested objects by its property value.
+ *
+ * @param {Object<string, any>} object An object of objects.
+ * @param {string|number} property The name of the property to evaluate.
+ * @param {*} value The value which the property should match.
+ *
+ * @return {string[]} An array with keys.
+ */
+export function getObjectKeysByPropertyValue(
+  object: Record<string, unknown>,
+  property: string,
+  value: unknown,
+): string[] {
+  const keys: string[] = [];
+
+  for (const key of Object.keys(object)) {
+    if (object[key] && (object[key] as Record<string, unknown>)[property] === value) {
+      keys.push(key);
+    }
+  }
+
+  return keys;
+}
+
+/**
+ * Filters out null values from an array.
+ *
+ * @template T The type of the array elements.
+ * @param {Array<T | null>} arr The array to filter.
+ * @returns {Array<T>} An array containing the non-null elements.
+ */
+export function filterNonNullValues<T>(arr: (T | null)[]): T[] {
+  return arr.filter((item): item is T => item !== null);
+}

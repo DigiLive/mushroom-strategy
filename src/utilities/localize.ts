@@ -62,12 +62,35 @@ export default function setupCustomLocalize(hass?: HomeAssistant): void {
 
 /**
  * Translate a key using the globally configured localize function.
+ *
+ * @param key - The key to be translated.
+ * @param caseType - Optional parameter to specify the case transformation:
+ *   - 'upper': Converts the localized key to uppercase.
+ *   - 'lower': Converts the localized key to lowercase.
+ *   - 'title': Converts the localized key to a title case (capitalizing the first letter of each word).
+ *
+ * @returns The translated key in the specified case format or the original key if not initialized.
  */
-export function localize(key: string): string {
+export function localize(key: string, caseType?: 'upper' | 'lower' | 'title'): string {
   if (!_localize) {
     logMessage(lvlWarn, 'localize is not initialized! Call setupCustomLocalize first.');
-
     return key;
   }
-  return _localize(key);
+
+  const localizedKey = _localize(key);
+
+  // Transform the case based on the caseType parameter
+  switch (caseType) {
+    case 'upper':
+      return localizedKey.toUpperCase();
+    case 'lower':
+      return localizedKey.toLowerCase();
+    case 'title':
+      return localizedKey
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+  }
+
+  return localizedKey; // Return the original localized key if no caseType is specified
 }

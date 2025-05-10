@@ -1,7 +1,8 @@
 import { HassServiceTarget } from 'home-assistant-js-websocket';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import { CustomHeaderCardConfig, StrategyHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
+import { localize } from '../utilities/localize';
 
 /**
  * Header Card class.
@@ -13,32 +14,39 @@ class HeaderCard {
   /** The target to control the entities of. */
   private readonly target: HassServiceTarget;
   /** The current configuration of the card after instantiating this class. */
-  private readonly configuration: StrategyHeaderCardConfig;
-
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): StrategyHeaderCardConfig {
-    return {
-      type: 'custom:mushroom-title-card',
-      showControls: true,
-      iconOn: 'mdi:power-on',
-      iconOff: 'mdi:power-off',
-      onService: 'none',
-      offService: 'none',
-    };
-  }
+  private readonly configuration: HeaderCardConfig;
 
   /**
    * Class constructor.
    *
    * @param {HassServiceTarget} target The target which is optionally controlled by the card.
-   * @param {CustomHeaderCardConfig} [customConfiguration] Custom card configuration.
+   * @param {HeaderCardConfig} [customConfiguration] Custom card configuration.
    *
    * @remarks
    * The target object can contain one or multiple ids of different entry types.
    */
-  constructor(target: HassServiceTarget, customConfiguration?: CustomHeaderCardConfig) {
+  constructor(target: HassServiceTarget, customConfiguration?: HeaderCardConfig) {
     this.target = target;
     this.configuration = { ...HeaderCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): HeaderCardConfig {
+    return {
+      type: 'custom:mushroom-title-card',
+      showControls: false,
+      on: {
+        icon: 'mdi:power-on',
+        icon_color: 'disabled',
+        service: 'none',
+      },
+      off: {
+        icon: 'mdi:power-off',
+        icon_color: 'disabled',
+        service: 'none',
+      },
+      title: localize('generic.unknown', 'title'),
+    };
   }
 
   /**
@@ -65,24 +73,24 @@ class HeaderCard {
         cards: [
           {
             type: 'custom:mushroom-template-card',
-            icon: this.configuration.iconOff,
+            icon: this.configuration.on?.icon,
             layout: 'vertical',
-            icon_color: 'red',
+            icon_color: 'green',
             tap_action: {
               action: 'call-service',
-              service: this.configuration.offService,
+              service: this.configuration.on?.service,
               target: this.target,
               data: {},
             },
           },
           {
             type: 'custom:mushroom-template-card',
-            icon: this.configuration.iconOn,
+            icon: this.configuration.off?.icon,
             layout: 'vertical',
-            icon_color: 'amber',
+            icon_color: 'deep-orange',
             tap_action: {
               action: 'call-service',
-              service: this.configuration.onService,
+              service: this.configuration.off?.service,
               target: this.target,
               data: {},
             },

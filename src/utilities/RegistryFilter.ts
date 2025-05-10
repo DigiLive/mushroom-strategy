@@ -16,7 +16,7 @@ import { logMessage, lvlWarn } from './debug';
 class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   private readonly entries: T[];
   private filters: (((entry: T) => boolean) | ((entry: T, index: number) => boolean))[] = [];
-  private readonly entryIdentifier: ('entity_id' | 'floor_id' | 'id') & K;
+  private readonly entryIdentifier: ('entity_id' | 'floor_id' | 'entry_id' | 'id') & K;
   private invertNext: boolean = false;
 
   /**
@@ -27,7 +27,13 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   constructor(entries: T[]) {
     this.entries = entries;
     this.entryIdentifier = (
-      entries.length === 0 || 'entity_id' in entries[0] ? 'entity_id' : 'floor_id' in entries[0] ? 'floor_id' : 'id'
+      entries.length === 0 || 'entity_id' in entries[0]
+        ? 'entity_id'
+        : 'floor_id' in entries[0]
+          ? 'floor_id'
+          : 'entry_id' in entries[0]
+            ? 'entry_id'
+            : 'id'
     ) as ('entity_id' | 'floor_id' | 'id') & K;
   }
 
@@ -81,8 +87,13 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
    */
   whereAreaId(areaId?: string, expandToDevice: boolean = true): this {
     const predicate = (entry: T) => {
-      let deviceAreaId: string | null | undefined = undefined;
+      if ('entry_id' in entry) {
+        return false;
+      }
+
       const entryObject = entry as EntityRegistryEntry;
+
+      let deviceAreaId: string | null | undefined = undefined;
 
       // Retrieve the device area ID only if expandToDevice is true
       if (expandToDevice && entryObject.device_id) {
@@ -104,6 +115,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
     };
 
     this.filters.push(this.checkInversion(predicate));
+
     return this;
   }
 
@@ -261,7 +273,9 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
       }
 
       const id = entry[this.entryIdentifier] as keyof StrategyConfig['card_options'];
-      const isHiddenByConfig = Registry.strategyOptions?.card_options?.[id]?.hidden === true;
+      const isHiddenByConfig =
+        Registry.strategyOptions.device_options['_'].hidden ||
+        Registry.strategyOptions.card_options[id]?.hidden === true;
 
       return !isHiddenByProperty && !isHiddenByConfig;
     };
@@ -302,9 +316,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
     const predicate = (entry: T) => {
       const category = 'entity_category' in entry ? entry.entity_category : undefined;
       const hideOption =
-        typeof category === 'string'
-          ? Registry.strategyOptions?.domains?.['_']?.[`hide_${category}_entities`]
-          : undefined;
+        typeof category === 'string' ? Registry.strategyOptions.domains['_']?.[`hide_${category}_entities`] : undefined;
 
       if (hideOption === true) {
         return false;

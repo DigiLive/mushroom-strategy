@@ -6,7 +6,6 @@ import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry'
 import {
   AllDomainsConfig,
   DashboardInfo,
-  isSortable,
   SingleDomainConfig,
   StrategyArea,
   StrategyConfig,
@@ -17,6 +16,9 @@ import {
 import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
+import { getObjectKeysByPropertyValue } from './utilities/auxiliaries';
+import { ConfigEntry } from './types/homeassistant/data/config_entries';
+import { isSortable } from './types/strategy/type-guards';
 
 /**
  * Registry Class
@@ -36,6 +38,18 @@ class Registry {
   private static _initialized: boolean = false;
   /** The Custom strategy configuration. */
   private static _strategyOptions: StrategyConfig;
+  static darkMode: boolean;
+
+  /** The entities which are grouped into a device view */
+  // TODO: Create type or interface?
+  private static _configEntries: ConfigEntry[] = [];
+
+  /**
+   * Home Assistant's Config Entries.
+   */
+  static get configEntries() {
+    return Registry._configEntries;
+  }
 
   /**
    * Class constructor.
@@ -48,8 +62,15 @@ class Registry {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
+  private static _groupingDeviceIds: Set<string>;
+
+  /** Get the initialization status of the Registry class. */
+  static get groupingDeviceIds() {
+    return Registry._groupingDeviceIds;
+  }
+
   /** The configuration of the strategy. */
-  static get strategyOptions(): StrategyConfig {
+  static get strategyOptions() {
     return Registry._strategyOptions;
   }
 
@@ -59,7 +80,7 @@ class Registry {
    * @remarks
    * This module makes changes to the registry at {@link Registry.initialize}.
    */
-  static get areas(): StrategyArea[] {
+  static get areas() {
     return Registry._areas;
   }
 
@@ -69,7 +90,7 @@ class Registry {
    * @remarks
    * This module makes changes to the registry at {@link Registry.initialize}.
    */
-  static get devices(): DeviceRegistryEntry[] {
+  static get devices() {
     return Registry._devices;
   }
 
@@ -79,17 +100,17 @@ class Registry {
    * @remarks
    * This module makes changes to the registry at {@link Registry.initialize}.
    */
-  static get entities(): EntityRegistryEntry[] {
+  static get entities() {
     return Registry._entities;
   }
 
   /** Home Assistant's State registry. */
-  static get hassStates(): HassEntities {
+  static get hassStates() {
     return Registry._hassStates;
   }
 
   /** Get the initialization status of the Registry class. */
-  static get initialized(): boolean {
+  static get initialized() {
     return Registry._initialized;
   }
 
@@ -105,6 +126,7 @@ class Registry {
    */
   static async initialize(info: DashboardInfo): Promise<void> {
     setupCustomLocalize(info.hass);
+    Registry.darkMode = info.hass.themes.darkMode;
 
     // Import the Hass States and strategy options.
     Registry._hassStates = info.hass.states;
@@ -121,10 +143,11 @@ class Registry {
     // Import the registries of Home Assistant.
     try {
       // noinspection ES6MissingAwait False positive? https://youtrack.jetbrains.com/issue/WEB-63746
-      [Registry._entities, Registry._devices, Registry._areas] = await Promise.all([
+      [Registry._entities, Registry._devices, Registry._areas, Registry._configEntries] = await Promise.all([
         info.hass.callWS({ type: 'config/entity_registry/list' }) as Promise<EntityRegistryEntry[]>,
         info.hass.callWS({ type: 'config/device_registry/list' }) as Promise<DeviceRegistryEntry[]>,
         info.hass.callWS({ type: 'config/area_registry/list' }) as Promise<AreaRegistryEntry[]>,
+        info.hass.callWS({ type: 'config_entries/get' }) as Promise<ConfigEntry[]>,
       ]);
     } catch (e) {
       logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
@@ -144,7 +167,7 @@ class Registry {
       .whereEntityCategory('diagnostic')
       .isNotHidden()
       .whereDisabledBy(null)
-      .orderBy(['name', 'original_name'], 'asc')
+      .orderBy(['name', 'original_name'])
       .toList();
 
     Registry._entities = Registry.entities.map((entity) => ({
@@ -156,7 +179,7 @@ class Registry {
     Registry._devices = new RegistryFilter(Registry.devices)
       .isNotHidden()
       .whereDisabledBy(null)
-      .orderBy(['name_by_user', 'name'], 'asc')
+      .orderBy(['name_by_user', 'name'])
       .toList();
 
     Registry._devices = Registry.devices.map((device) => ({
@@ -170,7 +193,7 @@ class Registry {
     } else {
       // Create and add the undisclosed area if not hidden in the strategy options.
       if (!Registry.strategyOptions.areas.undisclosed?.hidden) {
-        Registry.areas.push(ConfigurationDefaults.areas.undisclosed);
+        Registry._areas.push(ConfigurationDefaults.areas.undisclosed);
       }
 
       // Merge area configurations of the Strategy options into the entries of the area registry.
@@ -180,18 +203,18 @@ class Registry {
       });
 
       // Ensure the custom configuration of the undisclosed area doesn't overwrite the area_id.
-      Registry.strategyOptions.areas.undisclosed.area_id = 'undisclosed';
+      Registry._strategyOptions.areas.undisclosed.area_id = 'undisclosed';
 
       // Remove hidden areas if configured as so and sort them by name.
 
-      Registry._areas = new RegistryFilter(Registry.areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
+      Registry._areas = new RegistryFilter(Registry.areas).isNotHidden().orderBy(['order', 'name']).toList();
     }
 
     // Sort views by order first and then by title.
     const sortViews = () => {
       const entries = Object.entries(Registry.strategyOptions.views);
 
-      Registry.strategyOptions.views = Object.fromEntries(
+      Registry._strategyOptions.views = Object.fromEntries(
         entries.sort(([_, a], [__, b]) => {
           return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
         }),
@@ -203,7 +226,8 @@ class Registry {
     // Sort domains by order first and then by title.
     const sortDomains = () => {
       const entries = Object.entries(Registry.strategyOptions.domains);
-      Registry.strategyOptions.domains = Object.fromEntries(
+
+      Registry._strategyOptions.domains = Object.fromEntries(
         entries.sort(([, a], [, b]) => {
           if (isSortable(a) && isSortable(b)) {
             return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
@@ -219,12 +243,25 @@ class Registry {
     // Sort extra views by order first and then by title.
     // TODO: Add sorting to the wiki.
     const sortExtraViews = () => {
-      Registry.strategyOptions.extra_views.sort((a, b) => {
+      Registry._strategyOptions.extra_views.sort((a, b) => {
         return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
       });
     };
 
     sortExtraViews();
+
+    // Process grouping by device.
+    this._groupingDeviceIds = new Set(
+      Registry.devices
+        .filter(
+          (device) =>
+            Registry.strategyOptions.device_options['_'].group_entities ||
+            getObjectKeysByPropertyValue(Registry.strategyOptions.device_options, 'group_entities', true).includes(
+              device.id,
+            ),
+        )
+        .map((device) => device.id),
+    );
 
     Registry._initialized = true;
   }
@@ -278,20 +315,34 @@ class Registry {
    *
    * @param {string} type The type of options to filter ("domain", "view", "chip").
    *
-   * @returns {string[]} For domains and views: names of items that aren't hidden.
+   * @returns {Set<string>} For domains and views: names of items that aren't hidden.
    *                     For chips: names of items that are explicitly set to true.
    */
-  static getExposedNames(type: 'domain' | 'view' | 'chip'): string[] {
+  static getExposedNames(type: 'domain' | 'view' | 'chip'): Set<string> {
     // TODO: Align chip with other types.
     if (type === 'chip') {
-      return Object.entries(Registry.strategyOptions.chips)
+      const keySet = new Set<string>();
+
+      Object.entries(Registry.strategyOptions.chips)
         .filter(([_, value]) => value === true)
-        .map(([key]) => key.split('_')[0]);
+        .forEach(([key]) => {
+          keySet.add(key.split('_')[0]);
+        });
+
+      return keySet;
     }
 
-    const group = Registry.strategyOptions[`${type}s`] as Record<string, { hidden?: boolean }>;
+    const typeOptions = Registry.strategyOptions[`${type}s`] as Record<string, { hidden?: boolean }>;
 
-    return Object.keys(group).filter((key) => key !== '_' && key !== 'default' && !group[key].hidden);
+    const keySet = new Set<string>();
+
+    Object.keys(typeOptions).forEach((key) => {
+      if (key !== '_' && key !== 'default' && !typeOptions[key].hidden) {
+        keySet.add(key);
+      }
+    });
+
+    return keySet;
   }
 }
 

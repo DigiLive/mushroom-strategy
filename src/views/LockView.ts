@@ -1,10 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SingleDomainConfig } from '../types/strategy/strategy-generics';
 
 /**
  * Lock View Class.
@@ -17,22 +18,23 @@ class LockView extends AbstractView {
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
+    const domainConfig = Registry.strategyOptions.domains[LockView.domain] as SingleDomainConfig;
+
     return {
-      title: localize('locks.locks'),
+      title: domainConfig.title,
       path: 'locks',
       icon: 'mdi:lock-open',
       subview: false,
       headerCardConfiguration: {
-        iconOn: 'mdi:lock-open',
-        iconOff: 'mdi:lock',
-        onService: 'lock.lock',
-        offService: 'lock.unlock',
+        showControls: domainConfig.showControls,
+        on: domainConfig.on,
+        off: domainConfig.off,
       },
     };
   }
 
   /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  static getViewHeaderCardConfig(): HeaderCardConfig {
     return {
       title: localize('lock.all_locks'),
       subtitle:

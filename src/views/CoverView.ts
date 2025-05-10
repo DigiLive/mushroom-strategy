@@ -1,11 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
-import { SupportedDomains } from '../types/strategy/strategy-generics';
+import { SingleDomainConfig, SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
 
 /**
  * Cover View Class.
@@ -18,22 +18,23 @@ class CoverView extends AbstractView {
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
+    const domainConfig = Registry.strategyOptions.domains[CoverView.domain] as SingleDomainConfig;
+
     return {
-      title: localize('cover.covers'),
+      title: domainConfig.title,
       path: 'covers',
-      icon: 'mdi:window-open',
+      icon: 'mdi:arrow-up-down-bold-outline',
       subview: false,
       headerCardConfiguration: {
-        iconOn: 'mdi:arrow-up',
-        iconOff: 'mdi:arrow-down',
-        onService: 'cover.open_cover',
-        offService: 'cover.close_cover',
+        showControls: domainConfig.showControls,
+        on: domainConfig.on,
+        off: domainConfig.off,
       },
     };
   }
 
   /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  static getViewHeaderCardConfig(): HeaderCardConfig {
     return {
       title: localize('cover.all_covers'),
       subtitle:

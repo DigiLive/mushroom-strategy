@@ -1,10 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
+import { HeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SingleDomainConfig } from '../types/strategy/strategy-generics';
 
 /**
  * Vacuum View Class.
@@ -17,22 +18,23 @@ class VacuumView extends AbstractView {
 
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
+    const domainConfig = Registry.strategyOptions.domains[VacuumView.domain] as SingleDomainConfig;
+
     return {
-      title: localize('vacuum.vacuums'),
+      title: domainConfig.title,
       path: 'vacuums',
       icon: 'mdi:robot-vacuum',
       subview: false,
       headerCardConfiguration: {
-        iconOn: 'mdi:robot-vacuum',
-        iconOff: 'mdi:robot-vacuum-off',
-        onService: 'vacuum.start',
-        offService: 'vacuum.stop',
+        showControls: domainConfig.showControls,
+        on: domainConfig.on,
+        off: domainConfig.off,
       },
     };
   }
 
   /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  static getViewHeaderCardConfig(): HeaderCardConfig {
     return {
       title: localize('vacuum.all_vacuums'),
       subtitle:

@@ -5,7 +5,7 @@ import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry
 import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
 import AbstractCard from './AbstractCard';
 import SwitchCard from './SwitchCard';
-import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
+import { isCallServiceActionConfig } from '../types/strategy/type-guards';
 
 /**
  * Scene Card Class
