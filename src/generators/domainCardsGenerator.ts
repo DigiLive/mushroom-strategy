@@ -43,6 +43,13 @@ abstract class DomainCardsGenerator {
   }
 
   /**
+   * Creates a list of Lovelace card configurations.
+   *
+   * @returns A promise that resolves to a list of Lovelace card configurations.
+   */
+  abstract getCards(): Promise<LovelaceCardConfig[]>;
+
+  /**
    * Creates Lovelace card configurations for devices.
    *
    * This method generates cards devices.

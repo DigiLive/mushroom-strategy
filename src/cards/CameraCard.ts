@@ -10,17 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the camera domain.
  */
 class CameraCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): PictureEntityCardConfig {
-    return {
-      entity: '',
-      type: 'picture-entity',
-      show_name: false,
-      show_state: false,
-      camera_view: 'live',
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -31,6 +20,17 @@ class CameraCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...CameraCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): PictureEntityCardConfig {
+    return {
+      entity: '',
+      type: 'picture-entity',
+      show_name: false,
+      show_state: false,
+      camera_view: 'live',
+    };
   }
 }
 

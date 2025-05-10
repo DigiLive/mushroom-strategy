@@ -11,18 +11,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the valve domain.
  */
 class ValveCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): TemplateCardConfig {
-    return {
-      type: 'custom:mushroom-template-card',
-      icon: 'mdi:valve',
-      icon_color: 'blue',
-      double_tap_action: {
-        action: 'toggle',
-      },
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -38,7 +26,7 @@ class ValveCard extends AbstractCard {
     configuration.entity = entity.entity_id;
     configuration.icon = entity.icon ?? configuration.icon;
     configuration.primary = entity.name ?? entity.original_name ?? '?';
-    configuration.secondary = `{% 
+    configuration.secondary = `{%
                                  set mapping = {
                                    'open': '${localize('valve.open')}',
                                    'opening': '${localize('valve.opening')}',
@@ -51,6 +39,18 @@ class ValveCard extends AbstractCard {
                                {{ mapping.get(states('${entity.entity_id}'), '${localize('generic.unknown')}') }}`;
 
     this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): TemplateCardConfig {
+    return {
+      type: 'custom:mushroom-template-card',
+      icon: 'mdi:valve',
+      icon_color: 'blue',
+      double_tap_action: {
+        action: 'toggle',
+      },
+    };
   }
 }
 

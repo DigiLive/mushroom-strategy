@@ -10,14 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the lock domain.
  */
 class LockCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): LockCardConfig {
-    return {
-      type: 'custom:mushroom-lock-card',
-      icon: undefined,
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -28,6 +20,14 @@ class LockCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...LockCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): LockCardConfig {
+    return {
+      type: 'custom:mushroom-lock-card',
+      icon: undefined,
+    };
   }
 }
 

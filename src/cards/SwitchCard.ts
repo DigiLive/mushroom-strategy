@@ -10,17 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the switch domain.
  */
 class SwitchCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      icon: undefined,
-      tap_action: {
-        action: 'toggle',
-      },
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -31,6 +20,17 @@ class SwitchCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...SwitchCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon: undefined,
+      tap_action: {
+        action: 'toggle',
+      },
+    };
   }
 }
 

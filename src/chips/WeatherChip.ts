@@ -9,16 +9,6 @@ import AbstractChip from './AbstractChip';
  * Used to create a chip configuration to indicate the current weather.
  */
 class WeatherChip extends AbstractChip {
-  /** Returns the default configuration object for the chip. */
-  static getDefaultConfig(entityId: string): WeatherChipConfig {
-    return {
-      type: 'weather',
-      entity: entityId,
-      show_temperature: true,
-      show_conditions: true,
-    };
-  }
-
   /**
    * Class Constructor.
    *
@@ -29,6 +19,16 @@ class WeatherChip extends AbstractChip {
     super();
 
     this.configuration = { ...this.configuration, ...WeatherChip.getDefaultConfig(entityId), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the chip. */
+  static getDefaultConfig(entityId: string): WeatherChipConfig {
+    return {
+      type: 'weather',
+      entity: entityId,
+      show_temperature: true,
+      show_conditions: true,
+    };
   }
 }
 

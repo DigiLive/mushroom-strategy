@@ -10,6 +10,18 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the vacuum domain.
  */
 class VacuumCard extends AbstractCard {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {VacuumCardConfig} [customConfiguration] Custom card configuration.
+   */
+  constructor(entity: EntityRegistryEntry, customConfiguration?: VacuumCardConfig) {
+    super(entity);
+
+    this.configuration = { ...this.configuration, ...VacuumCard.getDefaultConfig(), ...customConfiguration };
+  }
+
   /** Returns the default configuration object for the card. */
   static getDefaultConfig(): VacuumCardConfig {
     return {
@@ -21,18 +33,6 @@ class VacuumCard extends AbstractCard {
         action: 'more-info',
       },
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {VacuumCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: VacuumCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...VacuumCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

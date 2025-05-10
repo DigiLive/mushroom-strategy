@@ -4,7 +4,7 @@ import { Info } from '../../info';
 /**
  * Action Chip Config
  *
- * @property {"action"} type - Type of the chip.
+ * @property {'action'} type - Type of the chip.
  * @property {string} [icon] - Custom icon for the chip.
  * @property {string} [icon_color] - Custom color for the icon.
  * @property {ActionConfig} [tap_action] - Home Assistant action to perform on tap.
@@ -23,7 +23,7 @@ export type ActionChipConfig = {
 /**
  * Alarm Control Panel Chip Config
  *
- * @property {"alarm-control-panel"} type - Type of the chip.
+ * @property {'alarm-control-panel'} type - Type of the chip.
  * @property {string} [entity] - The entity ID associated with the chip.
  * @property {string} [name] - Custom name for the chip.
  * @property {Info} [content_info] - Custom content information.
@@ -48,7 +48,7 @@ export type AlarmControlPanelChipConfig = {
 /**
  * Back Chip Config
  *
- * @property {"back"} type - Type of the chip.
+ * @property {'back'} type - Type of the chip.
  * @property {string} [icon] - Custom icon for the chip.
  */
 export type BackChipConfig = {
@@ -59,7 +59,7 @@ export type BackChipConfig = {
 /**
  * Entity Chip Config
  *
- * @property {"entity"} type - Type of the chip.
+ * @property {'entity'} type - Type of the chip.
  * @property {string} [entity] - The entity ID associated with the chip.
  * @property {string} [name] - Custom name for the chip.
  * @property {Info} [content_info] - Custom content information.
@@ -86,7 +86,7 @@ export type EntityChipConfig = {
 /**
  * Menu Chip Config
  *
- * @property {"menu"} type - Type of the chip.
+ * @property {'menu'} type - Type of the chip.
  * @property {string} [icon] - Custom icon for the chip.
  */
 export type MenuChipConfig = {
@@ -97,7 +97,7 @@ export type MenuChipConfig = {
 /**
  * Weather Chip Config
  *
- * @property {"weather"} type - Type of the chip.
+ * @property {'weather'} type - Type of the chip.
  * @property {string} [entity] - The entity ID associated with the chip.
  * @property {ActionConfig} [tap_action] - Home Assistant action to perform on tap.
  * @property {ActionConfig} [hold_action] - Home Assistant action to perform on hold.
@@ -118,7 +118,7 @@ export type WeatherChipConfig = {
 /**
  * Template Chip Config
  *
- * @property {"template"} type - Type of the chip.
+ * @property {'template'} type - Type of the chip.
  * @property {string} [entity] - The entity ID associated with the chip.
  * @property {ActionConfig} [tap_action] - Home Assistant action to perform on tap.
  * @property {ActionConfig} [hold_action] - Home Assistant action to perform on hold.
@@ -145,7 +145,7 @@ export type TemplateChipConfig = {
 /**
  * Conditional Chip Config
  *
- * @property {"conditional"} type - Type of the chip.
+ * @property {'conditional'} type - Type of the chip.
  * @property {LovelaceChipConfig} [chip] - A chip configuration.
  * @property {[]} conditions - Conditions for the chip.
  */
@@ -158,7 +158,7 @@ export type ConditionalChipConfig = {
 /**
  * Light Chip Config
  *
- * @property {"light"} type - Type of the chip.
+ * @property {'light'} type - Type of the chip.
  * @property {string} [entity] - The entity ID associated with the chip.
  * @property {string} [name] - Custom name for the chip.
  * @property {Info} [content_info] - Custom content information.
@@ -183,7 +183,7 @@ export type LightChipConfig = {
 /**
  * Spacer Chip Config
  *
- * @property {"spacer"} type - Type of the chip.
+ * @property {'spacer'} type - Type of the chip.
  */
 export type SpacerChipConfig = {
   type: 'spacer';

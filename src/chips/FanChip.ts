@@ -11,6 +11,17 @@ import RegistryFilter from '../utilities/RegistryFilter';
  * Used to create a chip to indicate how many fans are on and to switch them all off.
  */
 class FanChip extends AbstractChip {
+  /**
+   * Class Constructor.
+   *
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
+   */
+  constructor(customConfiguration?: TemplateChipConfig) {
+    super();
+
+    this.configuration = { ...this.configuration, ...FanChip.getDefaultConfig(), ...customConfiguration };
+  }
+
   /** Returns the default configuration object for the chip. */
   static getDefaultConfig(): TemplateChipConfig {
     return {
@@ -32,17 +43,6 @@ class FanChip extends AbstractChip {
         navigation_path: 'fans',
       },
     };
-  }
-
-  /**
-   * Class Constructor.
-   *
-   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
-   */
-  constructor(customConfiguration?: TemplateChipConfig) {
-    super();
-
-    this.configuration = { ...this.configuration, ...FanChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 

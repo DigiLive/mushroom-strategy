@@ -1,8 +1,8 @@
 /**
  * Represents the layout options for Lovelace in Home Assistant.
  *
- * @property {number | "full"} [grid_columns] - The number of grid columns or "full".
- * @property {number | "auto"} [grid_rows] - The number of grid rows or "auto".
+ * @property {number | 'full'} [grid_columns] - The number of grid columns or "full".
+ * @property {number | 'auto'} [grid_rows] - The number of grid rows or "auto".
  * @property {number} [grid_max_columns] - The maximum number of grid columns.
  * @property {number} [grid_min_columns] - The minimum number of grid columns.
  * @property {number} [grid_min_rows] - The minimum number of grid rows.
@@ -20,8 +20,8 @@ export interface LovelaceLayoutOptions {
 /**
  * Represents the grid options for Lovelace in Home Assistant.
  *
- * @property {number | "full"} [columns] - The number of columns or "full".
- * @property {number | "auto"} [rows] - The number of rows or "auto".
+ * @property {number | 'full'} [columns] - The number of columns or "full".
+ * @property {number | 'auto'} [rows] - The number of rows or "auto".
  * @property {number} [max_columns] - The maximum number of columns.
  * @property {number} [min_columns] - The minimum number of columns.
  * @property {number} [min_rows] - The minimum number of rows.

@@ -11,6 +11,17 @@ import RegistryFilter from '../utilities/RegistryFilter';
  * Used to create a chip configuration to indicate how many switches are on and to switch them all off.
  */
 class SwitchChip extends AbstractChip {
+  /**
+   * Class Constructor.
+   *
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
+   */
+  constructor(customConfiguration?: TemplateChipConfig) {
+    super();
+
+    this.configuration = { ...this.configuration, ...SwitchChip.getDefaultConfig(), ...customConfiguration };
+  }
+
   /** Returns the default configuration object for the chip. */
   static getDefaultConfig(): TemplateChipConfig {
     return {
@@ -32,17 +43,6 @@ class SwitchChip extends AbstractChip {
         navigation_path: 'switches',
       },
     };
-  }
-
-  /**
-   * Class Constructor.
-   *
-   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
-   */
-  constructor(customConfiguration?: TemplateChipConfig) {
-    super();
-
-    this.configuration = { ...this.configuration, ...SwitchChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 

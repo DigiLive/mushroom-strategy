@@ -16,6 +16,17 @@ class VacuumView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain = 'vacuum' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(VacuumView.getDefaultConfig(), customConfiguration, VacuumView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[VacuumView.domain] as SingleDomainConfig;
@@ -41,17 +52,6 @@ class VacuumView extends AbstractView {
         `${Registry.getCountTemplate(VacuumView.domain, 'in', '[cleaning, returning]')} ${localize('vacuum.vacuums')} ` +
         localize('generic.busy'),
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(VacuumView.getDefaultConfig(), customConfiguration, VacuumView.getViewHeaderCardConfig());
   }
 }
 

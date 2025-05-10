@@ -8,17 +8,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the person domain.
  */
 class PersonCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): PersonCardConfig {
-    return {
-      type: 'custom:mushroom-person-card',
-      layout: 'vertical',
-      primary_info: 'none',
-      secondary_info: 'none',
-      icon_type: 'entity-picture',
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -29,6 +18,17 @@ class PersonCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...PersonCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): PersonCardConfig {
+    return {
+      type: 'custom:mushroom-person-card',
+      layout: 'vertical',
+      primary_info: 'none',
+      secondary_info: 'none',
+      icon_type: 'entity-picture',
+    };
   }
 }
 

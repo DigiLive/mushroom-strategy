@@ -10,16 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the climate domain.
  */
 class ClimateCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): ClimateCardConfig {
-    return {
-      type: 'custom:mushroom-climate-card',
-      icon: undefined,
-      hvac_modes: ['off', 'cool', 'heat', 'fan_only'],
-      show_temperature_control: true,
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -30,6 +20,16 @@ class ClimateCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...ClimateCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): ClimateCardConfig {
+    return {
+      type: 'custom:mushroom-climate-card',
+      icon: undefined,
+      hvac_modes: ['off', 'cool', 'heat', 'fan_only'],
+      show_temperature_control: true,
+    };
   }
 }
 

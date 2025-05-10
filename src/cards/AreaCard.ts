@@ -8,18 +8,6 @@ import AbstractCard from './AbstractCard';
  * Used to create card configuration for an entry of the HASS area registry.
  */
 class AreaCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): TemplateCardConfig {
-    return {
-      type: 'custom:mushroom-template-card',
-      primary: undefined,
-      icon: 'mdi:floor-plan',
-      icon_color: 'blue',
-      tap_action: { action: 'navigate', navigation_path: '' },
-      hold_action: { action: 'none' },
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -46,6 +34,18 @@ class AreaCard extends AbstractCard {
     }
 
     this.configuration = { ...this.configuration, ...configuration, ...customConfig };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): TemplateCardConfig {
+    return {
+      type: 'custom:mushroom-template-card',
+      primary: undefined,
+      icon: 'mdi:floor-plan',
+      icon_color: 'blue',
+      tap_action: { action: 'navigate', navigation_path: '' },
+      hold_action: { action: 'none' },
+    };
   }
 }
 

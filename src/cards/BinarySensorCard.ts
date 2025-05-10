@@ -10,15 +10,6 @@ import SensorCard from './SensorCard';
  * Used to create a card configuration to control an entity of the binary_sensor domain.
  */
 class BinarySensorCard extends SensorCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      icon: 'mdi:power-cycle',
-      icon_color: 'green',
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -29,6 +20,15 @@ class BinarySensorCard extends SensorCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...BinarySensorCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon: 'mdi:power-cycle',
+      icon_color: 'green',
+    };
   }
 }
 

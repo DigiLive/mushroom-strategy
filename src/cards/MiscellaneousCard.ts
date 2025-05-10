@@ -8,14 +8,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of any domain.
  */
 class MiscellaneousCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      icon_color: 'blue-grey',
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -26,6 +18,14 @@ class MiscellaneousCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...MiscellaneousCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon_color: 'blue-grey',
+    };
   }
 }
 

@@ -8,16 +8,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card for controlling an entity of the sensor domain.
  */
 class SensorCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      icon: 'mdi:information',
-      animate: true,
-      line_color: 'green',
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -28,6 +18,16 @@ class SensorCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...SensorCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon: 'mdi:information',
+      animate: true,
+      line_color: 'green',
+    };
   }
 }
 

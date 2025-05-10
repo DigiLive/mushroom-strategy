@@ -19,6 +19,12 @@ class LightView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain = 'light' as const;
 
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(LightView.getDefaultConfig(), customConfiguration, LightView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[LightView.domain] as SingleDomainConfig;
@@ -44,12 +50,6 @@ class LightView extends AbstractView {
         `${Registry.getCountTemplate(LightView.domain, 'eq', 'on')} ${localize('light.lights')} ` +
         localize('generic.on'),
     };
-  }
-
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(LightView.getDefaultConfig(), customConfiguration, LightView.getViewHeaderCardConfig());
   }
 }
 

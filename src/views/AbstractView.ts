@@ -4,12 +4,12 @@ import { Registry } from '../Registry';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
 import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import { AbstractCardConfig, CustomHeaderCardConfig, StrategyHeaderCardConfig } from '../types/strategy/strategy-cards';
 import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig, ViewConstructor } from '../types/strategy/strategy-views';
 import { sanitizeClassName } from '../utilities/auxiliaries';
 import { logMessage, lvlFatal } from '../utilities/debug';
 import RegistryFilter from '../utilities/RegistryFilter';
+import { AbstractCardConfig, HeaderCardConfig } from '../types/strategy/strategy-cards';
 
 /**
  * Abstract View Class.
@@ -33,10 +33,6 @@ abstract class AbstractView {
     type: '',
   };
 
-  protected get domain(): SupportedDomains | 'home' {
-    return (this.constructor as unknown as ViewConstructor).domain;
-  }
-
   /**
    * Class constructor.
    *
@@ -47,6 +43,22 @@ abstract class AbstractView {
     if (!Registry.initialized) {
       logMessage(lvlFatal, 'Registry not initialized!');
     }
+  }
+
+  protected get domain(): SupportedDomains | 'home' {
+    return (this.constructor as unknown as ViewConstructor).domain;
+  }
+
+  /**
+   * Get a view configuration.
+   *
+   * The configuration includes the card configurations which are created by createCardConfigurations().
+   */
+  async getView(): Promise<LovelaceViewConfig> {
+    return {
+      ...this.baseConfiguration,
+      cards: await this.createCardConfigurations(),
+    };
   }
 
   /**
@@ -90,7 +102,7 @@ abstract class AbstractView {
         // Create and insert a Header card.
         const areaHeaderCardOptions = (
           'headerCardConfiguration' in this.baseConfiguration ? this.baseConfiguration.headerCardConfiguration : {}
-        ) as CustomHeaderCardConfig;
+        ) as HeaderCardConfig;
 
         areaCards.unshift(new HeaderCard(target, { title: area.name, ...areaHeaderCardOptions }).createCard());
 
@@ -107,15 +119,25 @@ abstract class AbstractView {
   }
 
   /**
-   * Get a view configuration.
+   * Initialize the view configuration with defaults and custom settings.
    *
-   * The configuration includes the card configurations which are created by createCardConfigurations().
+   * @param viewConfiguration The view's default configuration for the view.
+   * @param customConfiguration The view's custom configuration to apply.
+   * @param headerCardConfig The view's Header card configuration.
    */
-  async getView(): Promise<LovelaceViewConfig> {
-    return {
-      ...this.baseConfiguration,
-      cards: await this.createCardConfigurations(),
-    };
+  protected initializeViewConfig(
+    viewConfiguration: ViewConfig,
+    customConfiguration: ViewConfig = {},
+    headerCardConfig: HeaderCardConfig,
+  ): void {
+    this.baseConfiguration = { ...this.baseConfiguration, ...viewConfiguration, ...customConfiguration };
+
+    this.viewHeaderCardConfiguration = new HeaderCard(this.getDomainTargets(), {
+      ...(('headerCardConfiguration' in this.baseConfiguration
+        ? this.baseConfiguration.headerCardConfiguration
+        : {}) as HeaderCardConfig),
+      ...headerCardConfig,
+    }).createCard();
   }
 
   /**
@@ -127,28 +149,6 @@ abstract class AbstractView {
         .filter((entity) => entity.entity_id.startsWith(this.domain + '.'))
         .map((entity) => entity.entity_id),
     };
-  }
-
-  /**
-   * Initialize the view configuration with defaults and custom settings.
-   *
-   * @param viewConfiguration The view's default configuration for the view.
-   * @param customConfiguration The view's custom configuration to apply.
-   * @param headerCardConfig The view's Header card configuration.
-   */
-  protected initializeViewConfig(
-    viewConfiguration: ViewConfig,
-    customConfiguration: ViewConfig = {},
-    headerCardConfig: CustomHeaderCardConfig,
-  ): void {
-    this.baseConfiguration = { ...this.baseConfiguration, ...viewConfiguration, ...customConfiguration };
-
-    this.viewHeaderCardConfiguration = new HeaderCard(this.getDomainTargets(), {
-      ...(('headerCardConfiguration' in this.baseConfiguration
-        ? this.baseConfiguration.headerCardConfiguration
-        : {}) as StrategyHeaderCardConfig),
-      ...headerCardConfig,
-    }).createCard();
   }
 }
 

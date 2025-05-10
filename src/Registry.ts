@@ -34,15 +34,14 @@ class Registry {
   private static _areas: StrategyArea[] = [];
   /** Entries of Home Assistant's state registry */
   private static _hassStates: HassEntities;
-  /** Indicates whether this module is initialized. */
-  private static _initialized: boolean = false;
+  /** Entries of Home Assistant's config registry */
+  private static _configEntries: ConfigEntry[] = [];
   /** The Custom strategy configuration. */
   private static _strategyOptions: StrategyConfig;
+  /** Indicates whether this module is initialized. */
+  private static _initialized: boolean = false;
+  /** Indicates whether dark mode is enabled */
   static darkMode: boolean;
-
-  /** The entities which are grouped into a device view */
-  // TODO: Create type or interface?
-  private static _configEntries: ConfigEntry[] = [];
 
   /**
    * Home Assistant's Config Entries.

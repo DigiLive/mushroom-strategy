@@ -10,17 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the cover domain.
  */
 class CoverCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): CoverCardConfig {
-    return {
-      type: 'custom:mushroom-cover-card',
-      icon: undefined,
-      show_buttons_control: true,
-      show_position_control: true,
-      show_tilt_position_control: true,
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -31,6 +20,17 @@ class CoverCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...CoverCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): CoverCardConfig {
+    return {
+      type: 'custom:mushroom-cover-card',
+      icon: undefined,
+      show_buttons_control: true,
+      show_position_control: true,
+      show_tilt_position_control: true,
+    };
   }
 }
 

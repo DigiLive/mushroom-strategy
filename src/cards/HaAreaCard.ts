@@ -10,14 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create card configuration for an entry of the HASS area registry.
  */
 class AreaCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): AreaCardConfig {
-    return {
-      type: 'area',
-      area: '',
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -38,6 +30,14 @@ class AreaCard extends AbstractCard {
       ...configuration,
       ...customConfiguration,
       type: configuration.type, // Enforce the card type.
+    };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): AreaCardConfig {
+    return {
+      type: 'area',
+      area: '',
     };
   }
 }

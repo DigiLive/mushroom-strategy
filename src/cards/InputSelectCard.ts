@@ -10,14 +10,6 @@ import SelectCard from './SelectCard';
  * Used to create a card configuration to control an entity of the input_select domain.
  */
 class InputSelectCard extends SelectCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): SelectCardConfig {
-    return {
-      type: 'custom:mushroom-select-card',
-      icon: undefined,
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -28,6 +20,14 @@ class InputSelectCard extends SelectCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...InputSelectCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): SelectCardConfig {
+    return {
+      type: 'custom:mushroom-select-card',
+      icon: undefined,
+    };
   }
 }
 

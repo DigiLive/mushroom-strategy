@@ -10,14 +10,6 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the number domain.
  */
 class NumberCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): NumberCardConfig {
-    return {
-      type: 'custom:mushroom-number-card',
-      icon: undefined,
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -28,6 +20,14 @@ class NumberCard extends AbstractCard {
     super(entity);
 
     this.configuration = { ...this.configuration, ...NumberCard.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): NumberCardConfig {
+    return {
+      type: 'custom:mushroom-number-card',
+      icon: undefined,
+    };
   }
 }
 

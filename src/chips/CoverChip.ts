@@ -10,6 +10,17 @@ import AbstractChip from './AbstractChip';
  * Used to create a chip configuration to indicate how many covers aren't closed.
  */
 class CoverChip extends AbstractChip {
+  /**
+   * Class Constructor.
+   *
+   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
+   */
+  constructor(customConfiguration?: TemplateChipConfig) {
+    super();
+
+    this.configuration = { ...this.configuration, ...CoverChip.getDefaultConfig(), ...customConfiguration };
+  }
+
   /** Returns the default configuration object for the chip. */
   static getDefaultConfig(): TemplateChipConfig {
     return {
@@ -25,17 +36,6 @@ class CoverChip extends AbstractChip {
         navigation_path: 'covers',
       },
     };
-  }
-
-  /**
-   * Class Constructor.
-   *
-   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
-   */
-  constructor(customConfiguration?: TemplateChipConfig) {
-    super();
-
-    this.configuration = { ...this.configuration, ...CoverChip.getDefaultConfig(), ...customConfiguration };
   }
 }
 

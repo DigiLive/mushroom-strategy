@@ -46,9 +46,9 @@ export interface EntityRegistryDisplayEntry {
  * @property {string | null} device_id - The ID of the device linked to this entity.
  * @property {string | null} area_id - The ID of the area linked to this entity.
  * @property {string[]} labels - Labels associated with the entity.
- * @property {"user" | "device" | "integration" | "config_entry" | null} disabled_by - Indicates what disabled this
+ * @property {'user' | 'device' | 'integration' | 'config_entry' | null} disabled_by - Indicates what disabled this
  *                                                                                     entity.
- * @property {Exclude<EntityRegistryEntry["disabled_by"], "config_entry">} hidden_by - Indicates what hidden this
+ * @property {Exclude<EntityRegistryEntry['disabled_by'], 'config_entry'>} hidden_by - Indicates what hidden this
  *                                                                                     entity.
  * @property {EntityCategory | null} entity_category - The category of the entity.
  * @property {boolean} has_entity_name - Indicates if the entity has a name.
