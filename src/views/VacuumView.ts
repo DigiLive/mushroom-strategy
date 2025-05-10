@@ -36,7 +36,7 @@ class VacuumView extends AbstractView {
     return {
       title: localize('vacuum.all_vacuums'),
       subtitle:
-        `${Registry.getCountTemplate(VacuumView.domain, 'ne', 'off')} ${localize('vacuum.vacuums')} ` +
+        `${Registry.getCountTemplate(VacuumView.domain, 'in', '[cleaning, returning]')} ${localize('vacuum.vacuums')} ` +
         localize('generic.busy'),
     };
   }
