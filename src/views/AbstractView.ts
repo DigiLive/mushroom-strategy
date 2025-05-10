@@ -87,11 +87,11 @@ abstract class AbstractView {
 
       // Vertically stack the cards of the current area.
       if (areaCards.length) {
+        // Create and insert a Header card.
         const areaHeaderCardOptions = (
           'headerCardConfiguration' in this.baseConfiguration ? this.baseConfiguration.headerCardConfiguration : {}
         ) as CustomHeaderCardConfig;
 
-        // Create and insert a Header card.
         areaCards.unshift(new HeaderCard(target, { title: area.name, ...areaHeaderCardOptions }).createCard());
 
         viewCards.push({ type: 'vertical-stack', cards: areaCards });
