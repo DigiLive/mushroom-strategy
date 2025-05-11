@@ -269,44 +269,25 @@ class Registry {
    * Get a template string to define the number of a given domain's entities with a certain state.
    *
    * States are compared against a given value by a given operator.
-   * States `unavailable` and `unknown` are always excluded.
    *
    * @param {string} domain The domain of the entities.
    * @param {string} operator The comparison operator between state and value.
    * @param {string} value The value to which the state is compared against.
+   *
+   * @remarks
+   * - States `unavailable` and `unknown` are always excluded.
+   * - States with a defined `entity_id` are always excluded.
+   *   Most probably they represent a group of "child" states.
    */
   static getCountTemplate(domain: SupportedDomains, operator: string, value: string): string {
-    // noinspection JSMismatchedCollectionQueryUpdate
-    /**
-     * Array of entity state-entries, filtered by domain.
-     *
-     * Each element contains a template-string which is used to access home assistant's state machine (state object) in
-     * a template; E.g. `states['light.kitchen']`.
-     */
-    const states: string[] = [];
-
-    if (!Registry.initialized) {
-      logMessage(lvlWarn, 'Registry not initialized!');
-
-      return '?';
-    }
-
-    states.push(
-      ...new RegistryFilter(Registry.entities)
-        .whereDomain(domain)
-        .where((entity) => !entity.entity_id.endsWith('_stateful_scene'))
-        .toList()
-        .map((entity) => `states['${entity.entity_id}']`),
-    );
-
-    return `{% set entities = [${states}] %}
-       {{ entities
-          | selectattr('state','${operator}','${value}')
-          | selectattr('state','ne','unavailable')
-          | selectattr('state','ne','unknown')
-          | list
-          | count
-        }}`;
+    return `
+      {{ states.${domain}
+        | rejectattr('attributes.entity_id', 'defined')
+        | rejectattr('state', 'in', ['unavailable', 'unknown'])
+        | selectattr('state', '${operator}', '${value}')
+        | list
+        | count
+      }}`;
   }
 
   /**
