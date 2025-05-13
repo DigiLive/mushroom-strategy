@@ -1,2 +1,2 @@
 /node_modules/
-/dist/
+# Don't add directory /dist/ to .gitignore, as it is used by the build script
