@@ -63,13 +63,13 @@ Visit the [issues][issuesUrl] page.
 
 [sponsorBadge]: https://img.shields.io/badge/Sponsor_him-%E2%9D%A4-%23db61a2.svg?&logo=github&color=%23fe8e86
 
-[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.0-alpha.1&label=Release
+[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.0&label=Release
 
 <!-- Repository References -->
 
 [repositoryUrl]: https://github.com/DigiLive/mushroom-strategy
 
-[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.0-alpha.1
+[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.0
 
 [issuesUrl]: https://github.com/DigiLive/mushroom-strategy/issues
 
