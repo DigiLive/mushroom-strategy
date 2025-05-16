@@ -6,6 +6,9 @@ import { localize } from './utilities/localize';
  */
 export const ConfigurationDefaults: StrategyDefaults = {
   areas: {
+    _: {
+      type: 'AreaCard',
+    },
     undisclosed: {
       // TODO: Refactor undisclosed to other.
       aliases: [],
@@ -39,11 +42,13 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hide_config_entities: undefined,
       hide_diagnostic_entities: undefined,
       showControls: true,
+      stack_count: 1,
     },
     binary_sensor: {
       title: `${localize('sensor.binary')} ` + localize('sensor.sensors'),
       showControls: false,
       hidden: false,
+      stack_count: 2, // TODO: Add to wiki. also for other configurations.
     },
     camera: {
       title: localize('camera.cameras'),
@@ -141,6 +146,9 @@ export const ConfigurationDefaults: StrategyDefaults = {
   extra_views: [],
   home_view: {
     hidden: [],
+    stack_count: {
+      _: 2,
+    },
   },
   views: {
     camera: {

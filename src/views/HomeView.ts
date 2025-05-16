@@ -210,7 +210,11 @@ class HomeView extends AbstractView {
 
     return {
       type: 'vertical-stack',
-      cards: stackHorizontal(cardConfigurations),
+      cards: stackHorizontal(
+        cardConfigurations,
+        Registry.strategyOptions.home_view.stack_count['persons'] ??
+          Registry.strategyOptions.home_view.stack_count['_'],
+      ),
     };
   }
 
@@ -223,7 +227,6 @@ class HomeView extends AbstractView {
   private async createAreasSection(): Promise<StackCardConfig | undefined> {
     if (Registry.strategyOptions.home_view.hidden.includes('areas')) {
       // Areas section is hidden.
-
       return;
     }
 
@@ -253,11 +256,17 @@ class HomeView extends AbstractView {
         }).getCard(),
       );
     }
-
+    console.log(
+      Registry.strategyOptions.home_view.stack_count.areas?.[0],
+      Registry.strategyOptions.home_view.stack_count.areas?.[1],
+    );
     return {
       type: 'vertical-stack',
       title: Registry.strategyOptions.home_view.hidden.includes('areasTitle') ? undefined : localize('generic.areas'),
-      cards: stackHorizontal(cardConfigurations, { area: 1, 'custom:mushroom-template-card': 2 }),
+      cards: stackHorizontal(cardConfigurations, Registry.strategyOptions.home_view.stack_count['_'], {
+        'custom:mushroom-template-card': Registry.strategyOptions.home_view.stack_count.areas?.[0],
+        area: Registry.strategyOptions.home_view.stack_count.areas?.[1],
+      }),
     };
   }
 }

@@ -165,7 +165,7 @@ class Registry {
     }));
 
     // Process entries of the HASS area registry.
-    if (Registry.strategyOptions.areas._?.hidden) {
+    if (Registry.strategyOptions.areas._.hidden) {
       Registry._areas = [];
     } else {
       // Create and add the undisclosed area if not hidden in the strategy options.
@@ -251,7 +251,7 @@ class Registry {
     const states: string[] = [];
 
     if (!Registry.initialized) {
-      logMessage(lvlWarn, 'Registry not initialized!');
+      logMessage(lvlWarn, 'Registry is not initialized!');
 
       return '?';
     }
@@ -264,6 +264,7 @@ class Registry {
         .map((entity) => `states['${entity.entity_id}']`),
     );
 
+    // noinspection SpellCheckingInspection
     return `{% set entities = [${states}] %}
        {{ entities
           | selectattr('state','${operator}','${value}')

@@ -10,6 +10,7 @@ import { ViewConfig, ViewConstructor } from '../types/strategy/strategy-views';
 import { sanitizeClassName } from '../utilities/auxiliaries';
 import { logMessage, lvlFatal } from '../utilities/debug';
 import RegistryFilter from '../utilities/RegistryFilter';
+import { stackHorizontal } from '../utilities/cardStacking';
 
 /**
  * Abstract View Class.
@@ -45,7 +46,7 @@ abstract class AbstractView {
    */
   protected constructor() {
     if (!Registry.initialized) {
-      logMessage(lvlFatal, 'Registry not initialized!');
+      logMessage(lvlFatal, 'Registry is not initialized!');
     }
   }
 
@@ -63,7 +64,7 @@ abstract class AbstractView {
 
     // Create card configurations for each area.
     for (const area of Registry.areas) {
-      const areaCards: AbstractCardConfig[] = [];
+      let areaCards: AbstractCardConfig[] = [];
 
       // Set the target of the Header card to the current area.
       let target: HassServiceTarget = {
@@ -85,8 +86,14 @@ abstract class AbstractView {
         ),
       );
 
-      // Vertically stack the cards of the current area.
+      // Stack the cards of the current area.
       if (areaCards.length) {
+        areaCards = stackHorizontal(
+          areaCards,
+          Registry.strategyOptions.domains[this.domain as SupportedDomains].stack_count ??
+            Registry.strategyOptions.domains['_'].stack_count,
+        );
+
         // Create and insert a Header card.
         const areaHeaderCardOptions = (
           'headerCardConfiguration' in this.baseConfiguration ? this.baseConfiguration.headerCardConfiguration : {}
