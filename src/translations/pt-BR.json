@@ -1,0 +1,80 @@
+{
+  "camera": {
+    "all_cameras": "Todas as câmeras",
+    "cameras": "Câmeras"
+  },
+  "climate": {
+    "all_climates": "Todos os climatizadores",
+    "climates": "Climatizadores"
+  },
+  "cover": {
+    "all_covers": "Todas as persianas",
+    "covers": "Persianas"
+  },
+  "fan": {
+    "all_fans": "Todos os ventiladores",
+    "fans": "Ventiladores"
+  },
+  "generic": {
+    "all": "Todos",
+    "areas": "Áreas",
+    "busy": "Ocupado",
+    "good_afternoon": "Boa tarde",
+    "good_evening": "Boa noite",
+    "good_morning": "Bom dia",
+    "hello": "Olá",
+    "home": "Início",
+    "miscellaneous": "Variados",
+    "numbers": "Números",
+    "off": "Desligado",
+    "on": "Ligado",
+    "open": "Aberto",
+    "unavailable": "Indisponível",
+    "unclosed": "Não fechado",
+    "undisclosed": "Outro",
+    "unknown": "Desconhecido"
+  },
+  "input_select": {
+    "input_selects": "Seleção de entrada"
+  },
+  "light": {
+    "all_lights": "Todas as luzes",
+    "lights": "Luzes"
+  },
+  "lock": {
+    "all_locks": "Todas as fechaduras",
+    "locked": "Travado",
+    "locks": "Fechaduras",
+    "unlocked": "Destravado"
+  },
+  "media_player": {
+    "media_players": "Reprodutores de mídia"
+  },
+  "scene": {
+    "scenes": "Cenas"
+  },
+  "select": {
+    "selects": "Seleção"
+  },
+  "sensor": {
+    "binary": "Binário",
+    "sensors": "Sensores"
+  },
+  "switch": {
+    "all_switches": "Todos os interruptores",
+    "switches": "Interruptores"
+  },
+  "vacuum": {
+    "all_vacuums": "Todos os aspiradores",
+    "vacuums": "Aspiradores"
+  },
+  "valve": {
+    "all_valves": "Todas as válvulas",
+    "valves": "Válvulas",
+    "open": "Aberto",
+    "opening": "Abrindo",
+    "closed": "Fechado",
+    "closing": "Fechando",
+    "stopped": "Parado"
+  }
+}
