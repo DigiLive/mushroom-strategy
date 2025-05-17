@@ -33,7 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^8.31.0",
     "@typescript-eslint/parser": "^8.31.0",
     "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
+    "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.2.6",
     "home-assistant-js-websocket": "^9.5.0",
     "prettier": "^3.5.3",
