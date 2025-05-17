@@ -224,7 +224,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
 customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
 
-const version = 'v2.3.2';
+const version = 'v2.3.3-alpha.1';
 console.info(
   '%c Mushroom Strategy %c '.concat(version, ' '),
   'color: white; background: coral; font-weight: 700;',
