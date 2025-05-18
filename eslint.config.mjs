@@ -35,14 +35,10 @@ export default defineConfig([
     },
 
     languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-
+      globals: { ...globals.node },
       parser: tsParser,
       ecmaVersion: 2020,
       sourceType: 'module',
-
       parserOptions: {
         project: ['./tsconfig.json', './tsconfig.eslint.json'],
       },
@@ -50,35 +46,13 @@ export default defineConfig([
 
     rules: {
       '@typescript-eslint/no-empty-function': 'warn',
-
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          argsIgnorePattern: '^_',
-        },
-      ],
-
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'comma-dangle': ['error', 'always-multiline'],
-
-      'max-len': [
-        'warn',
-        {
-          code: 120,
-        },
-      ],
-
+      'max-len': ['warn', { code: 120, ignoreComments: true }],
       'no-console': 'off',
       'no-empty-function': 'off',
       'no-unused-vars': 'off',
-
-      quotes: [
-        'error',
-        'single',
-        {
-          avoidEscape: true,
-        },
-      ],
-
+      quotes: ['error', 'single', { avoidEscape: true }],
       semi: ['error', 'always'],
     },
   },
@@ -88,7 +62,6 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 5,
       sourceType: 'script',
-
       parserOptions: {
         project: null,
       },

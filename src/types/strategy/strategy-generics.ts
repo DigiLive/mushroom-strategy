@@ -165,21 +165,23 @@ export interface SingleDomainConfig extends Partial<HeaderCardConfig> {
 /**
  * Strategy Configuration.
  *
- * @property {Object.<string, StrategyArea>} areas - The configuration of areas.
- * @property {Object.<string, CustomCardConfig>} card_options - Card options for entities.
+ * @property {Object.<K in AreaRegistryEntry['area_id'], StrategyArea>} areas - The configuration of areas.
+ * @property {Object.<K in EntityRegistryEntry['entity_id'], CustomCardConfig>} card_options - Card options for entities.
+ * @property {Object.<K in DeviceRegistryEntry['id'], { hidden?: boolean; group_entities?: boolean }>} device_options - Device options for entities.
  * @property {ChipConfiguration} chips - The configuration of chips in the Home view.
  * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
  * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
  * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
  * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
- * @property {{ Object }} home_view - List of views to add to the dashboard.
+ * @property {{ hidden: HomeViewSections[]; stack_count: { _: number } }} home_view - List of views to add to the dashboard.
  * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
- * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card
- *                                                       and rooms cards.
+ * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card and rooms cards.
  */
 export interface StrategyConfig {
-  areas: { [S: string]: StrategyArea };
-  card_options: { [S: string]: CustomCardConfig };
+  areas: { [S in AreaRegistryEntry['area_id']]: StrategyArea };
+  card_options: { [S in EntityRegistryEntry['entity_id']]: CustomCardConfig };
+  device_options: { [S in DeviceRegistryEntry['id']]: { hidden?: boolean; group_entities?: boolean } };
+  // TODO: Move device entries from card_options to device_options.
   chips: ChipConfiguration;
   debug: boolean;
   domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
@@ -207,8 +209,7 @@ export type StrategyDefaults = Omit<StrategyConfig, 'areas'> & {
  * Strategy Area.
  *
  * @property {boolean} [hidden] True if the entity should be hidden from the dashboard.
- * @property {object[]} [extra_cards] - An array of card configurations.
- *                                      The configured cards are added to the dashboard.
+ * @property {object[]} [extra_cards] - Vard configurations to be added to the dashboard.
  * @property {number} [order] - Ordering position of the area in the list of available areas.
  * @property {string} [type] - The type of area card.
  */
@@ -257,39 +258,6 @@ export interface ChipConfiguration {
  */
 export interface CustomCardConfig extends LovelaceCardConfig {
   hidden?: boolean;
-}
-
-/**
- * Strategy Configuration.
- *
- * @property {Object.<K in keyof StrategyArea, StrategyArea>} areas - List of areas.
- * @property {Object.<K in keyof RegistryEntry, CustomCardConfig>} card_options - Card options for entities.
- * @property {ChipConfiguration} chips - The configuration of chips in the Home view.
- * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
- * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
- * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
- * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
- * @property {{ hidden: HomeViewSections[] | [] }} home_view - List of views to add to the dashboard.
- * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
- * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card
- *                                                       and rooms cards.
- */
-export interface StrategyConfig {
-  areas: { [S in AreaRegistryEntry['area_id']]: StrategyArea };
-  device_options: { [S in DeviceRegistryEntry['id']]: { hidden?: boolean; group_entities?: boolean } };
-  // TODO: Move device entries from card_options to device_options.
-  card_options: { [S in EntityRegistryEntry['entity_id']]: CustomCardConfig };
-  chips: ChipConfiguration;
-  debug: boolean;
-  domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
-  extra_cards: LovelaceCardConfig[];
-  extra_views: StrategyViewConfig[];
-  home_view: {
-    hidden: HomeViewSections[];
-    stack_count: { _: number } & { [K in HomeViewSections]?: K extends 'areas' ? [number, number] : number };
-  };
-  views: Record<SupportedViews, StrategyViewConfig>;
-  quick_access_cards: LovelaceCardConfig[];
 }
 
 /**
