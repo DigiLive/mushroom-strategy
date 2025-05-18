@@ -5,7 +5,7 @@ Please fill out the following information to help us review your translation cha
 
 ---
 
-### Type of Translation Contribution
+## Type of Translation Contribution
 
 Please select the type of contribution:
 
@@ -15,7 +15,7 @@ Please select the type of contribution:
 
 ---
 
-### Target Language
+## Target Language
 
 Please specify the language you are adding or modifying:
 
@@ -23,7 +23,7 @@ Please specify the language you are adding or modifying:
 
 ---
 
-### Motivation and Context
+## Motivation and Context
 
 Explain why this translation (addition, fix, or update) is needed.
 - For fixes, please describe the original error.
@@ -33,7 +33,7 @@ Explain why this translation (addition, fix, or update) is needed.
 
 ---
 
-### Scope of Changes
+## Scope of Changes
 
 Please describe the scope of your translation changes.  
 Which parts of the project are affected by these translations?
@@ -42,7 +42,7 @@ Which parts of the project are affected by these translations?
 
 ---
 
-### List of Changes
+## List of Changes
 
 Provide a concise list of the main changes you've made in this pull request.  
 If it's a large update, you can highlight key areas.
@@ -51,7 +51,7 @@ If it's a large update, you can highlight key areas.
 
 ---
 
-### Considerations for Reviewers
+## Considerations for Reviewers
 
 Are there any specific areas you would like reviewers to pay extra attention to?
 For example, specific terminology, cultural nuances, or consistency with existing translations.
@@ -60,7 +60,7 @@ For example, specific terminology, cultural nuances, or consistency with existin
 
 ---
 
-### Agreements
+## Agreements
 
 Please confirm the following:
 

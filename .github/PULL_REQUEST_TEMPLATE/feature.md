@@ -5,13 +5,13 @@ Please fill out the following information to help us review your pull request.
 
 ---
 
-### Feature Summary
+## Feature Summary
 
 [Briefly describe the feature you are proposing]
 
 ---
 
-### Motivation and Context
+## Motivation and Context
 
 Explain why this feature is needed and what problem it solves.  
 If it relates to an existing issue, please link it.
@@ -21,19 +21,19 @@ See [Linking a pull request to an issue](https://docs.github.com/en/issues/track
 
 ---
 
-### List of Changes
+## List of Changes
 
 [Provide a concise list of the main changes introduced by this pull request.]
 
 - ...
 
-### Wiki Updates
+## Wiki Updates
 
 [If this bug feature requires any updates to the Wiki, please provide details here.]
 
 ---
 
-### Agreements
+## Agreements
 
 Please confirm the following by inserting an `x` between the brackets:
 
