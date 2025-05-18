@@ -16,6 +16,17 @@ class SwitchView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain = 'switch' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(SwitchView.getDefaultConfig(), customConfiguration, SwitchView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[SwitchView.domain] as SingleDomainConfig;
@@ -41,17 +52,6 @@ class SwitchView extends AbstractView {
         `${Registry.getCountTemplate(SwitchView.domain, 'eq', 'on')} ${localize('switch.switches')} ` +
         localize('generic.on'),
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(SwitchView.getDefaultConfig(), customConfiguration, SwitchView.getViewHeaderCardConfig());
   }
 }
 

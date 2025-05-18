@@ -86,14 +86,14 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
       }
 
       if (areaId === undefined) {
-        return entry.area_id === undefined && deviceAreaId === undefined;
+        return entryObject.area_id === undefined && deviceAreaId === undefined;
       }
 
-      if (entry.area_id === 'undisclosed' || !entry.area_id) {
+      if (entryObject.area_id === 'undisclosed' || !entryObject.area_id) {
         return deviceAreaId === areaId;
       }
 
-      return entry.area_id === areaId;
+      return entryObject.area_id === areaId;
     };
 
     this.filters.push(this.checkInversion(predicate));

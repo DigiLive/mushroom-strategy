@@ -30,11 +30,14 @@
     "deepmerge": "^4"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.27.0",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
+    "globals": "^16.1.0",
     "home-assistant-js-websocket": "^9.5.0",
     "prettier": "^3.5.3",
     "superstruct": "^2.0.2",

@@ -16,6 +16,17 @@ class CameraView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain: SupportedDomains = 'camera' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(CameraView.getDefaultConfig(), customConfiguration, CameraView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[CameraView.domain] as SingleDomainConfig;
@@ -26,7 +37,8 @@ class CameraView extends AbstractView {
       icon: 'mdi:cctv',
       subview: false,
       headerCardConfiguration: {
-        showControls: domainConfig.showControls, // FIXME: This should be named "show_controls". Also in other files and Wiki.
+        // FIXME: This should be named "show_controls". Also in other files and Wiki.
+        showControls: domainConfig.showControls,
         on: domainConfig.on,
         off: domainConfig.off,
       },
@@ -41,17 +53,6 @@ class CameraView extends AbstractView {
         `${Registry.getCountTemplate(CameraView.domain, 'ne', 'off')} ${localize('camera.cameras')} ` +
         localize('generic.busy'),
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(CameraView.getDefaultConfig(), customConfiguration, CameraView.getViewHeaderCardConfig());
   }
 }
 

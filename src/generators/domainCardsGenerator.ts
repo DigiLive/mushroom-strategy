@@ -74,7 +74,7 @@ abstract class DomainCardsGenerator {
 
           return deviceCard;
         } catch (e) {
-          logMessage(lvlError, `Error creating card for device with id ${device.id}`, e);
+          logMessage(lvlError, `Error creating card for the device with id ${device.id}`, e);
 
           return null;
         }
@@ -88,7 +88,7 @@ abstract class DomainCardsGenerator {
         showControls: false,
       },
     ).createCard();
-
+    // TODO: add horizontal stacking
     return {
       type: 'vertical-stack',
       cards: [headerCard, ...cards.filter((card): card is LovelaceCardConfig => card !== null)],
@@ -113,7 +113,7 @@ abstract class DomainCardsGenerator {
       return null;
     }
 
-    const cards = await Promise.all(
+    let cards = await Promise.all(
       entities.map(async (entity) => {
         return this.createEntityCard(entity, 'SensorCard', {
           ...Registry.strategyOptions.card_options[entity.entity_id],
@@ -123,13 +123,24 @@ abstract class DomainCardsGenerator {
       }),
     );
 
-    const headerCard = new HeaderCard({}, Registry.strategyOptions.domains['sensor']).createCard();
+    filterNonNullValues(cards);
 
-    return {
-      type: 'vertical-stack',
-      cards: [headerCard, ...cards.filter((card): card is LovelaceCardConfig => card !== null)],
-      strategy: { domain: 'sensor' },
-    };
+    if (cards.length) {
+      const headerCard = new HeaderCard({}, Registry.strategyOptions.domains['sensor']).createCard();
+
+      cards = stackHorizontal(
+        cards,
+        Registry.strategyOptions.domains['sensor'].stack_count ?? Registry.strategyOptions.domains['_'].stack_count,
+      );
+
+      return {
+        type: 'vertical-stack',
+        cards: [headerCard, ...cards],
+        strategy: { domain: 'sensor' },
+      };
+    }
+
+    return null;
   }
 
   /**
@@ -147,11 +158,11 @@ abstract class DomainCardsGenerator {
       .toList();
 
     if (!entities.length) {
-      logMessage(lvlInfo, `No sensors available for view of ${this.parent.type} ${this.parent.id}.`);
+      logMessage(lvlInfo, `No entities available for view of ${this.parent.type} ${this.parent.id}.`);
       return null;
     }
 
-    const cards = await Promise.all(
+    let cards = await Promise.all(
       entities.map(async (entity) => {
         return this.createEntityCard(
           entity,
@@ -161,13 +172,24 @@ abstract class DomainCardsGenerator {
       }),
     );
 
-    const headerCard = new HeaderCard({}, { title: Registry.strategyOptions.domains['default'].title }).createCard();
+    filterNonNullValues(cards);
 
-    return {
-      type: 'vertical-stack',
-      cards: [headerCard, ...cards.filter((card): card is LovelaceCardConfig => card !== null)],
-      strategy: { domain: 'default' },
-    };
+    if (cards.length) {
+      const headerCard = new HeaderCard({}, { title: Registry.strategyOptions.domains['default'].title }).createCard();
+
+      cards = stackHorizontal(
+        cards,
+        Registry.strategyOptions.domains['default'].stack_count ?? Registry.strategyOptions.domains['_'].stack_count,
+      );
+
+      return {
+        type: 'vertical-stack',
+        cards: [headerCard, ...cards],
+        strategy: { domain: 'default' },
+      };
+    }
+
+    return null;
   }
 
   /**
@@ -191,7 +213,7 @@ abstract class DomainCardsGenerator {
       return null;
     }
 
-    let cards: (LovelaceCardConfig | null)[] = await Promise.all(
+    let cards = await Promise.all(
       entities.map(async (entity) => {
         targets.push(entity.entity_id);
 
@@ -203,20 +225,27 @@ abstract class DomainCardsGenerator {
       }),
     );
 
-    if (domainName === 'binary_sensor') {
-      cards = stackHorizontal(filterNonNullValues(cards));
+    filterNonNullValues(cards);
+
+    if (cards.length) {
+      const headerCard = new HeaderCard(
+        { entity_id: targets },
+        Registry.strategyOptions.domains[domainName],
+      ).createCard();
+
+      cards = stackHorizontal(
+        cards,
+        Registry.strategyOptions.domains[domainName].stack_count ?? Registry.strategyOptions.domains['_'].stack_count,
+      );
+
+      return {
+        type: 'vertical-stack',
+        cards: [headerCard, ...cards],
+        strategy: { domain: domainName },
+      };
     }
 
-    const headerCard = new HeaderCard(
-      { entity_id: targets },
-      Registry.strategyOptions.domains[domainName],
-    ).createCard();
-
-    return {
-      type: 'vertical-stack',
-      cards: [headerCard, ...cards],
-      strategy: { domain: domainName },
-    };
+    return null;
   }
 
   /**

@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to suggest a new feature!  
+        Thank you for taking the time to suggest a new feature!
         Please provide as much detail as possible so we can understand your idea and its potential impact.
 
   - type: input
@@ -58,7 +58,7 @@ body:
   - type: input
     id: affected-area-other
     attributes:
-      label: Other Affected Area (if selected above)
+      label: The Other Affected Area (if selected above)
     validations:
       required: false
 

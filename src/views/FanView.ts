@@ -16,6 +16,17 @@ class FanView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain: SupportedDomains = 'fan' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(FanView.getDefaultConfig(), customConfiguration, FanView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[FanView.domain] as SingleDomainConfig;
@@ -40,17 +51,6 @@ class FanView extends AbstractView {
       subtitle:
         `${Registry.getCountTemplate(FanView.domain, 'eq', 'on')} ${localize('fan.fans')} ` + localize('generic.on'),
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(FanView.getDefaultConfig(), customConfiguration, FanView.getViewHeaderCardConfig());
   }
 }
 

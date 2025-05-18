@@ -1,0 +1,12 @@
+{
+  "include": [
+    "eslint.config.mjs"
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "noEmit": true
+  }
+}

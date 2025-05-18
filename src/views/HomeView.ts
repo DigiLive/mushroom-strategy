@@ -8,7 +8,7 @@ import { ChipsCardConfig } from '../types/lovelace-mushroom/cards/chips-card';
 import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
 import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
 import { LovelaceChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
-import { HomeViewSections, isSupportedChip } from '../types/strategy/strategy-generics';
+import { isSupportedChip } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { sanitizeClassName } from '../utilities/auxiliaries';
 import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
@@ -26,16 +26,6 @@ class HomeView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain = 'home' as const;
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('generic.home'),
-      icon: 'mdi:home-assistant',
-      path: 'home',
-      subview: false,
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -45,6 +35,16 @@ class HomeView extends AbstractView {
     super();
 
     this.baseConfiguration = { ...this.baseConfiguration, ...HomeView.getDefaultConfig(), ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the view. */
+  static getDefaultConfig(): ViewConfig {
+    return {
+      title: localize('generic.home'),
+      icon: 'mdi:home-assistant',
+      path: 'home',
+      subview: false,
+    };
   }
 
   /**

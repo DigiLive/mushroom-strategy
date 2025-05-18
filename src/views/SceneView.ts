@@ -15,6 +15,17 @@ class SceneView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain = 'scene' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(SceneView.getDefaultConfig(), customConfiguration, SceneView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[SceneView.domain] as SingleDomainConfig;
@@ -35,17 +46,6 @@ class SceneView extends AbstractView {
   /** Returns the default configuration of the view's Header card. */
   static getViewHeaderCardConfig(): HeaderCardConfig {
     return {};
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(SceneView.getDefaultConfig(), customConfiguration, SceneView.getViewHeaderCardConfig());
   }
 }
 

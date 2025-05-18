@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
 import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
 import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
 import AbstractCard from './AbstractCard';

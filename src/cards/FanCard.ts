@@ -10,6 +10,18 @@ import AbstractCard from './AbstractCard';
  * Used to create a card configuration to control an entity of the fan domain.
  */
 class FanCard extends AbstractCard {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {FanCardConfig} [customConfiguration] Custom card configuration.
+   */
+  constructor(entity: EntityRegistryEntry, customConfiguration?: FanCardConfig) {
+    super(entity);
+
+    this.configuration = { ...this.configuration, ...FanCard.getDefaultConfig(), ...customConfiguration };
+  }
+
   /** Returns the default configuration object for the card. */
   static getDefaultConfig(): FanCardConfig {
     return {
@@ -21,18 +33,6 @@ class FanCard extends AbstractCard {
       show_oscillate_control: true,
       show_percentage_control: true,
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {FanCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: FanCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...FanCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

@@ -31,7 +31,7 @@ abstract class AbstractChip {
    */
   protected constructor() {
     if (!Registry.initialized) {
-      logMessage(lvlFatal, 'Registry not initialized!');
+      logMessage(lvlFatal, 'Registry is not initialized!');
     }
   }
 

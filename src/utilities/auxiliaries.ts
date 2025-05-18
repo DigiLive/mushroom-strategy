@@ -7,6 +7,7 @@
  * @param {string} className Name of the class to sanitize.
  */
 export function sanitizeClassName(className: string): string {
+  //TODO: In place sanitization.
   return className.replace(/^([a-z])|([-_][a-z])/g, (match) => match.toUpperCase().replace(/[-_]/g, ''));
 }
 
@@ -22,6 +23,7 @@ export function sanitizeClassName(className: string): string {
  * @returns {T} A deep clone of the input value, or the original value if cloning fails.
  */
 export function deepClone<T>(obj: T): T {
+  // TODO: In place clone.
   if (typeof structuredClone === 'function') {
     try {
       return structuredClone(obj);
@@ -63,12 +65,15 @@ export function getObjectKeysByPropertyValue(
 }
 
 /**
- * Filters out null values from an array.
+ * Filters out null values from the given array and asserts that the remaining values are non-null.
+ * The original array is modified in place to only contain non-null values.
  *
- * @template T The type of the array elements.
- * @param {Array<T | null>} arr The array to filter.
- * @returns {Array<T>} An array containing the non-null elements.
+ * @template T The type of non-null elements in the array
+ * @param {Array<(T | null)>} arr The array to be filtered.
+ * @return {asserts arr is Array<T>} The array containing non-null values of type T.
  */
-export function filterNonNullValues<T>(arr: (T | null)[]): T[] {
-  return arr.filter((item): item is T => item !== null);
+export function filterNonNullValues<T>(arr: (T | null)[]): asserts arr is T[] {
+  const filtered = arr.filter((item): item is T => item !== null);
+  arr.length = 0;
+  arr.push(...filtered);
 }

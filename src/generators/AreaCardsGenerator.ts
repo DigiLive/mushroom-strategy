@@ -43,14 +43,19 @@ class AreaCardsGenerator extends DomainCardsGenerator {
       const domainCardsPromises = [...this.domains]
         .filter((domain) => isSupportedDomain(domain) && domain !== 'sensor')
         .map((domain) => this.createSupportedDomainCards(domain));
-      const supportedDomainCards = filterNonNullValues(await Promise.all(domainCardsPromises));
+      const supportedDomainCards = await Promise.all(domainCardsPromises);
+
+      filterNonNullValues(supportedDomainCards);
 
       if (sensorCards) {
         const insertIndex = supportedDomainCards.findIndex((card) => card.strategy.domain > 'sensor');
         supportedDomainCards.splice(insertIndex, 0, sensorCards);
       }
 
-      return filterNonNullValues([deviceCards, ...supportedDomainCards, miscellaneousCards]);
+      const viewCards = [deviceCards, ...supportedDomainCards, miscellaneousCards];
+      filterNonNullValues(viewCards);
+
+      return viewCards;
     } catch (e) {
       logMessage(lvlError, 'Error creating area cards', e);
       return [];

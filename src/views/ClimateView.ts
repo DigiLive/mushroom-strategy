@@ -16,6 +16,21 @@ class ClimateView extends AbstractView {
   /**The domain of the entities that the view is representing. */
   static readonly domain: SupportedDomains = 'climate' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(
+      ClimateView.getDefaultConfig(),
+      customConfiguration,
+      ClimateView.getViewHeaderCardConfig(),
+    );
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[ClimateView.domain] as SingleDomainConfig;
@@ -41,21 +56,6 @@ class ClimateView extends AbstractView {
         `${Registry.getCountTemplate(ClimateView.domain, 'ne', 'off')} ${localize('climate.climates')} ` +
         localize('generic.busy'),
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(
-      ClimateView.getDefaultConfig(),
-      customConfiguration,
-      ClimateView.getViewHeaderCardConfig(),
-    );
   }
 }
 

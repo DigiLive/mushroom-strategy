@@ -16,6 +16,17 @@ class CoverView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain: SupportedDomains = 'cover' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(CoverView.getDefaultConfig(), customConfiguration, CoverView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[CoverView.domain] as SingleDomainConfig;
@@ -42,17 +53,6 @@ class CoverView extends AbstractView {
         `${localize('cover.covers')} ` +
         `${localize('generic.unclosed')}`,
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(CoverView.getDefaultConfig(), customConfiguration, CoverView.getViewHeaderCardConfig());
   }
 }
 

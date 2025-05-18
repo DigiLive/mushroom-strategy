@@ -11,6 +11,24 @@ import { isCallServiceActionConfig } from '../types/strategy/type-guards';
  * Used to create a card configuration to control an entity of the light domain.
  */
 class LightCard extends AbstractCard {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {LightCardConfig} [customConfiguration] Custom card configuration.
+   */
+  constructor(entity: EntityRegistryEntry, customConfiguration?: LightCardConfig) {
+    super(entity);
+
+    const configuration = LightCard.getDefaultConfig();
+
+    if (isCallServiceActionConfig(configuration.double_tap_action)) {
+      configuration.double_tap_action.target = { entity_id: entity.entity_id };
+    }
+
+    this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
+  }
+
   /** Returns the default configuration object for the card. */
   static getDefaultConfig(): LightCardConfig {
     return {
@@ -31,24 +49,6 @@ class LightCard extends AbstractCard {
         },
       },
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {LightCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: LightCardConfig) {
-    super(entity);
-
-    const configuration = LightCard.getDefaultConfig();
-
-    if (isCallServiceActionConfig(configuration.double_tap_action)) {
-      configuration.double_tap_action.target = { entity_id: entity.entity_id };
-    }
-
-    this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
   }
 }
 

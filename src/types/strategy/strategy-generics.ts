@@ -285,17 +285,11 @@ export interface StrategyConfig {
   extra_cards: LovelaceCardConfig[];
   extra_views: StrategyViewConfig[];
   home_view: {
-    hidden: HomeViewSections[] | [];
+    hidden: HomeViewSections[];
+    stack_count: { _: number } & { [K in HomeViewSections]?: K extends 'areas' ? [number, number] : number };
   };
   views: Record<SupportedViews, StrategyViewConfig>;
   quick_access_cards: LovelaceCardConfig[];
-}
-
-/**
- * Represents the default configuration for a strategy.
- */
-export interface StrategyDefaults extends StrategyConfig {
-  areas: { undisclosed: StrategyArea } & { [S: string]: StrategyArea };
 }
 
 /**

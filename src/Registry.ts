@@ -13,7 +13,7 @@ import {
   SupportedDomains,
   SupportedViews,
 } from './types/strategy/strategy-generics';
-import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
+import { logMessage, lvlFatal, lvlOff, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
 import { getObjectKeysByPropertyValue } from './utilities/auxiliaries';
@@ -26,29 +26,8 @@ import { isSortable } from './types/strategy/type-guards';
  * Contains the entries of Home Assistant's registries and Strategy configuration.
  */
 class Registry {
-  /** Entries of Home Assistant's entity registry. */
-  private static _entities: EntityRegistryEntry[];
-  /** Entries of Home Assistant's device registry. */
-  private static _devices: DeviceRegistryEntry[];
-  /** Entries of Home Assistant's area registry. */
-  private static _areas: StrategyArea[] = [];
-  /** Entries of Home Assistant's state registry */
-  private static _hassStates: HassEntities;
-  /** Entries of Home Assistant's config registry */
-  private static _configEntries: ConfigEntry[] = [];
-  /** The Custom strategy configuration. */
-  private static _strategyOptions: StrategyConfig;
-  /** Indicates whether this module is initialized. */
-  private static _initialized: boolean = false;
   /** Indicates whether dark mode is enabled */
   static darkMode: boolean;
-
-  /**
-   * Home Assistant's Config Entries.
-   */
-  static get configEntries() {
-    return Registry._configEntries;
-  }
 
   /**
    * Class constructor.
@@ -61,16 +40,42 @@ class Registry {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  private static _groupingDeviceIds: Set<string>;
+  /** Entries of Home Assistant's device registry. */
+  private static _devices: DeviceRegistryEntry[];
+  /** Entries of Home Assistant's state registry */
+  private static _hassStates: HassEntities;
+  /** Indicates whether this module is initialized. */
+  private static _initialized: boolean = false;
 
-  /** Get the initialization status of the Registry class. */
-  static get groupingDeviceIds() {
-    return Registry._groupingDeviceIds;
+  /**
+   * Home Assistant's Device registry.
+   *
+   * @remarks
+   * This module makes changes to the registry at {@link Registry.initialize}.
+   */
+  static get devices() {
+    return Registry._devices;
   }
 
-  /** The configuration of the strategy. */
-  static get strategyOptions() {
-    return Registry._strategyOptions;
+  /** Entries of Home Assistant's entity registry. */
+  private static _entities: EntityRegistryEntry[];
+
+  /**
+   * Home Assistant's Entity registry.
+   *
+   * @remarks
+   * This module makes changes to the registry at {@link Registry.initialize}.
+   */
+  static get entities() {
+    return Registry._entities;
+  }
+
+  /** Entries of Home Assistant's area registry. */
+  private static _areas: StrategyArea[] = [];
+
+  /** Home Assistant's State registry. */
+  static get hassStates() {
+    return Registry._hassStates;
   }
 
   /**
@@ -83,34 +88,34 @@ class Registry {
     return Registry._areas;
   }
 
-  /**
-   * Home Assistant's Device registry.
-   *
-   * @remarks
-   * This module makes changes to the registry at {@link Registry.initialize}.
-   */
-  static get devices() {
-    return Registry._devices;
-  }
+  /** Entries of Home Assistant's config registry */
+  private static _configEntries: ConfigEntry[] = [];
 
   /**
-   * Home Assistant's Entity registry.
-   *
-   * @remarks
-   * This module makes changes to the registry at {@link Registry.initialize}.
+   * Home Assistant's Config Entries.
    */
-  static get entities() {
-    return Registry._entities;
+  static get configEntries() {
+    return Registry._configEntries;
   }
 
-  /** Home Assistant's State registry. */
-  static get hassStates() {
-    return Registry._hassStates;
+  /** The Custom strategy configuration. */
+  private static _strategyOptions: StrategyConfig;
+
+  /** The configuration of the strategy. */
+  static get strategyOptions() {
+    return Registry._strategyOptions;
   }
 
   /** Get the initialization status of the Registry class. */
   static get initialized() {
     return Registry._initialized;
+  }
+
+  private static _groupingDeviceIds: Set<string>;
+
+  /** Get the initialization status of the Registry class. */
+  static get groupingDeviceIds() {
+    return Registry._groupingDeviceIds;
   }
 
   /**

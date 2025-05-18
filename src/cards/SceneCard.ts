@@ -16,18 +16,6 @@ import { isCallServiceActionConfig } from '../types/strategy/type-guards';
  * If the stateful scene entity is available, it will be used instead of the original scene entity.
  */
 class SceneCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      tap_action: {
-        action: 'perform-action',
-        perform_action: 'scene.turn_on',
-        target: {},
-      },
-    };
-  }
-
   /**
    * Class constructor.
    *
@@ -57,6 +45,18 @@ class SceneCard extends AbstractCard {
     configuration.icon = Registry.hassStates[entity.entity_id]?.attributes.icon ?? configuration.icon;
 
     this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
+  }
+
+  /** Returns the default configuration object for the card. */
+  static getDefaultConfig(): EntityCardConfig {
+    return {
+      type: 'custom:mushroom-entity-card',
+      tap_action: {
+        action: 'perform-action',
+        perform_action: 'scene.turn_on',
+        target: {},
+      },
+    };
   }
 }
 

@@ -36,7 +36,7 @@ abstract class AbstractCard {
    */
   protected constructor(entity: RegistryEntry) {
     if (!Registry.initialized) {
-      logMessage(lvlFatal, 'Registry not initialized!');
+      logMessage(lvlFatal, 'Registry is not initialized!');
     }
 
     this.entity = entity;

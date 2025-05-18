@@ -22,6 +22,7 @@ import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/ty
  * ```
  */
 export function stackHorizontal(
+  // TODO: In place stacking.
   cardConfigurations: LovelaceCardConfig[],
   defaultCount: number = 2,
   columnCounts?: {

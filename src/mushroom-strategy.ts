@@ -1,6 +1,5 @@
 import { Registry } from './Registry';
 import { LovelaceConfig } from './types/homeassistant/data/lovelace/config/types';
-import { LovelaceViewConfig } from './types/homeassistant/data/lovelace/config/view';
 import { DashboardInfo, isSupportedView } from './types/strategy/strategy-generics';
 import { filterNonNullValues, sanitizeClassName } from './utilities/auxiliaries';
 import { logMessage, lvlError, lvlFatal } from './utilities/debug';
@@ -54,7 +53,8 @@ class MushroomStrategy extends HTMLTemplateElement {
       return null;
     });
 
-    const views = filterNonNullValues(await Promise.all(viewPromises)) as LovelaceViewConfig[];
+    const views = await Promise.all(viewPromises);
+    filterNonNullValues(views);
 
     // Device views.
     const devices = new RegistryFilter(Registry.devices)

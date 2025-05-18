@@ -16,6 +16,17 @@ class LockView extends AbstractView {
   /** The domain of the entities that the view is representing. */
   static readonly domain = 'lock' as const;
 
+  /**
+   * Class constructor.
+   *
+   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   */
+  constructor(customConfiguration?: ViewConfig) {
+    super();
+
+    this.initializeViewConfig(LockView.getDefaultConfig(), customConfiguration, LockView.getViewHeaderCardConfig());
+  }
+
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     const domainConfig = Registry.strategyOptions.domains[LockView.domain] as SingleDomainConfig;
@@ -41,17 +52,6 @@ class LockView extends AbstractView {
         `${Registry.getCountTemplate(LockView.domain, 'ne', 'locked')} ${localize('lock.locks')} ` +
         localize('lock.unlocked'),
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(LockView.getDefaultConfig(), customConfiguration, LockView.getViewHeaderCardConfig());
   }
 }
 
