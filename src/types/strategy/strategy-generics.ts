@@ -1,4 +1,3 @@
-import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from '../homeassistant/data/device_registry';
 import { EntityRegistryEntry } from '../homeassistant/data/entity_registry';
 import { LovelaceCardConfig } from '../homeassistant/data/lovelace/config/card';
@@ -8,6 +7,7 @@ import { HomeAssistant } from '../homeassistant/types';
 import { LovelaceChipConfig } from '../lovelace-mushroom/utils/lovelace/chip/types';
 import { HeaderCardConfig } from './strategy-cards';
 import { ConfigEntry } from '../homeassistant/data/config_entries';
+import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
 
 /**
  * List of supported domains.
@@ -69,6 +69,7 @@ const SUPPORTED_CHIPS = ['light', 'fan', 'cover', 'switch', 'climate', 'weather'
  *
  * This constant array defines the sections that are present in the home view.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HOME_VIEW_SECTIONS = ['areas', 'areasTitle', 'chips', 'greeting', 'persons'] as const;
 
 export type SupportedDomains = (typeof SUPPORTED_DOMAINS)[number];
@@ -136,14 +137,16 @@ export interface ViewInfo {
 /**
  * All-Domains Configuration.
  *
- * @property {boolean | undefined} hide_config_entities - If True, all configuration entities are hidden from the
- *   dashboard.
- * @property {boolean | undefined} hide_diagnostic_entities - If True, all diagnostic entities are hidden from the
- *   dashboard.
+ * @property {boolean} [hide_config_entities] - If True, all configuration entities are hidden from the dashboard.
+ * @property {boolean} [hide_diagnostic_entities] - If True, all diagnostic entities are hidden from the dashboard.
+ * @property {boolean} [showControls] - False to hide controls.
+ * @property {number} [stack_count] - Number of cards per row.
  */
 export interface AllDomainsConfig {
-  hide_config_entities: boolean | undefined;
-  hide_diagnostic_entities: boolean | undefined;
+  hide_config_entities?: boolean;
+  hide_diagnostic_entities?: boolean;
+  showControls?: boolean;
+  stack_count?: number;
 }
 
 /**
@@ -151,11 +154,54 @@ export interface AllDomainsConfig {
  *
  * @property {boolean} hidden - If True, all entities of the domain are hidden from the dashboard.
  * @property {number} [order] - Ordering position of the domains in a view.
+ * @property {number} [stack_count] - Number of cards per row.
  */
 export interface SingleDomainConfig extends Partial<HeaderCardConfig> {
   hidden: boolean;
   order?: number;
+  stack_count?: number;
 }
+
+/**
+ * Strategy Configuration.
+ *
+ * @property {Object.<string, StrategyArea>} areas - The configuration of areas.
+ * @property {Object.<string, CustomCardConfig>} card_options - Card options for entities.
+ * @property {ChipConfiguration} chips - The configuration of chips in the Home view.
+ * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
+ * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
+ * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
+ * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
+ * @property {{ Object }} home_view - List of views to add to the dashboard.
+ * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
+ * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card
+ *                                                       and rooms cards.
+ */
+export interface StrategyConfig {
+  areas: { [S: string]: StrategyArea };
+  card_options: { [S: string]: CustomCardConfig };
+  chips: ChipConfiguration;
+  debug: boolean;
+  domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
+  extra_cards: LovelaceCardConfig[];
+  extra_views: StrategyViewConfig[];
+  home_view: {
+    hidden: HomeViewSections[];
+    stack_count: { _: number } & { [K in HomeViewSections]?: K extends 'areas' ? [number, number] : number };
+  };
+  views: Record<SupportedViews, StrategyViewConfig>;
+  quick_access_cards: LovelaceCardConfig[];
+}
+
+/**
+ * Represents the default configuration for a strategy.
+ */
+export type StrategyDefaults = Omit<StrategyConfig, 'areas'> & {
+  areas: {
+    _: AllAreasConfig;
+    undisclosed: StrategyArea;
+  };
+};
 
 /**
  * Strategy Area.
@@ -170,6 +216,15 @@ export interface StrategyArea extends AreaRegistryEntry {
   extra_cards?: LovelaceCardConfig[];
   hidden?: boolean;
   order?: number;
+  type?: string;
+}
+
+/**
+ * Configuration for all areas.
+ *
+ * @property {string} [type] - The type of area card.
+ */
+export interface AllAreasConfig {
   type?: string;
 }
 

@@ -28,8 +28,8 @@ class AreaCard extends AbstractCard {
       configuration.tap_action.navigation_path = area.area_id;
     }
 
-    // Don't override the default card type if default is set in the strategy options.
-    if (customConfig && customConfig.type === 'default') {
+    // Don't override the card type if set differently in the strategy options.
+    if (customConfig) {
       customConfig = { ...customConfig, type: configuration.type };
     }
 

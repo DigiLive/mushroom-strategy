@@ -124,6 +124,6 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+main().catch((_) => {
   throw 'Mushroom Strategy - An error occurred. Check the console (F12) for details.';
 });

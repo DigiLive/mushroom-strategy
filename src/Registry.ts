@@ -187,7 +187,7 @@ class Registry {
     }));
 
     // Process entries of the HASS area registry.
-    if (Registry.strategyOptions.areas._?.hidden) {
+    if (Registry.strategyOptions.areas._.hidden) {
       Registry._areas = [];
     } else {
       // Create and add the undisclosed area if not hidden in the strategy options.
@@ -201,8 +201,9 @@ class Registry {
         return { ...area, ...Registry.strategyOptions.areas['_'], ...Registry.strategyOptions.areas?.[area.area_id] };
       });
 
-      // Ensure the custom configuration of the undisclosed area doesn't overwrite the area_id.
+      // Ensure the custom configuration of the undisclosed area doesn't overwrite the required property values.
       Registry._strategyOptions.areas.undisclosed.area_id = 'undisclosed';
+      Registry.strategyOptions.areas.undisclosed.type = 'default';
 
       // Remove hidden areas if configured as so and sort them by name.
 

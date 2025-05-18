@@ -153,7 +153,7 @@ Enhancement suggestions are tracked as [GitHub issues][issuesUrl].
 
 ### Code Contribution
 
-You can contribute to this project by following the _fork → clone → edit → pull request_ workflow of GitHub.
+You can contribute to this project by following the *fork → clone → edit → pull request* workflow of GitHub.
 
 #### Prevent changes to the distribution directory
 

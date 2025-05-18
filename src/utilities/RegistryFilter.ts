@@ -16,7 +16,7 @@ import { logMessage, lvlWarn } from './debug';
 class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   private readonly entries: T[];
   private filters: (((entry: T) => boolean) | ((entry: T, index: number) => boolean))[] = [];
-  private readonly entryIdentifier: ('entity_id' | 'floor_id' | 'entry_id' | 'id') & K;
+  private readonly entryIdentifier: ('entity_id' | 'area_id' | 'id') & K;
   private invertNext: boolean = false;
 
   /**
@@ -27,14 +27,8 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   constructor(entries: T[]) {
     this.entries = entries;
     this.entryIdentifier = (
-      entries.length === 0 || 'entity_id' in entries[0]
-        ? 'entity_id'
-        : 'floor_id' in entries[0]
-          ? 'floor_id'
-          : 'entry_id' in entries[0]
-            ? 'entry_id'
-            : 'id'
-    ) as ('entity_id' | 'floor_id' | 'id') & K;
+      entries.length === 0 || 'entity_id' in entries[0] ? 'entity_id' : 'floor_id' in entries[0] ? 'area_id' : 'id'
+    ) as ('entity_id' | 'area_id' | 'id') & K;
   }
 
   /**
@@ -73,49 +67,36 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
-   * Filters entries **strictly** by their `area_id`.
-   *
-   * - Entries with a matching `area_id` are kept.
-   * - If `expandToDevice` is `true`, the device's `area_id` is evaluated if the entry's area_id doesn't match.
-   * - If `areaId` is `undefined` (or omitted), entries without an `area_id` property are kept.
+   * Filters entries by their `area_id`.
    *
    * @param {string | undefined} areaId - The area id to match.
-   * @param {boolean} [expandToDevice=true] - Whether to use the device's `area_id` if the entry's doesn't match.
+   * @param {boolean} [expandToDevice=true] - Whether to evaluate the device's `area_id` (see remarks).
    *
    * @remarks
-   * For area id `undisclosed`, the `area_id` of the entry's device may be `undisclosed` or `undefined`.
+   * For entries with area id `undisclosed` or `undefined`, the device's `area_id` must also match if `expandToDevice`
+   * is `true`.
    */
   whereAreaId(areaId?: string, expandToDevice: boolean = true): this {
     const predicate = (entry: T) => {
-      if ('entry_id' in entry) {
-        return false;
-      }
-
+      let deviceAreaId: string | null | undefined = undefined;
       const entryObject = entry as EntityRegistryEntry;
 
-      let deviceAreaId: string | null | undefined = undefined;
-
-      // Retrieve the device area ID only if expandToDevice is true
       if (expandToDevice && entryObject.device_id) {
         deviceAreaId = Registry.devices.find((device) => device.id === entryObject.device_id)?.area_id;
       }
 
-      // Logic for 'undisclosed' areaId
-      if (areaId === 'undisclosed') {
-        return entry.area_id === areaId && (deviceAreaId === areaId || deviceAreaId === undefined);
-      }
-
-      // Logic for undefined areaId
       if (areaId === undefined) {
-        return entry.area_id === undefined && (!expandToDevice || deviceAreaId === undefined);
+        return entry.area_id === undefined && deviceAreaId === undefined;
       }
 
-      // Logic for any other areaId
-      return entry.area_id === areaId || (expandToDevice && deviceAreaId === areaId);
+      if (entry.area_id === 'undisclosed' || !entry.area_id) {
+        return deviceAreaId === areaId;
+      }
+
+      return entry.area_id === areaId;
     };
 
     this.filters.push(this.checkInversion(predicate));
-
     return this;
   }
 
@@ -273,9 +254,12 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
       }
 
       const id = entry[this.entryIdentifier] as keyof StrategyConfig['card_options'];
-      const isHiddenByConfig =
-        Registry.strategyOptions.device_options['_'].hidden ||
-        Registry.strategyOptions.card_options[id]?.hidden === true;
+      const options =
+        this.entryIdentifier === 'area_id'
+          ? { ...Registry.strategyOptions.areas['_'], ...Registry.strategyOptions.areas[id] }
+          : Registry.strategyOptions.card_options?.[id];
+
+      const isHiddenByConfig = options?.hidden === true;
 
       return !isHiddenByProperty && !isHiddenByConfig;
     };
@@ -316,7 +300,9 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
     const predicate = (entry: T) => {
       const category = 'entity_category' in entry ? entry.entity_category : undefined;
       const hideOption =
-        typeof category === 'string' ? Registry.strategyOptions.domains['_']?.[`hide_${category}_entities`] : undefined;
+        typeof category === 'string'
+          ? Registry.strategyOptions?.domains?.['_']?.[`hide_${category}_entities`]
+          : undefined;
 
       if (hideOption === true) {
         return false;

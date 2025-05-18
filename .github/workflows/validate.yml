@@ -9,6 +9,6 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: HACS Action
-        uses: "hacs/action@main"
+        uses: "hacs/action@22.5.0"
         with:
           category: "plugin"

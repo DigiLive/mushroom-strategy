@@ -1,7 +1,8 @@
 # Mushroom dashboard strategy
 
-[![release][releaseBadge]][releaseUrl]
-[![hacs][hacsBadge]][hacsUrl]
+[![Release][releaseBadge]][releaseUrl]
+[![HACS][hacsBadge]][hacsUrl]
+[![Codacy][codacyBadge]][codacyUrl]
 
 ![Preview GIF](./docs/preview.gif)
 
@@ -26,10 +27,10 @@ For easy access, separate views are generated for entities which belong to speci
 
 ### Features
 
-- 🛠 Automatically create a dashboard with three lines of YAML.
-- 😍 Built-in Views for device-specific controls.
-- 🎨 Many options to customize to fit your needs.
-- 📈 [Mini graph][miniGraphUrl] cards for sensor entities.
+* 🛠 Automatically create a dashboard with three lines of YAML.
+* 😍 Built-in Views for device-specific controls.
+* 🎨 Many options to customize to fit your needs.
+* 📈 [Mini graph][miniGraphUrl] cards for sensor entities.
 
 > [!TIP]
 > If you like this package, please star the [project at GitHub][repositoryUrl]!
@@ -59,17 +60,21 @@ Visit the [issues][issuesUrl] page.
 
 <!-- Badge References -->
 
+[codacyBadge]: https://app.codacy.com/project/badge/Grade/24de1e79aea445499917d9acd5ce9e04
+
 [hacsBadge]: https://img.shields.io/badge/HACS-Default-blue
+
+[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.3-alpha.1&label=Release
 
 [sponsorBadge]: https://img.shields.io/badge/Sponsor_him-%E2%9D%A4-%23db61a2.svg?&logo=github&color=%23fe8e86
 
-[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.0-alpha.1&label=Release
-
 <!-- Repository References -->
+
+[codacyUrl]: https://app.codacy.com/gh/DigiLive/mushroom-strategy/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
 
 [repositoryUrl]: https://github.com/DigiLive/mushroom-strategy
 
-[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.0-alpha.1
+[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.3-alpha.1
 
 [issuesUrl]: https://github.com/DigiLive/mushroom-strategy/issues
 

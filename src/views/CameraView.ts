@@ -26,7 +26,7 @@ class CameraView extends AbstractView {
       icon: 'mdi:cctv',
       subview: false,
       headerCardConfiguration: {
-        showControls: domainConfig.showControls,
+        showControls: domainConfig.showControls, // FIXME: This should be named "show_controls". Also in other files and Wiki.
         on: domainConfig.on,
         off: domainConfig.off,
       },
