@@ -75,6 +75,7 @@
     "opening": "Abriendo",
     "closed": "Cerrada",
     "closing": "Cerrando",
-    "stopped": "Detenida"
+    "stopped": "Detenida",
+    "unclosed": "No Cerrada"
   }
 }

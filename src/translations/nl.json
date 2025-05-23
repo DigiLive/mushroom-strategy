@@ -75,6 +75,7 @@
     "opening": "Openen",
     "closed": "Gesloten",
     "closing": "Sluiten",
-    "stopped": "Gestopt"
+    "stopped": "Gestopt",
+    "unclosed": "Niet gesloten"
   }
 }

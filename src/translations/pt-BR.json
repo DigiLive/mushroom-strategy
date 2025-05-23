@@ -75,6 +75,7 @@
     "opening": "Abrindo",
     "closed": "Fechado",
     "closing": "Fechando",
-    "stopped": "Parado"
+    "stopped": "Parado",
+    "unclosed": "Nao fechado"
   }
 }

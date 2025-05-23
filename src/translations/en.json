@@ -75,6 +75,7 @@
     "opening": "Opening",
     "closed": "Closed",
     "closing": "Closing",
-    "stopped": "Stopped"
+    "stopped": "Stopped",
+    "unclosed": "Unclosed"
   }
 }

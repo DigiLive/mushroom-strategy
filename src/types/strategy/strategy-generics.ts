@@ -37,6 +37,7 @@ const SUPPORTED_DOMAINS = [
   'sensor',
   'switch',
   'vacuum',
+  'valve',
 ] as const;
 
 /**
@@ -55,6 +56,7 @@ const SUPPORTED_VIEWS = [
   'scene',
   'switch',
   'vacuum',
+  'valve',
 ] as const;
 
 /**

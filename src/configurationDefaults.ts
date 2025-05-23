@@ -141,6 +141,14 @@ export const ConfigurationDefaults: StrategyDefaults = {
       offService: 'vacuum.stop',
       hidden: false,
     },
+    valve: {
+      title: localize('valve.valves'),
+      iconOn: 'mdi:valve-open',
+      iconOff: 'mdi:valve-closed',
+      onService: 'valve.open_valve',
+      offService: 'valve.close_valve',
+      hidden: false,
+    },
   },
   extra_cards: [],
   extra_views: [],
@@ -189,6 +197,10 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
     vacuum: {
       order: 8,
+      hidden: false,
+    },
+    valve: {
+      order: 11,
       hidden: false,
     },
   },
