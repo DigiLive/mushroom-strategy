@@ -13,7 +13,7 @@ import {
   ViewInfo,
 } from './types/strategy/strategy-generics';
 import { sanitizeClassName } from './utilities/auxiliaries';
-import { logMessage, lvlError } from './utilities/debug';
+import { logMessage, lvlError, lvlInfo } from './utilities/debug';
 import RegistryFilter from './utilities/RegistryFilter';
 import { stackHorizontal } from './utilities/cardStacking';
 
@@ -55,6 +55,8 @@ class MushroomStrategy extends HTMLTemplateElement {
           if (viewConfiguration.cards.length) {
             return viewConfiguration;
           }
+
+          logMessage(lvlInfo, `View ${viewName} has no entities available!`);
         } catch (e) {
           logMessage(lvlError, `Error importing ${viewName} view!`, e);
         }
