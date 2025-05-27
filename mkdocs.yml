@@ -1,0 +1,77 @@
+site_name: Mushroom Strategy Documentation
+site_url: https://digilive.github.io/mushroom-strategy/
+site_description: The official documentation for Home Assistant's Mushroom Dashboard Strategy.
+
+repo_url: https://github.com/DigiLive/mushroom-strategy/
+edit_uri: edit/main/docs/
+
+site_author: Ferry Cools
+copyright: Copyright &copy; 2024 - <script>document.write(new Date().getFullYear())</script> DigiLive. All Rights Reserved.
+
+theme:
+  name: material
+  icon:
+    logo: material/mushroom
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs
+    - content.action.edit
+    - content.footnote.tooltips
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Basic Setup: getting-started/basic-setup.md
+  - Strategy Options:
+      - Overview: options/index.md
+      - Area Options: options/area-options.md
+      - Card Options: options/card-options.md
+      - Domain Options: options/domain-options.md
+      - Home View Options: options/home-view-options.md
+      - View Options: options/view-options.md
+      - Full Example: full-example.md
+  - FAQ: faq.md
+  - Contributing: contributing.md
+
+markdown_extensions:
+  - toc:
+      permalink: '#'
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.details
+  - footnotes
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+validation:
+  nav:
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn

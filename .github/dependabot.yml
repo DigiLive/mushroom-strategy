@@ -2,25 +2,25 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     groups:
       dependencies:
-        patterns: ["*"] 
+        patterns: ['*']
     labels:
-      - "dependencies"
+      - 'dependencies'
     pull-request-branch-name:
-      separator: "-"
-  - package-ecosystem: "github-actions"
-    directory: "/"
+      separator: '-'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     groups:
       actions:
-        patterns: ["*"] 
+        patterns: ['*']
     labels:
-      - "actions"
+      - 'actions'
     pull-request-branch-name:
-      separator: "-"
+      separator: '-'

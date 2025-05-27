@@ -4,16 +4,16 @@
 [![HACS][hacsBadge]][hacsUrl]
 [![Codacy][codacyBadge]][codacyUrl]
 
-![Preview GIF](./docs/preview.gif)
+![Preview GIF](docs/images/preview.gif)
 
 <details>
   <summary>More images...</summary>
 
-![Automatic](./docs/auto.png)
+![Automatic](docs/images/auto.png)
 
-![Views](./docs/views.png)
+![Views](docs/images/views.png)
 
-![customizable](./docs/customizable.png)
+![customizable](docs/images/customizable.png)
 </details>
 
 ## What is the Mushroom Dashboard Strategy?

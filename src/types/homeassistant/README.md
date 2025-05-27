@@ -1,3 +1,5 @@
+# Notice
+
 This directory contains partial code from
 the [Home Assistant Frontend repository](https://github.com/home-assistant/frontend).
 

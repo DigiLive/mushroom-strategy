@@ -2,14 +2,30 @@ name: Build distribution with Webpack
 
 on:
   push:
-    branches: [ "main" ]
-    # Ignore changes in folders that are affected by the auto commit. (Node.js project)
-    paths-ignore:
-      - 'dist/**'
-  # pull_request:
-  #  branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
+  detect-source-changes:
+    name: Detect Source Changes
+    runs-on: ubuntu-latest
+    outputs:
+      source_changed: ${{ steps.check_files.outputs.any_changed }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
+
+      - name: Check for changed files in src or webpack.config.js
+        id: check_files
+        uses: tj-actions/changed-files@v46
+        with:
+          files: |
+            src/**
+            webpack.config.js
+
   build:
     name: Build Distribution
     runs-on: ubuntu-latest
@@ -24,7 +40,9 @@ jobs:
       matrix:
         node-version: [22.x]
 
-    # Checkout Repository
+    needs: detect-source-changes
+    if: needs.detect-source-changes.outputs.source_changed == 'true'
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -44,16 +62,7 @@ jobs:
         run: |
           npm run build
 
-      - name: Check for file changes
-        id: checkDiff
-        run: |
-          git diff --quiet . || echo "changed=true" >> $GITHUB_OUTPUT
-
-      # Commit and push all changed files.
-      # Must only affect files that are listed in "paths-ignore".
       - name: Commit Distribution Build
-        # Only run on a main branch push (e.g., pull request merge).
-        if: github.event_name == 'push' && steps.checkDiff.outputs.changed == 'true'
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "ci_activity@noreply.github.com"

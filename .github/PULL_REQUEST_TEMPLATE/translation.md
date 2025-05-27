@@ -26,6 +26,7 @@ Please specify the language you are adding or modifying:
 ## Motivation and Context
 
 Explain why this translation (addition, fix, or update) is needed.
+
 - For fixes, please describe the original error.
 - For updates, briefly explain the context of the new strings.
 

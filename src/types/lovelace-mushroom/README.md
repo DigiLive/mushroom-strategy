@@ -1,3 +1,5 @@
+# Notice
+
 This directory contains partial code from
 the [Lovelace Mushroom repository](https://github.com/piitaya/lovelace-mushroom).
 

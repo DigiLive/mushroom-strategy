@@ -6,9 +6,9 @@ on:
 jobs:
   hacs:
     name: HACS Action
-    runs-on: "ubuntu-latest"
+    runs-on: 'ubuntu-latest'
     steps:
       - name: HACS Action
-        uses: "hacs/action@22.5.0"
+        uses: 'hacs/action@22.5.0'
         with:
-          category: "plugin"
+          category: 'plugin'

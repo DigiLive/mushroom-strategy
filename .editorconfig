@@ -12,3 +12,6 @@ trim_trailing_whitespace = true
 
 [{*.markdown,*.md}]
 trim_trailing_whitespace = false
+
+[docs/**/*.md]
+ij_formatter_enabled = false

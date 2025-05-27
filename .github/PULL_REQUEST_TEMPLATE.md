@@ -1,4 +1,4 @@
-Please click the `Preview` tab and select the type of Pull Request you are submitting.
+# Click the `Preview` tab and select the type of Pull Request you are submitting
 
 - [Bug Fix](?expand=1&template=bugfix.md)
 - [Feature](?expand=1&template=feature.md)
@@ -8,6 +8,8 @@ Please click the `Preview` tab and select the type of Pull Request you are submi
 > To add or fix a translation, select a type below.
 >
 > - [Translation Contribution](?expand=1&template=translation.md)
+
+---
 
 > [!CAUTION]
 > Any Pull Request that does not follow the above types will be rejected.
