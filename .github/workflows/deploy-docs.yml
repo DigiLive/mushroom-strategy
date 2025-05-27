@@ -23,7 +23,7 @@ jobs:
 
       - name: Check for changed files in docs folder or mkdocs.yml
         id: check_files
-        uses: tj-actions/changed-files@v40
+        uses: tj-actions/changed-files@v46
         with:
           files: |
             docs/**
