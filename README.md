@@ -1,62 +1,65 @@
-# Mushroom dashboard strategy
+# Mushroom Dashboard Strategy 🍄✨
 
 [![Release][releaseBadge]][releaseUrl]
 [![HACS][hacsBadge]][hacsUrl]
 [![Codacy][codacyBadge]][codacyUrl]
 
+---
+
+**Effortlessly create stunning Home Assistant Dashboards with the Mushroom Dashboard Strategy!**
+
+* Are you tired of manually configuring your Home Assistant dashboards?
+  Do you love the elegant design of Mushroom cards but wish for a simpler way to organize your entities,
+  devices, and areas?
+
+The **Mushroom Dashboard Strategy** is your solution.
+It automatically generates beautiful, organized dashboards for Home Assistant,
+leveraging the power and aesthetics of Mushroom cards with minimal configuration.
+
+---
+
+## ⭐ **Why Choose Mushroom Dashboard Strategy?**
+
+* **⚡️ Automatic Dashboard Generation:** Go from zero to a beautiful dashboard with just a few lines of YAML.
+* **🏡 Intelligent Organization:** Automatically creates intuitive views for your devices, areas, and entities.
+* **🎨 Highly Customizable:** Tailor your dashboard to your unique smart home setup with extensive options.
+* **📈 Integrated Insights:** Seamlessly displays mini graph cards for your sensor data.
+
+---
+
+## 🚀 **Get Started in Minutes!**
+
+Ready to transform your Home Assistant experience?
+
+The **Mushroom Dashboard Strategy** is available through HACS (Home Assistant Community Store).
+
+➡️ *
+*[Explore the detailed documentation for Installation & Usage Guides!](https://digilive.github.io/mushroom-strategy/)**
+
+---
+
+## 📸 **Sneak Peek**
+
 ![Preview GIF](docs/images/preview.gif)
 
-<details>
-  <summary>More images...</summary>
+---
 
-![Automatic](docs/images/auto.png)
+## 🤝 **Contributing & Support**
 
-![Views](docs/images/views.png)
+We welcome contributions and feedback!
 
-![customizable](docs/images/customizable.png)
-</details>
+* Have questions or need help?
+  Check out our [Discussions](https://github.com/DigiLive/mushroom-strategy/discussions) page.
 
-## What is the Mushroom Dashboard Strategy?
+* Found a bug or have an idea?
+  Open an [Issue](https://github.com/DigiLive/mushroom-strategy/issues).
 
-Mushroom Dashboard Strategy provides a strategy for Home Assistant to automatically generate a dashboard
-using [Mushroom][mushroomUrl] cards.
+* Enjoying the Mushroom Strategy?
+  Consider giving our project a ⭐ [star on GitHub](https://github.com/DigiLive/mushroom-strategy) and exploring ways
+  to ❤️ [sponsor the project](https://github.com/sponsors/DigiLive) to support its continued development!
+  Your support helps us grow and improve.
 
-Dashboard cards are generated for your Home Assistant's entities, devices and areas, divided over several views.
-Starting at the Home view, you can enter an area subview.
-For easy access, separate views are generated for entities which belong to specific domains.
-
-### Features
-
-* 🛠 Automatically create a dashboard with three lines of YAML.
-* 😍 Built-in Views for device-specific controls.
-* 🎨 Many options to customize to fit your needs.
-* 📈 [Mini graph][miniGraphUrl] cards for sensor entities.
-
-> [!TIP]
-> If you like this package, please star the [project at GitHub][repositoryUrl]!
-
-## Getting started
-
-The strategy is easily installable from [HACS][hacsUrl] (Home Assistant Community Store).
-Please visit [Installation Guide][installationUrl] at our Wiki.
-
-## Need some help?
-
-Visit the [Discussions][discussionsUrl] page or
-the [Wiki][wikiUrl].
-
-## Have an idea or want to report a bug?
-
-Make sure your idea or bug isn't discussed already in our Discussions or Issues!
-Visit the [issues][issuesUrl] page.
-
-## Collaborators
-
-* [DigiLive](https://github.com/DigiLive)
-
-  [![Sponsor DigiLive][sponsorBadge]](https://github.com/sponsors/DigiLive)
-
-* [Aalian Khan](https://github.com/AalianKhan)
+---
 
 <!-- Badge References -->
 
@@ -64,30 +67,14 @@ Visit the [issues][issuesUrl] page.
 
 [hacsBadge]: https://img.shields.io/badge/HACS-Default-blue
 
-[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.3-alpha.2&label=Release
-
-[sponsorBadge]: https://img.shields.io/badge/Sponsor_him-%E2%9D%A4-%23db61a2.svg?&logo=github&color=%23fe8e86
+[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.2&label=Release
 
 <!-- Repository References -->
 
-[codacyUrl]: https://app.codacy.com/gh/DigiLive/mushroom-strategy/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
-
-[repositoryUrl]: https://github.com/DigiLive/mushroom-strategy
-
-[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.3-alpha.2
-
-[issuesUrl]: https://github.com/DigiLive/mushroom-strategy/issues
-
-[discussionsUrl]: https://github.com/DigiLive/mushroom-strategy/discussions
-
-[wikiUrl]: https://github.com/DigiLive/mushroom-strategy/wiki
-
-[installationUrl]: https://github.com/DigiLive/mushroom-strategy/wiki#installation
+[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.2
 
 <!-- Other References -->
 
+[codacyUrl]: https://app.codacy.com/gh/DigiLive/mushroom-strategy/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
+
 [hacsUrl]: https://hacs.xyz
-
-[mushroomUrl]: https://github.com/piitaya/lovelace-mushroom
-
-[miniGraphUrl]: https://github.com/kalkih/mini-graph-card

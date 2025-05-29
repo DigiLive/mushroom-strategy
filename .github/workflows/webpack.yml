@@ -6,19 +6,18 @@ on:
       - main
 
 jobs:
-  detect-source-changes:
-    name: Detect Source Changes
+  check-for-changes:
+    name: Check for changes
     runs-on: ubuntu-latest
     outputs:
-      source_changed: ${{ steps.check_files.outputs.any_changed }}
+      changed: ${{ steps.check_files.outputs.any_changed }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
 
-      - name: Check for changed files in src or webpack.config.js
+      - name: Check for changed source files
         id: check_files
         uses: tj-actions/changed-files@v46
         with:
@@ -29,43 +28,51 @@ jobs:
   build:
     name: Build Distribution
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: check-for-changes
+    if: needs.check-for-changes.outputs.changed == 'true'
     env:
+      CI_COMMIT_AUTHOR: 'CI Bot'
+      CI_COMMIT_EMAIL: 'ci@noreply.github.com'
       CI_COMMIT_MESSAGE: |
         Continuous Integration - Build Distribution
 
         [skip codacy]
-      CI_COMMIT_AUTHOR: Continuous Integration
-
     strategy:
       matrix:
         node-version: [22.x]
 
-    needs: detect-source-changes
-    if: needs.detect-source-changes.outputs.source_changed == 'true'
-
     steps:
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
+          token: ${{ steps.generate_token.outputs.token }}
+          fetch-depth: 0
 
-      # Build steps
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-      - name: Node Install
+      - name: Install Dependencies
         run: npm ci
 
       - name: Build Distribution
-        run: |
-          npm run build
+        run: npm run build
 
       - name: Commit Distribution Build
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-          git config --global user.email "ci_activity@noreply.github.com"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
+          git remote set-url origin https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/DigiLive/mushroom-strategy.git
           git add dist
           git commit -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push

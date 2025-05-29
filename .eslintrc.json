@@ -21,7 +21,6 @@
   "ignorePatterns": [
     "dist/",
     "node_modules/",
-    "*.js",
     "src/types/homeassistant/",
     "src/types/lovelace-mushroom/"
   ],

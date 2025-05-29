@@ -1,7 +1,5 @@
 {
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*", "webpack.config.ts", "webpack.dev.config.ts"],
   "compilerOptions": {
     // 1. Language and Environment
     "target": "ES2020",
