@@ -12,6 +12,7 @@ import { logMessage, lvlWarn } from './debug';
  * Supports chaining for building complex filter queries.
  *
  * @template T The specific type of RegistryEntry being filtered.
+ * @template K - A property key of T.
  */
 class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   private readonly entries: T[];
@@ -73,10 +74,14 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
    * @param {boolean} [expandToDevice=true] - Whether to evaluate the device's `area_id` (see remarks).
    *
    * @remarks
-   * For entries with area id `undisclosed` or `undefined`, the device's `area_id` must also match if `expandToDevice`
-   * is `true`.
+   * The entry's `area_id` must match `areaId` (with special handling for 'undisclosed').
+   *
+   * If `expandToDevice` is true, additional rules apply based on `areaId`:
+   * - `areaId` is `null`/`undefined`: The device's `area_id` must be `null`.
+   * - `areaId` is `'undisclosed'`: The device's `area_id` must match or be `'undisclosed'`/`null`.
+   * - For other `areaId` values: If entry's `area_id` is `'undisclosed'`, the device's `area_id` must match `areaId`.
    */
-  whereAreaId(areaId?: string, expandToDevice: boolean = true): this {
+  whereAreaId(areaId?: string | null, expandToDevice: boolean = true): this {
     const predicate = (entry: T) => {
       let deviceAreaId: string | null | undefined = undefined;
       const entryObject = entry as EntityRegistryEntry;
@@ -85,15 +90,19 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
         deviceAreaId = Registry.devices.find((device) => device.id === entryObject.device_id)?.area_id;
       }
 
-      if (areaId === undefined) {
-        return entry.area_id === undefined && deviceAreaId === undefined;
+      if (!areaId) {
+        return entry.area_id === areaId && deviceAreaId === areaId;
       }
 
-      if (entry.area_id === 'undisclosed' || !entry.area_id) {
-        return deviceAreaId === areaId;
+      if (areaId === 'undisclosed') {
+        return entry.area_id === areaId && (deviceAreaId === areaId || deviceAreaId == null);
       }
 
-      return entry.area_id === areaId;
+      if (entry.area_id === areaId) {
+        return true;
+      }
+
+      return entry.area_id === 'undisclosed' && deviceAreaId === areaId;
     };
 
     this.filters.push(this.checkInversion(predicate));
