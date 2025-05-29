@@ -319,58 +319,84 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
-   * Sort the entries based in priority order of the provided keys.
+   * Sorts the entries based on the specified keys in priority order.
    *
-   * @template K A key to sort by, which must be a key of the registry entry types.
-   * @template T The specific type of RegistryEntry being sorted.
-   *
-   * @param {K[]} keys The keys to sort on, in order of priority.
-   * @param {'asc' | 'desc'} [direction='asc'] The sorting direction ('asc' for ascending, 'desc' for descending).
-   *
-   * @returns {RegistryFilter<T>} A new RegistryFilter instance with the sorted entries and the current filters.
+   * @template K - The type of keys to sort by (must be keys of T).
+   * @param {K[]} keys - Array of property keys to sort by, in order of priority.
+   * @param {'asc' | 'desc'} [direction='asc'] - Sort direction.
+   * @returns {RegistryFilter<T>} A new RegistryFilter instance with sorted entries.
    */
   orderBy<K extends keyof T>(keys: K[], direction: 'asc' | 'desc' = 'asc'): RegistryFilter<T> {
+    // Helper to get the first defined value from an entry for the given keys.
     const getValue = (entry: T, keys: K[]): unknown => {
-      for (const k of keys) {
-        const value = entry[k];
-
+      for (const key of keys) {
+        const value = entry[key];
         if (value !== null && value !== undefined) {
           return value;
         }
       }
-
       return undefined;
     };
 
+    // Assign sort priorities for special values.
+    const getSortValue = (value: unknown): [number, unknown] => {
+      switch (value) {
+        case -Infinity:
+          return [0, 0]; // First.
+        case undefined:
+        case null:
+          return [2, 0]; // In between.
+        case Infinity:
+          return [3, 0]; // Last.
+        default:
+          return [1, value]; // Normal value comparison.
+      }
+    };
+
+    // Create a new array to avoid mutating the original.
     const sortedEntries = [...this.entries].sort((a, b) => {
+      // Get the first defined value for each entry using the provided keys
       const valueA = getValue(a, keys);
       const valueB = getValue(b, keys);
 
+      // If values are strictly equal, they're in the same position.
       if (valueA === valueB) {
         return 0;
       }
 
-      const ascendingMultiplier = direction === 'asc' ? 1 : -1;
+      // Get sort priorities and comparable values
+      const [priorityA, comparableA] = getSortValue(valueA);
+      const [priorityB, comparableB] = getSortValue(valueB);
 
-      if (valueA === undefined || valueA === null) {
-        return ascendingMultiplier;
+      // First, compare by priority (handles special values).
+      if (priorityA !== priorityB) {
+        return (priorityA - priorityB) * (direction === 'asc' ? 1 : -1);
       }
 
-      if (valueB === undefined || valueB === null) {
-        return -ascendingMultiplier;
+      // For same priority, compare the actual values.
+      // Handle undefined/null cases
+      if (comparableA === undefined || comparableA === null) {
+        return 1;
       }
 
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return valueA.localeCompare(valueB) * ascendingMultiplier;
+      if (comparableB === undefined || comparableB === null) {
+        return -1;
       }
 
-      return (valueA < valueB ? -1 : 1) * ascendingMultiplier;
+      // String comparison.
+      if (typeof comparableA === 'string' && typeof comparableB === 'string') {
+        return comparableA.localeCompare(comparableB) * (direction === 'asc' ? 1 : -1);
+      }
+
+      // Numeric/other comparison.
+      return (comparableA < comparableB ? -1 : 1) * (direction === 'asc' ? 1 : -1);
     });
 
+    // Create a new filter with the sorted entries.
     const newFilter = new RegistryFilter(sortedEntries);
 
+    // Copy over existing filters.
     newFilter.filters = [...this.filters];
-
     return newFilter;
   }
 

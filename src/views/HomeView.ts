@@ -261,10 +261,7 @@ class HomeView extends AbstractView {
         }).getCard(),
       );
     }
-    console.log(
-      Registry.strategyOptions.home_view.stack_count.areas?.[0],
-      Registry.strategyOptions.home_view.stack_count.areas?.[1],
-    );
+
     return {
       type: 'vertical-stack',
       title: Registry.strategyOptions.home_view.hidden.includes('areasTitle') ? undefined : localize('generic.areas'),

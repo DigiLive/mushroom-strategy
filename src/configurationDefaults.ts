@@ -23,6 +23,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       name: localize('generic.undisclosed'),
       picture: null,
       temperature_entity_id: null,
+      order: Infinity,
     },
   },
   card_options: {},
