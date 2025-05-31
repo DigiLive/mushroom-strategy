@@ -316,17 +316,18 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../contributing/" class="md-tabs__link">
-        
-  
-  
     
+    
+      <li class="md-tabs__item">
+        <a href="../../contributing/" class="md-tabs__link">
+          
+  
   
   Contributing
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -925,9 +926,25 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../contributing/" class="md-nav__link">
+    
+    
+    
+    
+      
+      
         
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
@@ -936,7 +953,157 @@
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🤝 Contributing to Mushroom Strategy
+    
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Workflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Code
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/documentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Documentation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/translations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Translations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -965,7 +1132,7 @@
   
 
 
-<h1 id="home-view-options">Home View Options<a class="headerlink" href="#home-view-options" title="Permanent link">#</a></h1>
+<h1 id="home-view-options">🏠 Home View Options<a class="headerlink" href="#home-view-options" title="Permanent link">#</a></h1>
 <p>The <code>home_view</code> group enables you to specify the configuration of the Home view.</p>
 <table>
 <thead>
@@ -1012,7 +1179,7 @@
 </code></pre></div>
 <hr />
 <h2 id="stack-count">Stack Count<a class="headerlink" href="#stack-count" title="Permanent link">#</a></h2>
-<p>The <code>stack_count</code> option is a map of sections to define the number of cards per row.
+<p>The <code>stack_count</code> option is a map of sections to define the number of cards per row.<br />
 The key of the map is the section, while the value is the number of cards per row.</p>
 <p>The <code>areas</code> section is a special case, where the value is an array of two numbers.<br />
 The first number is the number of default cards per row, while the second number is the number of
@@ -1026,7 +1193,7 @@ The first number is the number of default cards per row, while the second number
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Section specific options take precedence over options set for all sections.!</p>
+<p>Section specific options take precedence over options set for all sections!</p>
 </div>
 <hr />
 <h2 id="chip-options">Chip Options<a class="headerlink" href="#chip-options" title="Permanent link">#</a></h2>
@@ -1141,8 +1308,7 @@ These cards will be shown between the greeting card and area cards.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can build your view in a temporary dashboard and copy the <code>views</code> group from the YAML of that dashboard into
-group <code>extra_views</code> of the strategy configuration.<br />
-The YAML can be found in the Raw configuration editor.</p>
+group <code>extra_views</code> of the strategy configuration. The YAML can be found in the Raw configuration editor.</p>
 </div>
 <h3 id="example_4">Example<a class="headerlink" href="#example_4" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
@@ -1170,8 +1336,7 @@ These cards will be shown below the areas.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can build your view in a temporary dashboard and copy the <code>views</code> group from the YAML of that dashboard into
-group <code>extra_cards</code> of the strategy configuration.<br />
-The YAML can be found in the Raw configuration editor.</p>
+group <code>extra_cards</code> of the strategy configuration. The YAML can be found in the Raw configuration editor.</p>
 </div>
 <h4 id="example_5">Example<a class="headerlink" href="#example_5" title="Permanent link">#</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
