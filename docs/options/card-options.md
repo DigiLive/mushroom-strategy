@@ -1,4 +1,4 @@
-# Card Options
+# :material-cards-outline: Card Options
 
 The `card_options` group enables you to specify the configuration of entity cards.
 Each configuration is identified by an entity id and can have the following options:
@@ -30,6 +30,6 @@ strategy:
 ```
 
 !!! tip
+
     You can build your card at another dashboard and copy the `cards` group from the YAML of that dashboard into group
-    `card_options` of the strategy configuration.  
-    The YAML can be found in the Raw configuration editor.
+    `card_options` of the strategy configuration. The YAML can be found in the Raw configuration editor.

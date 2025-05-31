@@ -1,6 +1,6 @@
-# Installation
+# 🚀 Installation
 
-## Prerequisites
+## ⚙️ Prerequisites
 
 Mushroom dashboard strategy and dependencies are available in [HACS][hacsUrl]{: target="_blank"} (Home Assistant
 Community Store).  
@@ -25,13 +25,13 @@ They will open the HACS repository at your Home Assistant instance directly.
 [![Open in HACS at your Home Assistant instance.][hacsBadge]][hacsMiniGraphUrl]{: target="_blank"} to
 install [Mini graph card][miniGraphUrl]{: target="_blank"}.
 
-## Dashboard Installation
+## 🛠️ Dashboard Installation
 
 If you meet all the prerequisites, click the badge below to install the strategy.
 
 [![Open in HACS at your Home Assistant instance.][hacsBadge]][hacsStrategyUrl]{: target="_blank"}
 
-## Local Installation
+## 🛠️ Local Installation
 
 Please install the strategy with HACS as described above.  
 If you require testing a custom build for debug purposes, follow these steps:
@@ -41,14 +41,16 @@ If you require testing a custom build for debug purposes, follow these steps:
 3. If file `mushroom-strategy.js.gz` exists in that folder, rename or delete it.
 
 !!! note
+
     Refresh the cache of the client you use to access Home Assistant.
 
-## Updating
+## 🔄 Updating
 
 By default, Home Assistant will notify you when an update of the strategy is available.  
 You can update the strategy by going to `Settings` found at the bottom of the sidebar.
 
 !!! tip
+
     You can enable notifications of pre-releases.
 
     * Go to `Settings` > `Devices & services` > `Entities`.

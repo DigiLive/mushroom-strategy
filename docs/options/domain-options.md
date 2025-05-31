@@ -1,6 +1,6 @@
-# Domain Options
+# 💡 Domain Options
 
-The `domains` group enables you to specify the configuration of a domain in a view.
+The `domains` group enables you to specify the configuration of a domain in a view.  
 Each configuration is identified by a domain name and can have the following options:
 
 | Option                   | type    | Default           | Description                                                               |

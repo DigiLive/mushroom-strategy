@@ -1,6 +1,6 @@
-# Area Options
+# 🛋️ Area Options
 
-The `areas` group enables you to specify the configuration of specific areas.
+The `areas` group enables you to specify the configuration of specific areas.  
 Each configuration is identified by an area id and can have the following options:
 
 | Name          | Type           | Default         | Description                                                                |
@@ -19,7 +19,7 @@ Please follow the links below to see the additional options per card type.
 
 ## Extra Cards
 
-The `extra_cards` group enables you to specify the configuration of additional cards an Area view.
+The `extra_cards` group enables you to specify the configuration of additional cards an Area view.  
 These cards will be shown last in the view.
 
 See Home View Options → [Extra Cards](#extra-cards) for more information.
@@ -90,7 +90,8 @@ views: []
 ```
 
 !!! note
-    Area specific options take precedence over options set for all areas.!
+
+    Area specific options take precedence over options set for all areas!
 
 <!-- References -->
 

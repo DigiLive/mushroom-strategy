@@ -60,7 +60,13 @@ nav:
       - View Options: options/view-options.md
       - Full Example: full-example.md
   - FAQ: faq.md
-  - Contributing: contributing.md
+  - Contributing:
+    - contributing/index.md
+    - Getting Started: contributing/getting-started.md
+    - Workflow: contributing/workflow.md
+    - Code: contributing/code.md
+    - Documentation: contributing/documentation.md
+    - Translations: contributing/translations.md
 
 markdown_extensions:
   - toc:

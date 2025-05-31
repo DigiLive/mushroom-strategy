@@ -1,4 +1,4 @@
-# Home View Options
+# 🏠 Home View Options
 
 The `home_view` group enables you to specify the configuration of the Home view.
 
@@ -35,7 +35,7 @@ strategy:
 
 ## Stack Count
 
-The `stack_count` option is a map of sections to define the number of cards per row.
+The `stack_count` option is a map of sections to define the number of cards per row.  
 The key of the map is the section, while the value is the number of cards per row.
 
 The `areas` section is a special case, where the value is an array of two numbers.  
@@ -53,7 +53,8 @@ home_view:
 ```
 
 !!! note
-    Section specific options take precedence over options set for all sections.!
+
+    Section specific options take precedence over options set for all sections!
 
 ---
 
@@ -83,6 +84,7 @@ If `weather_entity` is set to `auto`, the weather chip uses the first entity of 
 You can define a custom entity to use by setting an entity id.
 
 !!! note
+
     To hide the weather chip, you should hide or disable the entity itself.
 
 ### Example
@@ -105,6 +107,7 @@ To add custom chips, you can configure them in `extra_chips`.
 See [Mushroom Chips][chipDocUrl]{: target="_blank"} for all available chips.
 
 !!! tip
+
     You can build your chips in a temporary card in another dashboard and copy the `chips` group from the YAML of that
     card into group `extra_chips` of the strategy configuration. The YAML can be found in the Raw configuration editor.
 
@@ -139,9 +142,9 @@ These cards will be shown between the greeting card and area cards.
 Each card can have the options as described at [Card Options](card-options.md).
 
 !!! tip
+
     You can build your view in a temporary dashboard and copy the `views` group from the YAML of that dashboard into
-    group `extra_views` of the strategy configuration.  
-    The YAML can be found in the Raw configuration editor.
+    group `extra_views` of the strategy configuration. The YAML can be found in the Raw configuration editor.
 
 ### Example
 
@@ -175,8 +178,7 @@ Each card can have the options as described at [Card Options](card-options.md).
 
 !!! tip
     You can build your view in a temporary dashboard and copy the `views` group from the YAML of that dashboard into
-    group `extra_cards` of the strategy configuration.  
-    The YAML can be found in the Raw configuration editor.
+    group `extra_cards` of the strategy configuration. The YAML can be found in the Raw configuration editor.
 
 #### Example
 

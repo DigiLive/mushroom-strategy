@@ -47,9 +47,11 @@
     "webpack-cli": "^6.0.1"
   },
   "scripts": {
+    "ts:format": "prettier --write \"**/*.ts\"",
+    "json:format": "prettier --write \"**/*.json\"",
     "mkdocs:serve": "mkdocs serve",
-    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
-    "fix:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" \"#build\" --fix",
+    "md:lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\"",
+    "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" --fix",
     "build-dev": "webpack --config webpack.dev.config.ts",
     "build": "webpack",
     "bump": "bump --preid alpha package.json package-lock.json README.md ./src/mushroom-strategy.ts"

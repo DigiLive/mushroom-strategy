@@ -1,4 +1,4 @@
-# Basic Setup
+# ⚙️ Basic Setup
 
 To apply the Mushroom Strategy to a dashboard:
 
@@ -10,18 +10,18 @@ To apply the Mushroom Strategy to a dashboard:
    ```yaml
    strategy:
      type: custom:mushroom-strategy
-   views: []
    ```
 
-> [!NOTE]
-> You may see the following error:
+!!!warning
 
-```
- Error loading the dashboard strategy:
-     Error: Timeout waiting for strategy
-     element ||-strategy-mushroom-strategy to
-     be registered
-```
+    You may see the following error:
+    
+    ```
+     Error loading the dashboard strategy:
+         Error: Timeout waiting for strategy
+         element ||-strategy-mushroom-strategy to
+         be registered
+    ```
 
 This is mainly because of cache issues or HACS didn't create a reference.  
 Try clearing the cache of your client and/or re-downloading the strategy from HACS.

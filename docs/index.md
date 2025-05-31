@@ -1,4 +1,4 @@
-# Welcome to the Mushroom Strategy Documentation :material-mushroom: &nbsp;
+# :brown_mushroom: Welcome to the Mushroom Strategy Documentation
 
 [![Release][releaseBadge]][releaseUrl]
 [![HACS][hacsBadge]][hacsUrl]
@@ -53,7 +53,7 @@ engage with the community!
 to :heart: [sponsor the project](https://github.com/sponsors/DigiLive) to support its continued development! Your
 support helps us grow and improve.
 
-## Previews
+## 👀 Sneak Peak
 
 ![Preview GIF](images/preview.gif)
 
