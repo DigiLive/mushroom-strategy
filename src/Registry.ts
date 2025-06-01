@@ -12,7 +12,7 @@ import {
   StrategyConfig,
   StrategyViewConfig,
   SupportedDomains,
-  SupportedViews,
+  SupportedViews
 } from './types/strategy/strategy-generics';
 import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize from './utilities/localize';
@@ -24,19 +24,6 @@ import RegistryFilter from './utilities/RegistryFilter';
  * Contains the entries of Home Assistant's registries and Strategy configuration.
  */
 class Registry {
-  /** Entries of Home Assistant's entity registry. */
-  private static _entities: EntityRegistryEntry[];
-  /** Entries of Home Assistant's device registry. */
-  private static _devices: DeviceRegistryEntry[];
-  /** Entries of Home Assistant's area registry. */
-  private static _areas: StrategyArea[] = [];
-  /** Entries of Home Assistant's state registry */
-  private static _hassStates: HassEntities;
-  /** Indicates whether this module is initialized. */
-  private static _initialized: boolean = false;
-  /** The Custom strategy configuration. */
-  private static _strategyOptions: StrategyConfig;
-
   /**
    * Class constructor.
    *
@@ -48,9 +35,42 @@ class Registry {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  /** The configuration of the strategy. */
-  static get strategyOptions(): StrategyConfig {
-    return Registry._strategyOptions;
+  /** Entries of Home Assistant's device registry. */
+  private static _devices: DeviceRegistryEntry[];
+  /** Entries of Home Assistant's state registry */
+  private static _hassStates: HassEntities;
+  /** Indicates whether this module is initialized. */
+  private static _initialized: boolean = false;
+
+  /**
+   * Home Assistant's Device registry.
+   *
+   * @remarks
+   * This module makes changes to the registry at {@link Registry.initialize}.
+   */
+  static get devices(): DeviceRegistryEntry[] {
+    return Registry._devices;
+  }
+
+  /** Entries of Home Assistant's entity registry. */
+  private static _entities: EntityRegistryEntry[];
+
+  /**
+   * Home Assistant's Entity registry.
+   *
+   * @remarks
+   * This module makes changes to the registry at {@link Registry.initialize}.
+   */
+  static get entities(): EntityRegistryEntry[] {
+    return Registry._entities;
+  }
+
+  /** Entries of Home Assistant's area registry. */
+  private static _areas: StrategyArea[] = [];
+
+  /** Home Assistant's State registry. */
+  static get hassStates(): HassEntities {
+    return Registry._hassStates;
   }
 
   /**
@@ -63,34 +83,17 @@ class Registry {
     return Registry._areas;
   }
 
-  /**
-   * Home Assistant's Device registry.
-   *
-   * @remarks
-   * This module makes changes to the registry at {@link Registry.initialize}.
-   */
-  static get devices(): DeviceRegistryEntry[] {
-    return Registry._devices;
-  }
-
-  /**
-   * Home Assistant's Entity registry.
-   *
-   * @remarks
-   * This module makes changes to the registry at {@link Registry.initialize}.
-   */
-  static get entities(): EntityRegistryEntry[] {
-    return Registry._entities;
-  }
-
-  /** Home Assistant's State registry. */
-  static get hassStates(): HassEntities {
-    return Registry._hassStates;
-  }
-
   /** Get the initialization status of the Registry class. */
   static get initialized(): boolean {
     return Registry._initialized;
+  }
+
+  /** The Custom strategy configuration. */
+  private static _strategyOptions: StrategyConfig;
+
+  /** The configuration of the strategy. */
+  static get strategyOptions(): StrategyConfig {
+    return Registry._strategyOptions;
   }
 
   /**
@@ -216,16 +219,6 @@ class Registry {
     };
 
     sortDomains();
-
-    // Sort extra views by order first and then by title.
-    // TODO: Add sorting to the wiki.
-    const sortExtraViews = () => {
-      Registry.strategyOptions.extra_views.sort((a, b) => {
-        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
-      });
-    };
-
-    sortExtraViews();
 
     Registry._initialized = true;
   }

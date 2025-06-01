@@ -53,6 +53,8 @@ views: []
 The `extra_views` group enables you to specify the configuration of additional views.
 Each view can have the options as described in the [Home Assistant documentation][viewDocUrl]{: target="_blank"}.
 
+Extra views are sorted by order first and then by title, together with the build-in views.
+
 !!! tip
 
     You can build your view in a temporary dashboard and copy the `views` group from the YAML of that dashboard into
@@ -68,6 +70,7 @@ strategy:
       - theme: Backend-selected
         title: cool view
         path: cool-view
+        order: Infinity
         icon: mdi:emoticon-cool
         badges: []
         cards:

@@ -10,26 +10,12 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "ignorePatterns": [
-    "dist/",
-    "node_modules/",
-    "src/types/homeassistant/",
-    "src/types/lovelace-mushroom/"
-  ],
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "ignorePatterns": ["dist/", "node_modules/", "src/types/homeassistant/", "src/types/lovelace-mushroom/"],
   "overrides": [
     {
-      "files": [
-        "webpack.config.ts",
-        "webpack.dev.config.ts"
-      ],
+      "files": ["webpack.config.ts", "webpack.dev.config.ts"],
       "parserOptions": {
         "project": null
       }
@@ -43,29 +29,8 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
-    "max-len": [
-      "warn",
-      {
-        "code": 120
-      }
-    ],
     "no-console": "off",
     "no-empty-function": "off",
-    "no-unused-vars": "off",
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true
-      }
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+    "no-unused-vars": "off"
   }
 }

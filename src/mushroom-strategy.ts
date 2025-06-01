@@ -4,13 +4,14 @@ import SensorCard from './cards/SensorCard';
 import { Registry } from './Registry';
 import { LovelaceCardConfig } from './types/homeassistant/data/lovelace/config/card';
 import { LovelaceConfig } from './types/homeassistant/data/lovelace/config/types';
-import { LovelaceViewConfig, LovelaceViewRawConfig } from './types/homeassistant/data/lovelace/config/view';
+import { LovelaceViewConfig } from './types/homeassistant/data/lovelace/config/view';
 import {
   DashboardInfo,
   isSupportedDomain,
   isSupportedView,
   StrategyArea,
-  ViewInfo,
+  StrategyViewConfig,
+  ViewInfo
 } from './types/strategy/strategy-generics';
 import { sanitizeClassName } from './utilities/auxiliaries';
 import { logMessage, lvlError, lvlInfo } from './utilities/debug';
@@ -40,7 +41,7 @@ class MushroomStrategy extends HTMLTemplateElement {
   static async generateDashboard(info: DashboardInfo): Promise<LovelaceConfig> {
     await Registry.initialize(info);
 
-    const views: LovelaceViewRawConfig[] = [];
+    const views: StrategyViewConfig[] = [];
 
     // Parallelize view imports and creation.
     const viewPromises = Registry.getExposedNames('view')
@@ -64,9 +65,18 @@ class MushroomStrategy extends HTMLTemplateElement {
         return null;
       });
 
-    const resolvedViews = (await Promise.all(viewPromises)).filter(Boolean) as LovelaceViewRawConfig[];
+    const resolvedViews = (await Promise.all(viewPromises)).filter(Boolean) as StrategyViewConfig[];
 
     views.push(...resolvedViews);
+
+    // Extra views
+    if (Registry.strategyOptions.extra_views) {
+      views.push(...Registry.strategyOptions.extra_views);
+
+      views.sort((a, b) => {
+        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
+      });
+    }
 
     // Subviews for areas
     views.push(
@@ -74,17 +84,14 @@ class MushroomStrategy extends HTMLTemplateElement {
         title: area.name,
         path: area.area_id,
         subview: true,
+        hidden: area.hidden ?? false,
+        order: area.order ?? Infinity,
         strategy: {
           type: 'custom:mushroom-strategy',
           options: { area },
         },
       })),
     );
-
-    // Extra views
-    if (Registry.strategyOptions.extra_views) {
-      views.push(...Registry.strategyOptions.extra_views);
-    }
 
     return { views };
   }
