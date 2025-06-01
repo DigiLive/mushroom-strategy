@@ -11,7 +11,7 @@ import {
   isSupportedView,
   StrategyArea,
   StrategyViewConfig,
-  ViewInfo
+  ViewInfo,
 } from './types/strategy/strategy-generics';
 import { sanitizeClassName } from './utilities/auxiliaries';
 import { logMessage, lvlError, lvlInfo } from './utilities/debug';
@@ -233,7 +233,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
 customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
 
-const version = 'v2.3.3-alpha.2';
+const version = 'v2.3.3';
 console.info(
   '%c Mushroom Strategy %c '.concat(version, ' '),
   'color: white; background: coral; font-weight: 700;',

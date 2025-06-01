@@ -1,6 +1,6 @@
 {
   "name": "mushroom-strategy",
-  "version": "2.3.3-alpha.2",
+  "version": "2.3.3",
   "description": "Automatically generate a dashboard of Mushroom cards.",
   "keywords": [
     "dashboard",
@@ -54,6 +54,6 @@
     "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" --fix",
     "build-dev": "webpack --config webpack.dev.config.ts",
     "build": "webpack",
-    "bump": "bump --preid alpha package.json package-lock.json README.md ./src/mushroom-strategy.ts"
+    "bump": "bump --preid alpha package.json package-lock.json README.md ./docs/index.md ./src/mushroom-strategy.ts"
   }
 }
