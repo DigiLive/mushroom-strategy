@@ -1147,6 +1147,7 @@ Each configuration is identified by a view name and can have the following optio
 <h2 id="extra-views">Extra Views<a class="headerlink" href="#extra-views" title="Permanent link">#</a></h2>
 <p>The <code>extra_views</code> group enables you to specify the configuration of additional views.
 Each view can have the options as described in the <a href="https://www.home-assistant.io/dashboards/views/#views" target="_blank">Home Assistant documentation</a>.</p>
+<p>Extra views are sorted by order first and then by title, together with the build-in views.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can build your view in a temporary dashboard and copy the <code>views</code> group from the YAML of that dashboard into
@@ -1160,6 +1161,7 @@ group <code>extra_views</code> of the strategy configuration. The YAML can be fo
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">theme</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Backend-selected</span>
 <span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cool view</span>
 <span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cool-view</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Infinity</span>
 <span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:emoticon-cool</span>
 <span class="w">        </span><span class="nt">badges</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 <span class="w">        </span><span class="nt">cards</span><span class="p">:</span>
