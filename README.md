@@ -33,8 +33,7 @@ Ready to transform your Home Assistant experience?
 
 The **Mushroom Dashboard Strategy** is available through HACS (Home Assistant Community Store).
 
-➡️ *
-*[Explore the detailed documentation for Installation & Usage Guides!](https://digilive.github.io/mushroom-strategy/)**
+➡️ **[Explore the detailed documentation for Installation & Usage Guides!](https://digilive.github.io/mushroom-strategy/)**
 
 ---
 
