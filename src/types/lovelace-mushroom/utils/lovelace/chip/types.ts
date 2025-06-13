@@ -146,12 +146,12 @@ export type TemplateChipConfig = {
  * Conditional Chip Config
  *
  * @property {"conditional"} type - Type of the chip.
- * @property {LovelaceChipConfig} [chip] - A chip configuration.
+ * @property {MushroomChipConfig} [chip] - A chip configuration.
  * @property {[]} conditions - Conditions for the chip.
  */
 export type ConditionalChipConfig = {
   type: 'conditional';
-  chip?: LovelaceChipConfig;
+  chip?: MushroomChipConfig;
   conditions: any[];
 };
 
@@ -189,8 +189,8 @@ export type SpacerChipConfig = {
   type: 'spacer';
 };
 
-/** Lovelace Chip Config */
-export type LovelaceChipConfig =
+/** Mushroom Chip Config */
+export type MushroomChipConfig =
   | ActionChipConfig
   | AlarmControlPanelChipConfig
   | BackChipConfig
