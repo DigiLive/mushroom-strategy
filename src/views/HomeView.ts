@@ -4,11 +4,9 @@ import { Registry } from '../Registry';
 import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { AreaCardConfig, StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import { ChipsCardConfig } from '../types/lovelace-mushroom/cards/chips-card';
 import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
 import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
-import { LovelaceChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
-import { isSupportedChip } from '../types/strategy/strategy-generics';
+import { isSupportedBadge } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
 import { sanitizeClassName } from '../utilities/auxiliaries';
 import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
@@ -16,6 +14,8 @@ import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
 import registryFilter from '../utilities/RegistryFilter';
 import { stackHorizontal } from '../utilities/cardStacking';
+import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
+import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
 
 /**
  * Home View Class.
@@ -38,12 +38,32 @@ class HomeView extends AbstractView {
   }
 
   /** Returns the default configuration object for the view. */
+  // TODO: Move type and max_columns to the abstract class.
   static getDefaultConfig(): ViewConfig {
     return {
+      //type: 'sections',
+      //max_columns: 4,
+      header: {
+        badges_position: 'top',
+        layout: 'center',
+      },
       title: localize('generic.home'),
       icon: 'mdi:home-assistant',
       path: 'home',
       subview: false,
+    };
+  }
+
+  /**
+   * Get a view configuration.
+   *
+   * The configuration includes the card configurations which are created by createCardConfigurations().
+   */
+  async getView(): Promise<LovelaceViewConfig> {
+    return {
+      ...this.baseConfiguration,
+      badges: await this.createBadgeSection(),
+      cards: await this.createCardConfigurations(),
     };
   }
 
@@ -55,22 +75,14 @@ class HomeView extends AbstractView {
   async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
     const homeViewCards: LovelaceCardConfig[] = [];
 
-    let chipsSection, personsSection, areasSection;
+    let personsSection, areasSection;
 
     try {
-      [chipsSection, personsSection, areasSection] = await Promise.all([
-        this.createChipsSection(),
-        this.createPersonsSection(),
-        this.createAreasSection(),
-      ]);
+      [personsSection, areasSection] = await Promise.all([this.createPersonsSection(), this.createAreasSection()]);
     } catch (e) {
       logMessage(lvlError, 'Error importing created sections!', e);
 
       return homeViewCards;
-    }
-
-    if (chipsSection) {
-      homeViewCards.push(chipsSection);
     }
 
     if (personsSection) {
@@ -125,71 +137,67 @@ class HomeView extends AbstractView {
   }
 
   /**
-   * Create a chip section to include in the view
+   * Create a badge section to include in the view.
    *
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
-  private async createChipsSection(): Promise<ChipsCardConfig | undefined> {
-    if (Registry.strategyOptions.home_view.hidden.includes('chips')) {
+  private async createBadgeSection(): Promise<LovelaceBadgeConfig[] | undefined> {
+    if (Registry.strategyOptions.home_view.hidden.includes('badges')) {
       // The section is hidden.
       return;
     }
 
-    const chipConfigurations: LovelaceChipConfig[] = [];
-    const exposedChips = Registry.getExposedNames('chip');
+    const configurations: LovelaceBadgeConfig[] = [];
+    const exposedBadges = Registry.getExposedNames('badge');
 
-    let Chip;
+    let Badge;
 
-    // Weather chip.
-    // FIXME: It's not possible to hide the weather chip in the configuration.
+    // Weather badge.
+    // FIXME: It's not possible to hide the weather badge in the configuration.
     const weatherEntityId =
-      Registry.strategyOptions.chips.weather_entity === 'auto'
+      Registry.strategyOptions.badges.weather_entity === 'auto'
         ? Registry.entities.find((entity) => entity.entity_id.startsWith('weather.'))?.entity_id
-        : Registry.strategyOptions.chips.weather_entity;
+        : Registry.strategyOptions.badges.weather_entity;
 
     if (weatherEntityId) {
       try {
-        Chip = (await import('../chips/WeatherChip')).default;
-        const weatherChip = new Chip(weatherEntityId);
+        Badge = (await import('../badges/WeatherBadge')).default;
+        const weatherBadge = new Badge(weatherEntityId);
 
-        chipConfigurations.push(weatherChip.getChipConfiguration());
+        configurations.push(weatherBadge.getConfiguration());
       } catch (e) {
-        logMessage(lvlError, 'Error importing chip weather!', e);
+        logMessage(lvlError, 'Error importing badge weather!', e);
       }
     } else {
-      logMessage(lvlInfo, 'Weather chip has no entities available.');
+      logMessage(lvlInfo, 'Weather badge has no entities available.');
     }
 
-    // Numeric chips.
-    for (const chipName of exposedChips) {
-      if (!isSupportedChip(chipName) || !new registryFilter(Registry.entities).whereDomain(chipName).count()) {
-        logMessage(lvlInfo, `Chip for domain ${chipName} is unsupported or has no entities available.`);
+    // Numeric badges.
+    for (const badgeName of exposedBadges) {
+      if (!isSupportedBadge(badgeName) || !new registryFilter(Registry.entities).whereDomain(badgeName).count()) {
+        logMessage(lvlInfo, `Badge for domain ${badgeName} is unsupported or has no entities available.`);
 
         continue;
       }
 
-      const moduleName = sanitizeClassName(chipName + 'Chip');
+      const moduleName = sanitizeClassName(badgeName + 'Badge');
 
       try {
-        Chip = (await import(`../chips/${moduleName}`)).default;
-        const currentChip = new Chip();
+        Badge = (await import(`../badges/${moduleName}`)).default;
+        const currentBadge = new Badge();
 
-        chipConfigurations.push(currentChip.getChipConfiguration());
+        configurations.push(currentBadge.getConfiguration());
       } catch (e) {
-        logMessage(lvlError, `Error importing chip ${chipName}!`, e);
+        logMessage(lvlError, `Error importing badge ${badgeName}!`, e);
       }
     }
 
-    // Add extra chips.
-    if (Registry.strategyOptions.chips?.extra_chips) {
-      chipConfigurations.push(...Registry.strategyOptions.chips.extra_chips);
+    // Add extra badges.
+    if (Registry.strategyOptions.badges?.extra_badges) {
+      configurations.push(...Registry.strategyOptions.badges.extra_badges);
     }
 
-    return {
-      type: 'custom:mushroom-chips-card',
-      alignment: 'center',
-      chips: chipConfigurations,
-    };
+    return configurations;
   }
 
   /**
@@ -210,15 +218,14 @@ class HomeView extends AbstractView {
     cardConfigurations.push(
       ...Registry.entities
         .filter((entity) => entity.entity_id.startsWith('person.'))
-        .map((person) => new PersonCard(person).getCard()),
+        .map((person) => new PersonCard(person).getCard())
     );
 
     return {
       type: 'vertical-stack',
       cards: stackHorizontal(
         cardConfigurations,
-        Registry.strategyOptions.home_view.stack_count['persons'] ??
-          Registry.strategyOptions.home_view.stack_count['_'],
+        Registry.strategyOptions.home_view.stack_count['persons'] ?? Registry.strategyOptions.home_view.stack_count['_']
       ),
     };
   }
@@ -258,7 +265,7 @@ class HomeView extends AbstractView {
         new AreaCard(area, {
           ...Registry.strategyOptions.areas['_'],
           ...Registry.strategyOptions.areas[area.area_id],
-        }).getCard(),
+        }).getCard()
       );
     }
 

@@ -27,15 +27,15 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
   },
   card_options: {},
-  chips: {
-    // TODO: Make chips sortable.
+  badges: {
+    // TODO: Make badges sortable.
     weather_entity: 'auto',
     light_count: true,
     fan_count: true,
     cover_count: true,
     switch_count: true,
     climate_count: true,
-    extra_chips: [],
+    extra_badges: [],
   },
   debug: false,
   domains: {
