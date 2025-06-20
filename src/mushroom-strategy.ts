@@ -17,6 +17,10 @@ import { sanitizeClassName } from './utilities/auxiliaries';
 import { logMessage, lvlError, lvlInfo } from './utilities/debug';
 import RegistryFilter from './utilities/RegistryFilter';
 import { stackHorizontal } from './utilities/cardStacking';
+import { PersistentNotification } from './utilities/PersistentNotification';
+import { HomeAssistant } from './types/homeassistant/types';
+import semver from 'semver/preload';
+import { NOTIFICATIONS } from './notifications';
 
 /**
  * Mushroom Dashboard Strategy.<br>
@@ -40,6 +44,8 @@ class MushroomStrategy extends HTMLTemplateElement {
    */
   static async generateDashboard(info: DashboardInfo): Promise<LovelaceConfig> {
     await Registry.initialize(info);
+
+    await MushroomStrategy.handleNotifications(info.hass);
 
     const views: StrategyViewConfig[] = [];
 
@@ -90,7 +96,7 @@ class MushroomStrategy extends HTMLTemplateElement {
           type: 'custom:mushroom-strategy',
           options: { area },
         },
-      })),
+      }))
     );
 
     return { views };
@@ -135,7 +141,7 @@ class MushroomStrategy extends HTMLTemplateElement {
         {
           ...Registry.strategyOptions.domains['_'],
           ...Registry.strategyOptions.domains[domain],
-        },
+        }
       ).createCard();
 
       try {
@@ -157,7 +163,7 @@ class MushroomStrategy extends HTMLTemplateElement {
           if (domainCards.length) {
             domainCards = stackHorizontal(
               domainCards,
-              Registry.strategyOptions.domains[domain].stack_count ?? Registry.strategyOptions.domains['_'].stack_count,
+              Registry.strategyOptions.domains[domain].stack_count ?? Registry.strategyOptions.domains['_'].stack_count
             );
 
             return { type: 'vertical-stack', cards: [headerCard, ...domainCards] };
@@ -176,7 +182,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
         domainCards = stackHorizontal(
           domainCards,
-          Registry.strategyOptions.domains[domain].stack_count ?? Registry.strategyOptions.domains['_'].stack_count,
+          Registry.strategyOptions.domains[domain].stack_count ?? Registry.strategyOptions.domains['_'].stack_count
         );
 
         return domainCards.length ? { type: 'vertical-stack', cards: [headerCard, ...domainCards] } : null;
@@ -201,7 +207,7 @@ class MushroomStrategy extends HTMLTemplateElement {
         try {
           const MiscellaneousCard = (await import('./cards/MiscellaneousCard')).default;
           let miscellaneousCards = miscellaneousEntities.map((entity) =>
-            new MiscellaneousCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard(),
+            new MiscellaneousCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard()
           );
 
           const headerCard = new HeaderCard(target, {
@@ -213,7 +219,7 @@ class MushroomStrategy extends HTMLTemplateElement {
             miscellaneousCards = stackHorizontal(
               miscellaneousCards,
               Registry.strategyOptions.domains['default'].stack_count ??
-                Registry.strategyOptions.domains['_'].stack_count,
+                Registry.strategyOptions.domains['_'].stack_count
             );
 
             viewCards.push({
@@ -229,13 +235,46 @@ class MushroomStrategy extends HTMLTemplateElement {
 
     return { cards: viewCards };
   }
+
+  /**
+   * Handle persistent notifications.
+   *
+   * @remarks
+   * Goes through `NOTIFICATIONS` and shows each one whose version range matches the current version.
+   * If the current version is not applicable, the notification is dismissed.
+   *
+   * @param hass The Home Assistant instance.
+   * @returns A promise that resolves when all notifications have been handled.
+   */
+  private static async handleNotifications(hass: HomeAssistant): Promise<void> {
+    const notificationManager = new PersistentNotification(hass, 'mushroom_strategy');
+    const currentVersion = STRATEGY_VERSION.replace(/^v/, '');
+    const version = semver.coerce(currentVersion) || '0.0.0';
+
+    try {
+      await Promise.all(
+        NOTIFICATIONS.map(async (notification) => {
+          if (semver.gte(version, notification.fromVersion) && semver.lte(version, notification.toVersion)) {
+            return notificationManager.showNotification(notification.storageKey, notification.message, {
+              title: notification.title,
+              version: currentVersion,
+            });
+          }
+
+          return notificationManager.dismissNotification(notification.storageKey);
+        })
+      );
+    } catch (e) {
+      logMessage(lvlError, 'Error while handling persistent notifications for Mushroom Strategy', e);
+    }
+  }
 }
 
 customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
 
-const version = 'v2.3.4';
+const STRATEGY_VERSION = 'v2.3.5';
 console.info(
-  '%c Mushroom Strategy %c '.concat(version, ' '),
+  '%c Mushroom Strategy %c '.concat(STRATEGY_VERSION, ' '),
   'color: white; background: coral; font-weight: 700;',
-  'color: coral; background: white; font-weight: 700;',
+  'color: coral; background: white; font-weight: 700;'
 );

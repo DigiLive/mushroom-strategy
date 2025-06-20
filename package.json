@@ -1,6 +1,6 @@
 {
   "name": "mushroom-strategy",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Automatically generate a dashboard of Mushroom cards.",
   "keywords": [
     "dashboard",
@@ -30,6 +30,7 @@
     "deepmerge": "^4"
   },
   "devDependencies": {
+    "@types/semver": "^7.7.0",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.27.0",
@@ -38,6 +39,7 @@
     "home-assistant-js-websocket": "^9.5.0",
     "markdownlint-cli2": "^0.18.1",
     "prettier": "^3.5.3",
+    "semver": "^7.7.2",
     "superstruct": "^2.0.2",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
