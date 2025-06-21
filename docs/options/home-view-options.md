@@ -172,7 +172,7 @@ strategy:
 
 ---
 
-### Extra Cards
+## Extra Cards
 
 The `extra_cards` group enables you to specify the configuration of additional cards in the view.
 These cards will be shown below the areas.
@@ -183,7 +183,7 @@ Each card can have the options as described at [Card Options](card-options.md).
     You can build your view in a temporary dashboard and copy the `views` group from the YAML of that dashboard into
     group `extra_cards` of the strategy configuration. The YAML can be found in the Raw configuration editor.
 
-#### Example
+### Example
 
 ```yaml
 strategy:
