@@ -14,7 +14,7 @@ import {
   ViewInfo,
 } from './types/strategy/strategy-generics';
 import { sanitizeClassName } from './utilities/auxiliaries';
-import { logMessage, lvlError, lvlInfo } from './utilities/debug';
+import { logMessage, lvlError } from './utilities/debug';
 import RegistryFilter from './utilities/RegistryFilter';
 import { stackHorizontal } from './utilities/cardStacking';
 import { PersistentNotification } from './utilities/PersistentNotification';
@@ -57,13 +57,8 @@ class MushroomStrategy extends HTMLTemplateElement {
           const moduleName = sanitizeClassName(`${viewName}View`);
           const View = (await import(`./views/${moduleName}`)).default;
           const currentView = new View(Registry.strategyOptions.views[viewName]);
-          const viewConfiguration = await currentView.getView();
 
-          if (viewConfiguration.cards.length) {
-            return viewConfiguration;
-          }
-
-          logMessage(lvlInfo, `View ${viewName} has no entities available!`);
+          return await currentView.getView();
         } catch (e) {
           logMessage(lvlError, `Error importing ${viewName} view!`, e);
         }

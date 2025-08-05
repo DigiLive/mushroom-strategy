@@ -1,8 +1,6 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
-import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { AreaCardConfig, StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
 import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
 import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
@@ -13,9 +11,13 @@ import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
 import { localize } from '../utilities/localize';
 import AbstractView from './AbstractView';
 import registryFilter from '../utilities/RegistryFilter';
-import { stackHorizontal } from '../utilities/cardStacking';
 import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
 import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
+import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
+import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
+import HeaderCard from '../cards/HeaderCard';
+import { stackHorizontal } from '../utilities/cardStacking';
+import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 
 /**
  * Home View Class.
@@ -41,8 +43,8 @@ class HomeView extends AbstractView {
   // TODO: Move type and max_columns to the abstract class.
   static getDefaultConfig(): ViewConfig {
     return {
-      //type: 'sections',
-      //max_columns: 4,
+      type: 'sections',
+      max_columns: 3,
       header: {
         badges_position: 'top',
         layout: 'center',
@@ -60,38 +62,8 @@ class HomeView extends AbstractView {
    * The configuration includes the card configurations which are created by createCardConfigurations().
    */
   async getView(): Promise<LovelaceViewConfig> {
-    return {
-      ...this.baseConfiguration,
-      badges: await this.createBadgeSection(),
-      cards: await this.createCardConfigurations(),
-    };
-  }
-
-  /**
-   * Create the configuration of the cards to include in the view.
-   *
-   * @override
-   */
-  async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
-    const homeViewCards: LovelaceCardConfig[] = [];
-
-    let personsSection, areasSection;
-
-    try {
-      [personsSection, areasSection] = await Promise.all([this.createPersonsSection(), this.createAreasSection()]);
-    } catch (e) {
-      logMessage(lvlError, 'Error importing created sections!', e);
-
-      return homeViewCards;
-    }
-
-    if (personsSection) {
-      homeViewCards.push(personsSection);
-    }
-
-    // Create the greeting section.
-    if (!Registry.strategyOptions.home_view.hidden.includes('greeting')) {
-      homeViewCards.push({
+    if (this.baseConfiguration.header && !Registry.strategyOptions.home_view.hidden.includes('greeting')) {
+      this.baseConfiguration.header.card = {
         type: 'custom:mushroom-template-card',
         primary: `{% set time = now().hour %}
            {% if (time >= 18) %}
@@ -113,27 +85,76 @@ class HomeView extends AbstractView {
         hold_action: {
           action: 'none',
         } as ActionConfig,
-      } as TemplateCardConfig);
+      } as TemplateCardConfig;
     }
 
-    if (Registry.strategyOptions.quick_access_cards) {
-      homeViewCards.push(...Registry.strategyOptions.quick_access_cards);
+    return {
+      ...this.baseConfiguration,
+      badges: await this.createBadgeSection(),
+      sections: await this.createSections(),
+    };
+  }
+
+  /**
+   * Create the configuration of the cards to include in the view.
+   *
+   * @override
+   */
+  async createSections(): Promise<LovelaceSectionRawConfig[]> {
+    const MEDIA_QUERY = {
+      SMALL: '(max-width: 1343px)',
+      LARGE: '(min-width: 1344px)',
+    };
+    const sections: LovelaceSectionRawConfig[] = [];
+
+    const addSection = (title: string, cards: LovelaceCardConfig[], mediaQuery?: string) => {
+      const section: LovelaceSectionRawConfig = {
+        type: 'grid',
+        /*title: title,*/ // TODO: Property is deprecated.
+        cards: cards,
+      };
+
+      if (mediaQuery) {
+        section.visibility = [
+          {
+            condition: 'screen',
+            media_query: mediaQuery,
+          },
+        ];
+      }
+
+      sections.push(section);
+    };
+
+    try {
+      const [personCards, areaCards] = await Promise.all([this.createPersonCards(), this.createAreaCards()]);
+
+      const sectionConfigurations = [
+        ['Persons', [personCards], MEDIA_QUERY.SMALL, !!personCards],
+        ['Quick Access Wide', Registry.strategyOptions.quick_access_cards, MEDIA_QUERY.LARGE, true],
+        [
+          'Persons and Areas',
+          [personCards, areaCards].filter(Boolean),
+          MEDIA_QUERY.LARGE,
+          !!(personCards || areaCards),
+        ],
+        ['Quick Access Narrow', Registry.strategyOptions.quick_access_cards, MEDIA_QUERY.SMALL, true],
+        ['Areas', [areaCards], MEDIA_QUERY.SMALL, !!areaCards],
+        ['Extra', Registry.strategyOptions.extra_cards, undefined, true],
+      ] as const;
+
+      sectionConfigurations.forEach(([title, cards, mediaQuery, condition]) => {
+        if (condition && cards.length) {
+          addSection(title, cards as LovelaceCardConfig[], mediaQuery);
+          return;
+        }
+        logMessage(lvlInfo, `Section ${title} has no entities available.`);
+      });
+    } catch (e) {
+      logMessage(lvlError, 'Error importing section cards!', e);
     }
 
-    if (areasSection) {
-      homeViewCards.push(areasSection);
-    }
-
-    if (Registry.strategyOptions.extra_cards) {
-      homeViewCards.push(...Registry.strategyOptions.extra_cards);
-    }
-
-    return [
-      {
-        type: 'vertical-stack',
-        cards: homeViewCards,
-      },
-    ];
+    return sections;
   }
 
   /**
@@ -205,10 +226,9 @@ class HomeView extends AbstractView {
    *
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
-  private async createPersonsSection(): Promise<StackCardConfig | undefined> {
+  private async createPersonCards(): Promise<StackCardConfig | undefined> {
     if (Registry.strategyOptions.home_view.hidden.includes('persons')) {
-      // The section is hidden.
-
+      logMessage(lvlInfo, 'Persons section is hidden.');
       return;
     }
 
@@ -221,8 +241,13 @@ class HomeView extends AbstractView {
         .map((person) => new PersonCard(person).getCard())
     );
 
+    cardConfigurations.push(...cardConfigurations);
+
     return {
       type: 'vertical-stack',
+      grid_options: {
+        columns: 'full',
+      },
       cards: stackHorizontal(
         cardConfigurations,
         Registry.strategyOptions.home_view.stack_count['persons'] ?? Registry.strategyOptions.home_view.stack_count['_']
@@ -236,9 +261,9 @@ class HomeView extends AbstractView {
    * Area cards are grouped into two areas per row.
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
-  private async createAreasSection(): Promise<StackCardConfig | undefined> {
+  private async createAreaCards(): Promise<StackCardConfig | undefined> {
     if (Registry.strategyOptions.home_view.hidden.includes('areas')) {
-      // Areas section is hidden.
+      logMessage(lvlInfo, 'Areas section is hidden.');
       return;
     }
 
@@ -269,9 +294,13 @@ class HomeView extends AbstractView {
       );
     }
 
+    if (!Registry.strategyOptions.home_view.hidden.includes('areasTitle')) {
+      cardConfigurations.unshift(new HeaderCard({}, { title: localize('generic.areas') }).createCard());
+    }
+
     return {
       type: 'vertical-stack',
-      title: Registry.strategyOptions.home_view.hidden.includes('areasTitle') ? undefined : localize('generic.areas'),
+      columns: 'full',
       cards: stackHorizontal(cardConfigurations, Registry.strategyOptions.home_view.stack_count['_'], {
         'custom:mushroom-template-card': Registry.strategyOptions.home_view.stack_count.areas?.[0],
         area: Registry.strategyOptions.home_view.stack_count.areas?.[1],

@@ -11,6 +11,7 @@ import { sanitizeClassName } from '../utilities/auxiliaries';
 import { logMessage, lvlFatal } from '../utilities/debug';
 import RegistryFilter from '../utilities/RegistryFilter';
 import { stackHorizontal } from '../utilities/cardStacking';
+import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
 
 /**
  * Abstract View Class.
@@ -34,10 +35,6 @@ abstract class AbstractView {
     type: '',
   };
 
-  protected get domain(): SupportedDomains | 'home' {
-    return (this.constructor as unknown as ViewConstructor).domain;
-  }
-
   /**
    * Class constructor.
    *
@@ -50,10 +47,40 @@ abstract class AbstractView {
     }
   }
 
+  protected get domain(): SupportedDomains | 'home' {
+    return (this.constructor as unknown as ViewConstructor).domain;
+  }
+
+  // noinspection JSUnusedGlobalSymbols Methodd is dynamically called.
+  /**
+   * Get a view configuration.
+   *
+   * The configuration includes the card configurations which are created by createCardConfigurations().
+   */
+  async getView(): Promise<LovelaceViewConfig | false> {
+    const sectionsCards = await this.createSections();
+
+    if (!sectionsCards.length) {
+      return false;
+    }
+
+    if (this.domain === 'home') {
+      return {
+        ...this.baseConfiguration,
+        sections: sectionsCards,
+      };
+    }
+
+    return {
+      ...this.baseConfiguration,
+      cards: sectionsCards as LovelaceCardConfig[],
+    };
+  }
+
   /**
    * Create the configuration of the cards to include in the view.
    */
-  protected async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
+  protected async createSections(): Promise<LovelaceSectionRawConfig[]> {
     const viewCards: LovelaceCardConfig[] = [];
     const moduleName = sanitizeClassName(this.domain + 'Card');
     const DomainCard = (await import(`../cards/${moduleName}`)).default;
@@ -82,8 +109,8 @@ abstract class AbstractView {
       // Create a card configuration for each entity in the current area.
       areaCards.push(
         ...areaEntities.map((entity) =>
-          new DomainCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard(),
-        ),
+          new DomainCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard()
+        )
       );
 
       // Stack the cards of the current area.
@@ -91,7 +118,7 @@ abstract class AbstractView {
         areaCards = stackHorizontal(
           areaCards,
           Registry.strategyOptions.domains[this.domain as SupportedDomains].stack_count ??
-            Registry.strategyOptions.domains['_'].stack_count,
+            Registry.strategyOptions.domains['_'].stack_count
         );
 
         // Create and insert a Header card.
@@ -114,29 +141,6 @@ abstract class AbstractView {
   }
 
   /**
-   * Get a view configuration.
-   *
-   * The configuration includes the card configurations which are created by createCardConfigurations().
-   */
-  async getView(): Promise<LovelaceViewConfig> {
-    return {
-      ...this.baseConfiguration,
-      cards: await this.createCardConfigurations(),
-    };
-  }
-
-  /**
-   * Get the domain's entity ids to target for a HASS service call.
-   */
-  private getDomainTargets(): HassServiceTarget {
-    return {
-      entity_id: Registry.entities
-        .filter((entity) => entity.entity_id.startsWith(this.domain + '.'))
-        .map((entity) => entity.entity_id),
-    };
-  }
-
-  /**
    * Initialize the view configuration with defaults and custom settings.
    *
    * @param viewConfiguration The view's default configuration for the view.
@@ -146,7 +150,7 @@ abstract class AbstractView {
   protected initializeViewConfig(
     viewConfiguration: ViewConfig,
     customConfiguration: ViewConfig = {},
-    headerCardConfig: CustomHeaderCardConfig,
+    headerCardConfig: CustomHeaderCardConfig
   ): void {
     this.baseConfiguration = { ...this.baseConfiguration, ...viewConfiguration, ...customConfiguration };
 
@@ -161,6 +165,17 @@ abstract class AbstractView {
       ...(this.baseConfiguration.headerCardConfiguration as StrategyHeaderCardConfig),
       ...headerCardConfig,
     }).createCard();
+  }
+
+  /**
+   * Get the domain's entity ids to target for a HASS service call.
+   */
+  private getDomainTargets(): HassServiceTarget {
+    return {
+      entity_id: Registry.entities
+        .filter((entity) => entity.entity_id.startsWith(this.domain + '.'))
+        .map((entity) => entity.entity_id),
+    };
   }
 }
 
