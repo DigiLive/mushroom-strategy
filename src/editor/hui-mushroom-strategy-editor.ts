@@ -68,7 +68,6 @@ export class HuiMushroomStrategyEditor
   }
 
   public setConfig(config: any): void {
-    console.log('Editor setConfig called with:', config);
     this._config = config || { type: 'custom:mushroom-strategy', options: {} };
   }
 
