@@ -27,8 +27,7 @@
     "url": "https://github.com/DigiLive/mushroom-strategy"
   },
   "dependencies": {
-    "deepmerge": "^4",
-    "lit": "^3.0.0"
+    "deepmerge": "^4"
   },
   "devDependencies": {
     "@types/semver": "^7.7.0",

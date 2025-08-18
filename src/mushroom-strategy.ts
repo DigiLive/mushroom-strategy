@@ -1,7 +1,6 @@
 import { HassServiceTarget } from 'home-assistant-js-websocket';
 import HeaderCard from './cards/HeaderCard';
 import SensorCard from './cards/SensorCard';
-import './editor/hui-mushroom-strategy-editor';
 import { Registry } from './Registry';
 import { LovelaceCardConfig } from './types/homeassistant/data/lovelace/config/card';
 import { LovelaceConfig } from './types/homeassistant/data/lovelace/config/types';
@@ -269,20 +268,8 @@ class MushroomStrategy extends HTMLTemplateElement {
       logMessage(lvlError, 'Error while handling persistent notifications for Mushroom Strategy', e);
     }
   }
-
-  static getConfigElement() {
-    return document.createElement("hui-mushroom-strategy-editor");
-  }
-
-  static getStubConfig() {
-    return {
-      type: 'custom:mushroom-strategy',
-      options: {}
-    };
-  }
 }
 
-// Register the strategy  
 customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
 
 const STRATEGY_VERSION = 'v2.3.5';
@@ -291,15 +278,3 @@ console.info(
   'color: white; background: coral; font-weight: 700;',
   'color: coral; background: white; font-weight: 700;'
 );
-
-// Debug: Test editor registration
-setTimeout(() => {
-  const strategy = customElements.get('ll-strategy-mushroom-strategy');
-  const editor = customElements.get('hui-mushroom-strategy-editor');
-  console.log('Mushroom Strategy Debug:', {
-    strategyRegistered: !!strategy,
-    editorRegistered: !!editor,
-    hasGetConfigElement: !!(strategy as any)?.getConfigElement,
-    hasGetStubConfig: !!(strategy as any)?.getStubConfig
-  });
-}, 1000);
