@@ -135,12 +135,21 @@ export class HuiMushroomStrategyEditor
         ${this._renderChipsSection(options)}
         ${this._renderAreasSection(options)}
         ${this._renderDomainsSection(options)}
+        ${this._renderDomainStackCountsSection(options)}
+        ${this._renderDomainOrderSection(options)}
         ${this._renderViewsSection(options)}
+        ${this._renderViewOrderSection(options)}
+        ${this._renderExtraCardsSection(options)}
+        ${this._renderQuickAccessCardsSection(options)}
+        ${this._renderExtraViewsSection(options)}
       </div>
     `;
   }
 
   private _renderGeneralSection(options: StrategyConfig): TemplateResult {
+    const domains = options.domains || {};
+    const allDomainsConfig = domains._ || {};
+    
     return html`
       <div class="section">
         <div class="section-header">General Settings</div>
@@ -152,6 +161,43 @@ export class HuiMushroomStrategyEditor
             .configPath=${"debug"}
             @change=${this._valueChanged}
           ></ha-switch>
+        </div>
+        
+        <div class="form-row">
+          <label>Hide Config Entities</label>
+          <ha-switch
+            .checked=${allDomainsConfig.hide_config_entities || false}
+            .configPath=${"domains._.hide_config_entities"}
+            @change=${this._valueChanged}
+          ></ha-switch>
+        </div>
+        
+        <div class="form-row">
+          <label>Hide Diagnostic Entities</label>
+          <ha-switch
+            .checked=${allDomainsConfig.hide_diagnostic_entities || false}
+            .configPath=${"domains._.hide_diagnostic_entities"}
+            @change=${this._valueChanged}
+          ></ha-switch>
+        </div>
+        
+        <div class="form-row">
+          <label>Show Controls</label>
+          <ha-switch
+            .checked=${allDomainsConfig.showControls !== false}
+            .configPath=${"domains._.showControls"}
+            @change=${this._valueChanged}
+          ></ha-switch>
+        </div>
+        
+        <div class="form-row">
+          <label>Default Stack Count</label>
+          <ha-textfield
+            type="number"
+            .value=${allDomainsConfig.stack_count || 1}
+            .configPath=${"domains._.stack_count"}
+            @input=${this._valueChanged}
+          ></ha-textfield>
         </div>
       </div>
     `;
@@ -170,6 +216,26 @@ export class HuiMushroomStrategyEditor
             type="number"
             .value=${homeView.stack_count?._ || 2}
             .configPath=${"home_view.stack_count._"}
+            @input=${this._valueChanged}
+          ></ha-textfield>
+        </div>
+        
+        <div class="form-row">
+          <label>Area Stack Count</label>
+          <ha-textfield
+            type="number"
+            .value=${homeView.stack_count?.areas || 2}
+            .configPath=${"home_view.stack_count.areas"}
+            @input=${this._valueChanged}
+          ></ha-textfield>
+        </div>
+        
+        <div class="form-row">
+          <label>Person Stack Count</label>
+          <ha-textfield
+            type="number"
+            .value=${homeView.stack_count?.persons || 2}
+            .configPath=${"home_view.stack_count.persons"}
             @input=${this._valueChanged}
           ></ha-textfield>
         </div>
@@ -246,6 +312,7 @@ export class HuiMushroomStrategyEditor
             .value=${chips.weather_entity || 'auto'}
             .configPath=${"chips.weather_entity"}
             @input=${this._valueChanged}
+            placeholder="auto or weather.entity_id"
           ></ha-textfield>
         </div>
         
@@ -292,6 +359,13 @@ export class HuiMushroomStrategyEditor
             .configPath=${"chips.climate_count"}
             @change=${this._valueChanged}
           ></ha-switch>
+        </div>
+        
+        <div style="margin-top: 12px;">
+          <label><strong>Extra Chips:</strong></label>
+          <div style="margin-top: 8px; padding: 8px; background: var(--card-background-color); border-radius: 4px; font-size: 12px;">
+            Configure additional chips in YAML mode. Use the "extra_chips" property.
+          </div>
         </div>
       </div>
     `;
@@ -419,6 +493,131 @@ export class HuiMushroomStrategyEditor
     current[pathParts[pathParts.length - 1]] = !isChecked;
 
     fireEvent(this, "config-changed", { config: newConfig });
+  }
+
+  private _renderDomainStackCountsSection(options: StrategyConfig): TemplateResult {
+    const domains = options.domains || {} as any;
+    const supportedDomains = ['binary_sensor', 'camera', 'climate', 'cover', 'fan', 'input_select', 'light', 'lock', 'media_player', 'number', 'scene', 'select', 'sensor', 'switch', 'vacuum', 'valve'] as const;
+    
+    return html`
+      <div class="section">
+        <div class="section-header">Domain Stack Counts</div>
+        
+        ${supportedDomains.map(domain => html`
+          <div class="form-row">
+            <label>${domain.charAt(0).toUpperCase() + domain.slice(1).replace('_', ' ')} Stack Count</label>
+            <ha-textfield
+              type="number"
+              .value=${domains[domain]?.stack_count || 1}
+              .configPath=${"domains." + domain + ".stack_count"}
+              @input=${this._valueChanged}
+            ></ha-textfield>
+          </div>
+        `)}
+      </div>
+    `;
+  }
+
+  private _renderDomainOrderSection(options: StrategyConfig): TemplateResult {
+    const domains = options.domains || {} as any;
+    const supportedDomains = ['binary_sensor', 'camera', 'climate', 'cover', 'fan', 'input_select', 'light', 'lock', 'media_player', 'number', 'scene', 'select', 'sensor', 'switch', 'vacuum', 'valve'] as const;
+    
+    return html`
+      <div class="section">
+        <div class="section-header">Domain Order</div>
+        
+        ${supportedDomains.map(domain => html`
+          <div class="form-row">
+            <label>${domain.charAt(0).toUpperCase() + domain.slice(1).replace('_', ' ')} Order</label>
+            <ha-textfield
+              type="number"
+              .value=${domains[domain]?.order || 0}
+              .configPath=${"domains." + domain + ".order"}
+              @input=${this._valueChanged}
+            ></ha-textfield>
+          </div>
+        `)}
+      </div>
+    `;
+  }
+
+  private _renderViewOrderSection(options: StrategyConfig): TemplateResult {
+    const views = options.views || {} as any;
+    const supportedViews = ['home', 'light', 'switch', 'fan', 'cover', 'climate', 'lock', 'camera', 'vacuum', 'scene', 'valve'] as const;
+    
+    return html`
+      <div class="section">
+        <div class="section-header">View Order</div>
+        
+        ${supportedViews.map(view => html`
+          <div class="form-row">
+            <label>${view.charAt(0).toUpperCase() + view.slice(1)} View Order</label>
+            <ha-textfield
+              type="number"
+              .value=${views[view]?.order || 0}
+              .configPath=${"views." + view + ".order"}
+              @input=${this._valueChanged}
+            ></ha-textfield>
+          </div>
+        `)}
+      </div>
+    `;
+  }
+
+  private _renderExtraCardsSection(options: StrategyConfig): TemplateResult {
+    return html`
+      <div class="section">
+        <div class="section-header">Extra Cards</div>
+        
+        <div style="padding: 8px; background: var(--card-background-color); border-radius: 4px; font-size: 12px;">
+          Extra cards are shown below room cards on each view. Configure them in YAML mode using the "extra_cards" property.
+          <br><br>
+          Example:
+          <pre style="margin: 8px 0; padding: 4px; background: var(--secondary-background-color); border-radius: 4px;">extra_cards:
+  - type: entities
+    entities:
+      - entity: sensor.example</pre>
+        </div>
+      </div>
+    `;
+  }
+
+  private _renderQuickAccessCardsSection(options: StrategyConfig): TemplateResult {
+    return html`
+      <div class="section">
+        <div class="section-header">Quick Access Cards</div>
+        
+        <div style="padding: 8px; background: var(--card-background-color); border-radius: 4px; font-size: 12px;">
+          Quick access cards are shown between the welcome card and room cards in the home view. Configure them in YAML mode using the "quick_access_cards" property.
+          <br><br>
+          Example:
+          <pre style="margin: 8px 0; padding: 4px; background: var(--secondary-background-color); border-radius: 4px;">quick_access_cards:
+  - type: button
+    entity: script.example</pre>
+        </div>
+      </div>
+    `;
+  }
+
+  private _renderExtraViewsSection(options: StrategyConfig): TemplateResult {
+    return html`
+      <div class="section">
+        <div class="section-header">Extra Views</div>
+        
+        <div style="padding: 8px; background: var(--card-background-color); border-radius: 4px; font-size: 12px;">
+          Extra views are custom-defined views added to the dashboard. Configure them in YAML mode using the "extra_views" property.
+          <br><br>
+          Example:
+          <pre style="margin: 8px 0; padding: 4px; background: var(--secondary-background-color); border-radius: 4px;">extra_views:
+  - title: My Custom View
+    path: custom
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.example</pre>
+        </div>
+      </div>
+    `;
   }
 }
 
