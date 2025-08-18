@@ -121,7 +121,6 @@ export class HuiMushroomStrategyEditor
     const options = this._config.options || {};
 
     console.log('Editor rendering with config:', this._config);
-    console.log('Options:', options);
 
     return html`
       <div class="card-config">
