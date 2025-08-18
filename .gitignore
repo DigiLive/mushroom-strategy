@@ -1,2 +1,3 @@
 /node_modules/
 # Don't add directory /dist/ to .gitignore, as it is used by the build script
+dist/mushroom-strategy.js
