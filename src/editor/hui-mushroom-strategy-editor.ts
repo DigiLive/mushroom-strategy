@@ -620,5 +620,4 @@ export class HuiMushroomStrategyEditor
 
 // Ensure custom element is registered
 if (!customElements.get("hui-mushroom-strategy-editor")) {
-  customElements.define("hui-mushroom-strategy-editor", HuiMushroomStrategyEditor);
 }
