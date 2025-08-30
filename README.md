@@ -66,11 +66,11 @@ We welcome contributions and feedback!
 
 [hacsBadge]: https://img.shields.io/badge/HACS-Default-blue
 
-[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.3.5&label=Release
+[releaseBadge]: https://img.shields.io/github/v/tag/digilive/mushroom-strategy?filter=v2.4.0&label=Release
 
 <!-- Repository References -->
 
-[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.3.5
+[releaseUrl]: https://github.com/DigiLive/mushroom-strategy/releases/tag/v2.4.0
 
 <!-- Other References -->
 
