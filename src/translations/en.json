@@ -62,6 +62,7 @@
   },
   "switch": {
     "all_switches": "All Switches",
+    "chip_confirmation": "Warning: This action will turn off all switches. Are you sure you want to continue?",
     "switches": "Switches"
   },
   "vacuum": {

@@ -62,6 +62,7 @@
   },
   "switch": {
     "all_switches": "Alle Schakelaars",
+    "chip_confirmation": "Waarschuwing: Deze actie zal alle schakelaars uitzetten. Weet u zeker dat u door wilt gaan?",
     "switches": "Schakelaars"
   },
   "vacuum": {
