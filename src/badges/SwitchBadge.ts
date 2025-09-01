@@ -4,6 +4,7 @@ import { Registry } from '../Registry';
 import RegistryFilter from '../utilities/RegistryFilter';
 import AbstractBadge from './AbstractBadge';
 import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
+import { localize } from '../utilities/localize';
 
 /**
  * Switch Badge class.
@@ -31,6 +32,9 @@ class SwitchBadge extends AbstractBadge {
       content: Registry.getCountTemplate('switch', 'eq', 'on'),
       tap_action: {
         action: 'perform-action',
+        confirmation: {
+          text: localize('switch.chip_confirmation'),
+        },
         perform_action: 'switch.turn_off',
         target: {
           entity_id: new RegistryFilter(Registry.entities)
