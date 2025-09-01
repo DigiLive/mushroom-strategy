@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+#  pull_request:
+#    branches:
+#      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -36,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: check-for-changes
-    if: needs.check-for-changes.outputs.changed == 'true'
+    if: needs.check-for-changes.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
     env:
       CI_COMMIT_AUTHOR: 'CI Bot'
       CI_COMMIT_EMAIL: 'ci@noreply.github.com'
