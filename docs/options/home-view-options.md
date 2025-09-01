@@ -61,14 +61,17 @@ home_view:
 ## Chip Options
 
 The mushroom strategy has chips that indicate the number of entities for a specific domain which are in an "active"
-state. Hidden/Disabled entities are excluded from this count.
+state.  
+Hidden/Disabled entities are excluded from this count.
 
-* Tapping a chip will set corresponding entities to an "inactive" state.[^1]
-* Tap and hold a chip, will navigate to the corresponding view.
+- Tapping a chip will set corresponding entities to an "inactive" state.[^1]  
+  _**Note:** The Switch chip requires a confirmation before executing its tap action to prevent accidental toggling of
+  all switches._
+- Holding a chip, will navigate to the corresponding view.
 
 [^1]: For some chips, the tap action is disabled.
 
-The `chips` group enables you to specify the configuration of chips.
+The `chips` group enables you to specify its configuration of chips.
 
 | Name             | type    | default | Description                                 |
 |:-----------------|:--------|:--------|:--------------------------------------------|

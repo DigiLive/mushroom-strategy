@@ -62,6 +62,7 @@
   },
   "switch": {
     "all_switches": "Todos os interruptores",
+    "chip_confirmation": "Atenção: Essa ação irá desligar todos os interruptores. Tem certeza que deseja continuar?",
     "switches": "Interruptores"
   },
   "vacuum": {

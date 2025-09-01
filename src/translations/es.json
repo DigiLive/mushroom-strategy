@@ -62,6 +62,7 @@
   },
   "switch": {
     "all_switches": "Todos los Apagadores",
+    "chip_confirmation": "Advertencia: Esta acción apagará todos los interruptores. ¿Está seguro de que desea continuar?",
     "switches": "Apagadores"
   },
   "vacuum": {
