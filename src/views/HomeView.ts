@@ -1,23 +1,23 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from "../Registry";
-import { AreaCardConfig, StackCardConfig } from "../types/homeassistant/panels/lovelace/cards/types";
-import { PersonCardConfig } from "../types/lovelace-mushroom/cards/person-card-config";
-import { TemplateCardConfig } from "../types/lovelace-mushroom/cards/template-card-config";
-import { isSupportedBadge } from "../types/strategy/strategy-generics";
-import { ViewConfig } from "../types/strategy/strategy-views";
-import { sanitizeClassName } from "../utilities/auxiliaries";
-import { logMessage, lvlError, lvlInfo } from "../utilities/debug";
-import { localize } from "../utilities/localize";
-import AbstractView from "./AbstractView";
-import registryFilter from "../utilities/RegistryFilter";
-import { LovelaceViewConfig } from "../types/homeassistant/data/lovelace/config/view";
-import { LovelaceBadgeConfig } from "../types/homeassistant/data/lovelace/config/badge";
-import { LovelaceSectionRawConfig } from "../types/homeassistant/data/lovelace/config/section";
-import { ActionConfig } from "../types/homeassistant/data/lovelace/config/action";
-import HeaderCard from "../cards/HeaderCard";
-import { stackHorizontal } from "../utilities/cardStacking";
-import { LovelaceCardConfig } from "../types/homeassistant/data/lovelace/config/card";
+import { Registry } from '../Registry';
+import { AreaCardConfig, StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
+import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
+import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
+import { isSupportedBadge } from '../types/strategy/strategy-generics';
+import { ViewConfig } from '../types/strategy/strategy-views';
+import { sanitizeClassName } from '../utilities/auxiliaries';
+import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
+import { localize } from '../utilities/localize';
+import AbstractView from './AbstractView';
+import registryFilter from '../utilities/RegistryFilter';
+import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
+import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
+import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
+import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
+import HeaderCard from '../cards/HeaderCard';
+import { stackHorizontal } from '../utilities/cardStacking';
+import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 
 /**
  * Home View Class.
