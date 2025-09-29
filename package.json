@@ -30,10 +30,10 @@
     "deepmerge": "^4"
   },
   "devDependencies": {
-    "@types/semver": "^7.7.0",
-    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@types/semver": "^7.7.1",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.32.1",
-    "eslint": "^9.34.0",
+    "eslint": "^9.36.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "home-assistant-js-websocket": "^9.5.0",
