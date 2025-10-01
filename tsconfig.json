@@ -15,13 +15,16 @@
     // 4. Interop and Imports
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    // 5. Type Checking and Strictness
+    // 5. Experimental Features
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    // 6. Type Checking and Strictness
     "strict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
-    // 6. Project Structure and Build Integrity
+    // 7. Project Structure and Build Integrity
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
