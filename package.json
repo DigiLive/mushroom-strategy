@@ -30,22 +30,22 @@
     "deepmerge": "^4"
   },
   "devDependencies": {
-    "@types/semver": "^7.7.0",
-    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@types/semver": "^7.7.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.32.1",
-    "eslint": "^9.34.0",
+    "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "home-assistant-js-websocket": "^9.5.0",
     "markdownlint-cli2": "^0.18.1",
     "prettier": "^3.6.2",
-    "semver": "^7.7.2",
+    "semver": "^7.7.3",
     "superstruct": "^2.0.2",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2",
+    "typescript": "^5.9.3",
     "version-bump-prompt": "^6",
-    "webpack": "^5.101.3",
+    "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1"
   },
   "scripts": {
