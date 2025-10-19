@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Wiki
-    url: https://github.com/DigiLive/mushroom-strategy/wiki
-    about: Please consult to Wiki for more information about the strategy and how to configure it.
+  - name: Manual
+    url: https://digilive.github.io/mushroom-strategy/
+    about: Please consult the manual for more information about the strategy and how to configure it.
   - name: Discussions
     url: https://github.com/DigiLive/mushroom-strategy/discussions
     about: Discuss any other topic about the strategy over here.

@@ -9,7 +9,7 @@ Each configuration is identified by a domain name and can have the following opt
 | hide_config_entities     | boolean | `true`            | Set to `false` to include config-entities to the dashboard.               |
 | hide_diagnostic_entities | boolean | `true`            | Set to `false` to include diagnostic-entities to the dashboard.           |
 | order                    | number  | `unset`           | Ordering position of the domain entities in a view.                       |
-| showControls             | boolean | `true`            | Weather to show controls in a view, to switch all entities of the domain. |
+| showControls             | boolean | `true`            | Whether to show controls in a view, to switch all entities of the domain. |
 | stack_count              | object  | `{_: 1}`          | Cards per row.[^1]                                                        |
 | title                    | string  | `domain specific` | Title of the domain in a view.                                            |
 

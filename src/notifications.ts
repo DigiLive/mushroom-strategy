@@ -10,4 +10,14 @@ export const NOTIFICATIONS = [
     fromVersion: '2.3.5',
     toVersion: '3.0.0',
   },
+  {
+    storageKey: 'greetingCard_poll',
+    title: 'Mushroom Strategy',
+    message:
+      '## Greeting Card Poll\n' +
+      "Please follow below link to read about the greeting card's future and cast your vote.\n" +
+      'https://github.com/DigiLive/mushroom-strategy/discussions/259',
+    fromVersion: '2.4.1',
+    toVersion: '3.0.0',
+  },
 ];
