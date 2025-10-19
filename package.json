@@ -37,6 +37,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "home-assistant-js-websocket": "^9.5.0",
+    "husky": "^9.1.7",
     "markdownlint-cli2": "^0.18.1",
     "prettier": "^3.6.2",
     "semver": "^7.7.3",
@@ -56,6 +57,7 @@
     "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" --fix",
     "build-dev": "webpack --config webpack.dev.config.ts",
     "build": "webpack",
-    "bump": "bump --preid alpha package.json package-lock.json README.md ./docs/index.md ./src/mushroom-strategy.ts"
+    "bump": "bump --preid alpha package.json package-lock.json README.md ./docs/index.md ./src/mushroom-strategy.ts",
+    "prepare": "husky"
   }
 }
