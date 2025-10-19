@@ -26,35 +26,22 @@ strategy:
         order: 1
         stack_count: 2
         title: "My cool lights"
-    chips:
+    badges:
       weather_entity: weather.forecast_home
       climate_count: false
       cover_count: false
-      extra_chips:
-        - type: conditional
-          conditions:
-            - entity: lock.front_door
-              state: unlocked
-          chip:
-            type: entity
-            entity: lock.front_door
-            icon_color: red
-            content_info: none
-            icon: ''
-            use_entity_picture: false
-            tap_action:
-              action: toggle
-        - type: conditional
-          conditions:
-            - entity: cover.garage_door
-              state_not: closed
-          chip:
-            type: entity
-            entity: cover.garage_door
-            icon_color: red
-            content_info: none
-            tap_action:
-              action: toggle
+      extra_badges:
+        - type: custom:mushroom-template-badge
+          content: Hello
+          icon: mdi:mushroom
+          color: red
+        - type: entity
+          show_name: false
+          show_state: true
+          show_icon: true
+          entity: light.kitchen
+          tap_action:
+            action: toggle
     areas:
       _:
         type: default
@@ -63,8 +50,8 @@ strategy:
         icon: mdi:television
         icon_color: green
         extra_cards:
-          - type: custom:mushroom-chips-card
-            chips:
+          - type: custom:mushroom-badges-card
+            badges:
               - type: entity
                 entity: sensor.family_room_temperature
                 icon: mdi:thermometer
