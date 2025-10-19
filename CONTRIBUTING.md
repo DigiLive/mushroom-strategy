@@ -157,44 +157,10 @@ You can contribute to this project by following the *fork → clone → edit →
 
 #### Prevent changes to the distribution directory
 
-We must not commit any changes to directory `dist` or its content.
-As a help, you can configure your local git repository to ignore this directory.
+We must not commit any changes to the `dist` directory or its content.
 
-```shell
-git update-index --skip-worktree ./dist/
-git update-index --skip-worktree ./dist/name-of-the-file-to-ignore.js
-```
-
-To revert above, run the following commands:
-
-```shell
-git update-index --no-skip-worktree ./dist/
-git update-index --skip-worktree ./dist/name-of-the-file-to-ignore.js
-```
-
-##### Additional method
-
-You can add the directory to the `exclude` file of the repository.
-However, the directory or its content will not be ignored once it's already tracked.
-The syntax is the same as for the `.gitignore` file.
-
-Example of file `<project-directory>/.git/info/exclude`:
-
-```gitexclude
-# git ls-files --others --exclude-from=.git/info/exclude
-# Lines that start with '#' are comments.
-# For a project mostly in C, the following would be a good set of
-# exclude patterns (uncomment them if you want to use them):
-# *.[oa]
-# *~
-/dist/
-```
-
-Note: If you already have unstaged changes, you must run the following git command after editing your ignore-patterns:
-
-```shell
-git update-index --assume-unchanged ./dist/
-```
+This is enforced by a pre-commit hook that will prevent any commits to the `dist/` directory.
+The hook is automatically set up when you run `npm install`.
 
 ## Style Guides
 
