@@ -97,14 +97,14 @@ export class PersistentNotification {
    * @param customKey An optional custom key to use for storage.
    */
   public async dismissNotification(storageKey: string, customKey?: string): Promise<void> {
-    storageKey = this.compileStorageKey(storageKey, customKey);
+    const compiledKey = this.compileStorageKey(storageKey, customKey);
 
     try {
-      const stored = localStorage.getItem(storageKey);
+      const stored = localStorage.getItem(compiledKey);
       const notification = stored ? (JSON.parse(stored) as StoredNotification) : null;
 
       // Clear from storage
-      localStorage.removeItem(storageKey);
+      localStorage.removeItem(compiledKey);
 
       // Clear the notification if notificationId is provided
       if (notification?.hassId) {
@@ -115,9 +115,9 @@ export class PersistentNotification {
         return;
       }
 
-      logMessage(lvlDebug, `Notification '${storageKey}' cleared from storage!`);
+      logMessage(lvlDebug, `Notification '${compiledKey}' cleared from storage!`);
     } catch (error) {
-      logMessage(lvlError, `Failed to clear notification '${storageKey}'!`, error);
+      logMessage(lvlError, `Failed to clear notification '${compiledKey}'!`, error);
     }
   }
 
@@ -129,10 +129,10 @@ export class PersistentNotification {
    * @returns True if the notification has been shown before, false otherwise.
    */
   public hasBeenShown(storageKey: string, customKey?: string): boolean {
-    storageKey = this.compileStorageKey(storageKey, customKey);
+    const compiledKey = this.compileStorageKey(storageKey, customKey);
 
     try {
-      const stored = localStorage.getItem(storageKey);
+      const stored = localStorage.getItem(compiledKey);
       if (!stored) {
         return false;
       }
@@ -171,7 +171,7 @@ export class PersistentNotification {
    * @param notificationId Id of the notification in Home Assistant.
    */
   private markAsShown(storageKey: string, version: string, notificationId?: string): void {
-    storageKey = this.compileStorageKey(storageKey);
+    const compiledKey = this.compileStorageKey(storageKey);
 
     const notification: StoredNotification = {
       shown: true,
@@ -181,7 +181,7 @@ export class PersistentNotification {
     };
 
     try {
-      localStorage.setItem(storageKey, JSON.stringify(notification));
+      localStorage.setItem(compiledKey, JSON.stringify(notification));
     } catch (error) {
       logMessage(lvlError, 'Failed to save the notification state!', error);
     }

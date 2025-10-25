@@ -330,12 +330,12 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   /**
    * Sorts the entries based on the specified keys in priority order.
    *
-   * @template K - The type of keys to sort by (must be keys of T).
-   * @param {K[]} keys - Array of property keys to sort by, in order of priority.
+   * @param {Array<keyof T>} keys - Array of property keys to sort by, in order of priority.
    * @param {'asc' | 'desc'} [direction='asc'] - Sort direction.
    * @returns {RegistryFilter<T>} A new RegistryFilter instance with sorted entries.
+   * @template T - The type of registry entry
    */
-  orderBy<K extends keyof T>(keys: K[], direction: 'asc' | 'desc' = 'asc'): RegistryFilter<T> {
+  orderBy(keys: K[], direction: 'asc' | 'desc' = 'asc'): RegistryFilter<T> {
     // Helper to get the first defined value from an entry for the given keys.
     const getValue = (entry: T, keys: K[]): unknown => {
       for (const key of keys) {

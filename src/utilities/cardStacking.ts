@@ -26,7 +26,7 @@ export function stackHorizontal(
   defaultCount: number = 2,
   columnCounts?: {
     [key: string]: number | undefined;
-  },
+  }
 ): LovelaceCardConfig[] {
   if (cardConfigurations.length <= 1) {
     return cardConfigurations;

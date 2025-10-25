@@ -50,7 +50,7 @@ class ClimateView extends AbstractView {
     this.initializeViewConfig(
       ClimateView.getDefaultConfig(),
       customConfiguration,
-      ClimateView.getViewHeaderCardConfig(),
+      ClimateView.getViewHeaderCardConfig()
     );
   }
 }
