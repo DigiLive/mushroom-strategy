@@ -33,7 +33,7 @@ interface StoredNotification {
 
 /**
  * A utility class for managing persistent notifications in Home Assistant.
- * Handles showing, dismissing and tracking notifications to prevent duplicates.
+ * Handles showing, dismissing, and tracking notifications to prevent duplicates.
  *
  * Notifications are stored in localStorage and can be versioned.
  *
