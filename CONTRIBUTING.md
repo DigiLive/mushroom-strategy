@@ -44,7 +44,7 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 > [!TIP]
 > Before you ask a question, we assume that you have read the [README](README.md) file or the
-> available resources at the [Wiki][wikiUrl] or [Discussions][discussionsUrl].
+> available resources at the [Documentation][documentationUrl] or [Discussions][discussionsUrl].
 
 Before you ask a question, it is best to search for existing [discussions][discussionsUrl] or [Issues][issuesUrl]
 that might
@@ -79,7 +79,7 @@ Please complete the following steps in advance to help us fix any potential bug 
 
 - Make sure that you are using the latest version.
 - Determine if your bug is really a bug and not an error on your side, e.g., using incompatible environment
-  components/versions (Make sure that you have read the [Wiki][wikiUrl].
+  components/versions (Make sure that you have read the [Documentation][documentationUrl].
   If you are looking for support, you might want to check [this section](#i-have-a-question)).
 - To see if other users have experienced (and potentially already solved) the same issue you are having, check if there
   is not already a report existing for your issue in the [issue tracker][issuesUrl].
@@ -128,7 +128,7 @@ suggestions.
 #### Before Submitting an Enhancement
 
 - Make sure that you are using the latest version.
-- Read the [Wiki][wikiUrl] carefully and find out if the functionality is already covered, maybe by an
+- Read the [Documentation][documentationUrl] carefully and find out if the functionality is already covered, maybe by an
   individual configuration.
 - Search the [issue tracker][issuesUrl] or [Pull Requests][pullRequestUrl] to see if the enhancement has already been
   suggested.  
@@ -157,44 +157,10 @@ You can contribute to this project by following the *fork → clone → edit →
 
 #### Prevent changes to the distribution directory
 
-We must not commit any changes to directory `dist` or its content.
-As a help, you can configure your local git repository to ignore this directory.
+We must not commit any changes to the `dist` directory or its content.
 
-```shell
-git update-index --skip-worktree ./dist/
-git update-index --skip-worktree ./dist/name-of-the-file-to-ignore.js
-```
-
-To revert above, run the following commands:
-
-```shell
-git update-index --no-skip-worktree ./dist/
-git update-index --skip-worktree ./dist/name-of-the-file-to-ignore.js
-```
-
-##### Additional method
-
-You can add the directory to the `exclude` file of the repository.
-However, the directory or its content will not be ignored once it's already tracked.
-The syntax is the same as for the `.gitignore` file.
-
-Example of file `<project-directory>/.git/info/exclude`:
-
-```gitexclude
-# git ls-files --others --exclude-from=.git/info/exclude
-# Lines that start with '#' are comments.
-# For a project mostly in C, the following would be a good set of
-# exclude patterns (uncomment them if you want to use them):
-# *.[oa]
-# *~
-/dist/
-```
-
-Note: If you already have unstaged changes, you must run the following git command after editing your ignore-patterns:
-
-```shell
-git update-index --assume-unchanged ./dist/
-```
+This is enforced by a pre-commit hook that will prevent any commits to the `dist/` directory.
+The hook is automatically set up when you run `npm install`.
 
 ## Style Guides
 
@@ -217,6 +183,6 @@ This guide is based on the **contributing-gen**. [Make your own](https://github.
 
 [discussionsUrl]: https://github.com/DigiLive/mushroom-strategy/discussions
 
-[wikiUrl]: https://github.com/DigiLive/mushroom-strategy/wiki
+[documentationUrl]: https://digilive.github.io/mushroom-strategy/
 
 [sponsorUrl]: https://github.com/sponsors/DigiLive

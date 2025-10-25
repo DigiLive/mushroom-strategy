@@ -27,9 +27,9 @@ See [Linking a pull request to an issue](https://docs.github.com/en/issues/track
 
 - ...
 
-## Wiki Updates
+## Documentation Updates
 
-[If this bug feature requires any updates to the Wiki, please provide details here.]
+[If this bug feature requires any updates to the documentation, please provide details here.]
 
 ---
 

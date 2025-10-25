@@ -1,0 +1,5 @@
+if git diff --cached --name-only --diff-filter=ACMR | grep -q '^dist/'; then
+    echo "Error: Direct commits to dist/ are not allowed."
+    echo "These files are managed by CI. Use 'git commit --no-verify' if absolutely necessary."
+    exit 1
+fi
