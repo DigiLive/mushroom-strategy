@@ -50,9 +50,9 @@ Describe the actual behavior that occurred due to the bug.
 
 ---
 
-## Wiki Updates
+## Documentation Updates
 
-[If this bug fix requires any updates to the Wiki, please provide details here.]
+[If this bug fix requires any updates to the documentation, please provide details here.]
 
 ---
 
