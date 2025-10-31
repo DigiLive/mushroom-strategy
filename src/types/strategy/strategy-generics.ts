@@ -210,10 +210,12 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
  * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
  * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
  * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
- * @property {{ Object }} home_view - List of views to add to the dashboard.
+ * @property {Object} home_view - List of views to add to the dashboard.
+ * @property {Record<HomeViewSections, boolean>} home_view.hidden - Visibility settings for the home view sections.
+ * @property {Object} home_view.stack_count - Controls the number of cards per row in different sections.
+ * @property {number} home_view.stack_count._ - Default number of cards per row.
  * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
- * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show between the welcome card
- *                                                       and rooms cards.
+ * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show before the area cards.
  */
 export interface StrategyConfig {
   areas: { [S: string]: StrategyArea };
@@ -224,7 +226,7 @@ export interface StrategyConfig {
   extra_cards: LovelaceCardConfig[];
   extra_views: StrategyViewConfig[];
   home_view: {
-    hidden: HomeViewSections[];
+    hidden: Record<HomeViewSections, boolean>;
     stack_count: { _: number } & { [K in HomeViewSections]?: K extends 'areas' ? [number, number] : number };
   };
   views: Record<SupportedViews, StrategyViewConfig>;

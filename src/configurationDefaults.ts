@@ -49,7 +49,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       title: `${localize('sensor.binary')} ` + localize('sensor.sensors'),
       showControls: false,
       hidden: false,
-      stack_count: 2, // TODO: Add to wiki. also for other configurations.
+      stack_count: 2,
     },
     camera: {
       title: localize('camera.cameras'),
@@ -154,7 +154,13 @@ export const ConfigurationDefaults: StrategyDefaults = {
   extra_cards: [],
   extra_views: [],
   home_view: {
-    hidden: [],
+    hidden: {
+      areas: false,
+      areasTitle: false,
+      badges: false,
+      greeting: true,
+      persons: false,
+    },
     stack_count: {
       _: 2,
     },
