@@ -14,10 +14,10 @@ import registryFilter from '../utilities/RegistryFilter';
 import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
 import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
 import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
-import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
 import HeaderCard from '../cards/HeaderCard';
 import { stackHorizontal } from '../utilities/cardStacking';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
+import GreetingCard from '../cards/GreetingCard';
 
 /**
  * Home View Class.
@@ -62,32 +62,6 @@ class HomeView extends AbstractView {
    * The configuration includes the card configurations which are created by createCardConfigurations().
    */
   async getView(): Promise<LovelaceViewConfig> {
-    if (this.baseConfiguration.header && !Registry.strategyOptions.home_view.hidden.includes('greeting')) {
-      this.baseConfiguration.header.card = {
-        type: 'custom:mushroom-template-card',
-        primary: `{% set time = now().hour %}
-           {% if (time >= 18) %}
-             ${localize('generic.good_evening')},{{user}}!
-           {% elif (time >= 12) %}
-             ${localize('generic.good_afternoon')}, {{user}}!
-           {% elif (time >= 6) %}
-             ${localize('generic.good_morning')}, {{user}}!
-           {% else %}
-             ${localize('generic.hello')}, {{user}}! {% endif %}`,
-        icon: 'mdi:hand-wave',
-        icon_color: 'orange',
-        tap_action: {
-          action: 'none',
-        } as ActionConfig,
-        double_tap_action: {
-          action: 'none',
-        } as ActionConfig,
-        hold_action: {
-          action: 'none',
-        } as ActionConfig,
-      } as TemplateCardConfig;
-    }
-
     return {
       ...this.baseConfiguration,
       badges: await this.createBadgeSection(),
@@ -163,8 +137,8 @@ class HomeView extends AbstractView {
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
   private async createBadgeSection(): Promise<LovelaceBadgeConfig[] | undefined> {
-    if (Registry.strategyOptions.home_view.hidden.includes('badges')) {
-      // The section is hidden.
+    if (Registry.strategyOptions.home_view.hidden.badges) {
+      logMessage(lvlInfo, 'Badges are hidden.');
       return;
     }
 
@@ -227,7 +201,11 @@ class HomeView extends AbstractView {
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
   private async createPersonCards(): Promise<StackCardConfig | undefined> {
-    if (Registry.strategyOptions.home_view.hidden.includes('persons')) {
+    const greetingCard = Registry.strategyOptions.home_view.hidden.greeting
+      ? logMessage(lvlInfo, 'Greeting card is hidden.')
+      : new GreetingCard().getCard();
+
+    if (Registry.strategyOptions.home_view.hidden.persons) {
       logMessage(lvlInfo, 'Persons section is hidden.');
       return;
     }
@@ -247,7 +225,7 @@ class HomeView extends AbstractView {
         columns: 'full',
       },
       cards: stackHorizontal(
-        cardConfigurations,
+        greetingCard ? [greetingCard, ...cardConfigurations] : cardConfigurations,
         Registry.strategyOptions.home_view.stack_count['persons'] ?? Registry.strategyOptions.home_view.stack_count['_']
       ),
     };
@@ -256,11 +234,14 @@ class HomeView extends AbstractView {
   /**
    * Create the area cards to include in the view.
    *
-   * Area cards are grouped into two areas per row.
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
   private async createAreaCards(): Promise<StackCardConfig | undefined> {
-    if (Registry.strategyOptions.home_view.hidden.includes('areas')) {
+    const titleCard = Registry.strategyOptions.home_view.hidden.areasTitle
+      ? logMessage(lvlInfo, 'Areas title is hidden.')
+      : new HeaderCard({}, { title: localize('generic.areas') }).createCard();
+
+    if (Registry.strategyOptions.home_view.hidden.areas) {
       logMessage(lvlInfo, 'Areas section is hidden.');
       return;
     }
@@ -292,17 +273,17 @@ class HomeView extends AbstractView {
       );
     }
 
-    if (!Registry.strategyOptions.home_view.hidden.includes('areasTitle')) {
-      cardConfigurations.unshift(new HeaderCard({}, { title: localize('generic.areas') }).createCard());
-    }
-
     return {
       type: 'vertical-stack',
       columns: 'full',
-      cards: stackHorizontal(cardConfigurations, Registry.strategyOptions.home_view.stack_count['_'], {
-        'custom:mushroom-template-card': Registry.strategyOptions.home_view.stack_count.areas?.[0],
-        area: Registry.strategyOptions.home_view.stack_count.areas?.[1],
-      }),
+      cards: stackHorizontal(
+        titleCard ? [titleCard, ...cardConfigurations] : cardConfigurations,
+        Registry.strategyOptions.home_view.stack_count['_'],
+        {
+          'custom:mushroom-template-card': Registry.strategyOptions.home_view.stack_count.areas?.[0],
+          area: Registry.strategyOptions.home_view.stack_count.areas?.[1],
+        }
+      ),
     };
   }
 }
