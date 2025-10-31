@@ -33,7 +33,7 @@ class SwitchBadge extends AbstractBadge {
       tap_action: {
         action: 'perform-action',
         confirmation: {
-          text: localize('switch.chip_confirmation'),
+          text: localize('switch.badge_confirmation'),
         },
         perform_action: 'switch.turn_off',
         target: {

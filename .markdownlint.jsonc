@@ -5,14 +5,18 @@
     "line_length": 120,
     "code_block_line_length": 120,
     "heading_line_length": 80,
-    "tables": false,
+    "tables": false
   },
   "MD024": {
-    "siblings_only": true,
+    "siblings_only": true
   },
   "MD033": {
-    "allowed_elements": ["br", "summary", "details"],
+    "allowed_elements": [
+      "br",
+      "summary",
+      "details"
+    ]
   },
   "MD040": false,
-  "MD046": false,
+  "MD046": false
 }

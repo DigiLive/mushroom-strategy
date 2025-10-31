@@ -1,6 +1,6 @@
 # ⚙️ Overview
 
-The dashboard can be highly customized using the `options` parameter in the yaml configuration of your dashboard.
+The dashboard can be highly customized using the `options` parameter in the YAML configuration of your dashboard.
 
    ```yaml
    strategy:
@@ -12,8 +12,8 @@ The dashboard can be highly customized using the `options` parameter in the yaml
 By default,
 
 - All views and domains are enabled.
-- All chips are enabled and count the number of "active" entities.
-- For the weather chip, the entity is selected automatically unless you specify one.
+- All badges are enabled and count the number of "active" entities.
+- For the weather badge, the entity is selected automatically unless you specify one.
 - All entities without an area are added to the `undisclosed` area.
 - All configuration- and diagnostic entities are hidden.
 
@@ -25,7 +25,7 @@ The options are divided into groups as described below.
 | card_options       | object         | empty                 | See [Card Options](card-options.md).                                                                                                      |
 | domains            | object         | All supported domains | See [Domain Options](domain-options.md).                                                                                                  |
 | home_view          | object         | unset                 | See [Home View Options](home-view-options.md).                                                                                            |
-| chips              | object         | All supported chips   | See [Chip Options](home-view-options.md#chip-options).                                                                                    |
+| badges             | object         | All supported badges  | See [Badge Options](home-view-options.md#badge-options).                                                                                  |
 | quick_access_cards | array of cards | empty                 | List of cards to show between the greeting card and the area cards.<br>See [Quick Access Cards](home-view-options.md#quick-access-cards). |
 | extra_cards        | array of cards | empty                 | List of cards to show below the area cards.<br>See [extra Cards](home-view-options.md#extra-cards).                                       |
 | views              | object         | All supported views   | See [View Options](view-options.md).                                                                                                      |
