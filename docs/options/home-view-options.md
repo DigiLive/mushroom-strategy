@@ -2,10 +2,10 @@
 
 The `home_view` group enables you to specify the configuration of the Home view.
 
-| Option        | type   | default  | Description                                   |
-|:--------------|:-------|:---------|:----------------------------------------------|
-| `hidden`      | array  | `[]`     | Array of sections to hide from the home view. |
-| `stack_count` | object | `{_: 2}` | Cards per row.                                |
+| Option        | type   | default            | Description                                   |
+|:--------------|:-------|:-------------------|:----------------------------------------------|
+| `hidden`      | object | `{greeting: true}` | Array of sections to hide from the home view. |
+| `stack_count` | object | `{_: 2}`           | Cards per row.                                |
 
 ---
 
@@ -27,8 +27,8 @@ strategy:
   options:
     home_view:
       hidden:
-        - greeting
-        - areasTitle
+        greeting: false
+        areasTitle: true
 ```
 
 ---

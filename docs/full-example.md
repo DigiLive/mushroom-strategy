@@ -13,8 +13,8 @@ strategy:
         icon: mdi:toggle-switch
     home_view:
       hidden:
-        - areasTitle
-        - greeting
+        greeting: false
+        areasTitle: true
       stack_count:
         areas: [2, 1]
         persons: 3
