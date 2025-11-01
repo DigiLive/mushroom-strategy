@@ -3,7 +3,7 @@ name: PR-dependency Checker
 on:
   # pull_request_target:
   pull_request:
-    types: [opened, edited, closed, reopened]
+    types: [opened, edited, closed, reopened, synchronize]
 
 permissions:
   checks: read
