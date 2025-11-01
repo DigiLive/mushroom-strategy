@@ -28,8 +28,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const core = require('@actions/core');
-
             try {
               // Get the check run that just completed
               const { data: { check_runs } } = await github.rest.checks.listForRef({
