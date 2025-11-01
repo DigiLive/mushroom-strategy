@@ -22,6 +22,7 @@ jobs:
 
       - name: Process and post-check result
         uses: actions/github-script@v7
+        if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
