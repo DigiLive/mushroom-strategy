@@ -1,7 +1,6 @@
 name: PR-dependency Checker
 
 on:
-  # pull_request_target:
   pull_request:
     types: [opened, edited, closed, reopened, synchronize]
 
@@ -16,7 +15,7 @@ jobs:
     name: Check Dependencies
     steps:
       - uses: gregsdennis/dependencies-action@v1.4.1
-        id: deps
+        id: dependencies
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,10 +25,19 @@ jobs:
         if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STEPS_DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
         with:
           script: |
+            console.log('Waiting 10 seconds for Check Run finalization...');
+            await new Promise(r => setTimeout(r, 10000));
+            console.log('Wait complete. Querying Check Run...');
+
+            const stepOutcome = process.env.STEPS_DEPENDENCIES_OUTCOME;
+            let newCommentBody = '';
+            let hasIssues = false;
+
             try {
-              // Get the check run that just completed
+              // 1. Try to get the check run that just completed (for annotations).
               const { data: { check_runs } } = await github.rest.checks.listForRef({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -40,53 +48,58 @@ jobs:
               });
 
               if (check_runs.length === 0) {
-                console.log('No check runs found');
-                return;
+                // The API call probably failed.
+                console.log('No check runs found via API. Using the step outcome for status.');
+
+                // Set a generic message based on the guaranteed step outcome.
+                if (stepOutcome === 'failure') {
+                  newCommentBody = '## Dependency Checker\n```\nDependency check failed, but a detailed report is not yet available. Please check the logs.\n```';
+                  hasIssues = true;
+                } else {
+                  newCommentBody = '## Dependency Checker\n```\nAll dependencies are resolved!\n```';
+                }
+              } else {
+                const checkRun = check_runs[0];
+
+                // Get annotations from the check run.
+                const { data: annotations } = await github.rest.checks.listAnnotations({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  check_run_id: checkRun.id,
+                });
+
+                // Extract just the annotation messages.
+                const messages = annotations.map(a => a.message).filter(Boolean);
+                hasIssues = messages.length > 0;
+
+                // Create the comment body.
+                newCommentBody = `## Dependency Checker\n\`\`\`\n${messages.join('\n\n') ||
+                'All dependencies are resolved!'}\n\`\`\``;
               }
 
-              const checkRun = check_runs[0];
+              // 2. Manage blocked label.
+              if (stepOutcome === 'failure') {
+                await addBlockedLabel();
+              } else {
+                await removeBlockedLabel();
+              }
 
-              // Get annotations from the check run
-              const { data: annotations } = await github.rest.checks.listAnnotations({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                check_run_id: checkRun.id,
-              });
-
-              // Extract just the annotation messages
-              const messages = annotations.map(a => a.message).filter(Boolean);
-              const hasIssues = messages.length > 0;
-
-              // Create the comment body
-              const newCommentBody = `## Dependency Checker\n\`\`\`\n${messages.join('\n\n') || 'All dependencies are resolved!'}\n\`\`\``;
-
-              // Find existing comments from this action
+              // 3. Comment Management.
               const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
               });
 
-              // Find the most recent comment from this action
-              const existingComment = comments
-                .filter(comment =>
-                  comment.user.login === 'github-actions[bot]' &&
-                  comment.body.startsWith('## Dependency Checker')
-                )
-                .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
-
-              // Manage blocked label based on check run conclusion
-              if (checkRun.conclusion === 'failure') {
-                await addBlockedLabel();
-              } else {
-                await removeBlockedLabel();
-              }
+              const existingComment = comments.filter(comment =>
+                comment.user.login === 'github-actions[bot]' &&
+                comment.body.startsWith('## Dependency Checker')
+              ).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
 
               if (existingComment) {
-                // Compare with the most recent comment
                 const oldBody = existingComment.body.replace(/\r\n/g, '\n');
+
                 if (oldBody !== newCommentBody) {
-                  // Create new comment if content is different
                   await github.rest.issues.createComment({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -94,8 +107,7 @@ jobs:
                     body: newCommentBody
                   });
                 }
-              } else if (hasIssues || checkRun.conclusion === 'success') {
-                // Only create a new comment if there are messages, or it's a success
+              } else if (hasIssues || stepOutcome === 'success') {
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -104,12 +116,12 @@ jobs:
                 });
               }
 
-              // Set job status based on check run conclusion
-              if (checkRun.conclusion === 'failure') {
+              // 4. Set job status.
+              if (stepOutcome === 'failure') {
                 core.setFailed(newCommentBody);
               }
 
-              // Helper function to add blocked label
+              // Helper function to add a blocked label to the PR.
               async function addBlockedLabel() {
                 try {
                   await github.rest.issues.addLabels({
@@ -120,15 +132,17 @@ jobs:
                   });
                 } catch (error) {
                   if (error.status !== 404) throw error;
+
                   // Label doesn't exist, create it first
                   await github.rest.issues.createLabel({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     name: 'blocked',
-                    color: 'd73a4a', // Red color
-                    description: 'This PR is blocked by dependencies'
+                    color: 'd93f0b',
+                    description: 'Resolving this issue or merging this PR is blocked by at least one other.'
                   });
-                  // Try adding again
+
+                  // Try adding the label again.
                   await github.rest.issues.addLabels({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
@@ -138,7 +152,7 @@ jobs:
                 }
               }
 
-              // Helper function to remove blocked label
+              // Helper function to remove the blocked label from the PR.
               async function removeBlockedLabel() {
                 try {
                   await github.rest.issues.removeLabel({
