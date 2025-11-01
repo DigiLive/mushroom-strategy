@@ -5,14 +5,154 @@ on:
     types: [opened, edited, closed, reopened]
 
 permissions:
-  issues: read
-  pull-requests: read
+  checks: read
+  pull-requests: write
+  contents: read
 
 jobs:
   check_dependencies:
     runs-on: ubuntu-latest
     name: Check Dependencies
     steps:
-      - uses: gregsdennis/dependencies-action@main
+      - uses: gregsdennis/dependencies-action@v1.4.1
+        id: deps
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Process and post-check result
+        if: always() && (steps.deps.outcome == 'success' || steps.deps.outcome == 'failure')
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const core = require('@actions/core');
+
+            try {
+              // Get the check run that just completed
+              const { data: { check_runs } } = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `refs/pull/${context.issue.number}/head`,
+                check_name: 'Check Dependencies',
+                status: 'completed',
+                filter: 'latest'
+              });
+
+              if (check_runs.length === 0) {
+                console.log('No check runs found');
+                return;
+              }
+
+              const checkRun = check_runs[0];
+
+              // Get annotations from the check run
+              const { data: annotations } = await github.rest.checks.listAnnotations({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_run_id: checkRun.id,
+              });
+
+              // Extract just the annotation messages
+              const messages = annotations.map(a => a.message).filter(Boolean);
+              const hasIssues = messages.length > 0;
+
+              // Create the comment body
+              const newCommentBody = `## Dependency Checker\n\`\`\`\n${messages.join('\n\n') || 'All dependencies are resolved!'}\n\`\`\``;
+
+              // Find existing comments from this action
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+
+              // Find the most recent comment from this action
+              const existingComment = comments
+                .filter(comment =>
+                  comment.user.login === 'github-actions[bot]' &&
+                  comment.body.startsWith('## Dependency Checker')
+                )
+                .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
+
+              // Manage blocked label based on check run conclusion
+              if (checkRun.conclusion === 'failure') {
+                await addBlockedLabel();
+              } else {
+                await removeBlockedLabel();
+              }
+
+              if (existingComment) {
+                // Compare with the most recent comment
+                const oldBody = existingComment.body.replace(/\r\n/g, '\n');
+                if (oldBody !== newCommentBody) {
+                  // Create new comment if content is different
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    body: newCommentBody
+                  });
+                }
+              } else if (hasIssues || checkRun.conclusion === 'success') {
+                // Only create a new comment if there are messages or it's a success
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: newCommentBody
+                });
+              }
+
+              // Set job status based on check run conclusion
+              if (checkRun.conclusion === 'failure') {
+                core.setFailed('Dependency check failed. Please check the PR comments for details.');
+              }
+
+              // Helper function to add blocked label
+              async function addBlockedLabel() {
+                try {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    labels: ['blocked']
+                  });
+                } catch (error) {
+                  if (error.status !== 404) throw error;
+                  // Label doesn't exist, create it first
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: 'blocked',
+                    color: 'd73a4a', // Red color
+                    description: 'This PR is blocked by dependencies'
+                  });
+                  // Try adding again
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    labels: ['blocked']
+                  });
+                }
+              }
+
+              // Helper function to remove blocked label
+              async function removeBlockedLabel() {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    name: 'blocked'
+                  });
+                } catch (error) {
+                  // Ignore if label doesn't exist
+                  if (error.status !== 404) throw error;
+                }
+              }
+            } catch (error) {
+              core.setFailed(`Error in dependency check workflow: ${error.message}`);
+            }
