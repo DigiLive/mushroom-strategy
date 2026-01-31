@@ -31,23 +31,23 @@
   },
   "devDependencies": {
     "@types/semver": "^7.7.1",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/eslint-plugin": "^8.48.0",
     "@typescript-eslint/parser": "^8.32.1",
-    "eslint": "^9.38.0",
+    "bumpp": "^10.3.2",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "home-assistant-js-websocket": "^9.5.0",
+    "home-assistant-js-websocket": "^9.6.0",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
-    "markdownlint-cli2": "^0.18.1",
-    "prettier": "^3.6.2",
+    "markdownlint-cli2": "^0.19.1",
+    "prettier": "^3.7.3",
     "semver": "^7.7.3",
     "superstruct": "^2.0.2",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "version-bump-prompt": "^6",
-    "webpack": "^5.102.1",
+    "webpack": "^5.103.0",
     "webpack-cli": "^6.0.1"
   },
   "scripts": {
@@ -58,7 +58,7 @@
     "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" --fix",
     "build-dev": "webpack --config webpack.dev.config.ts",
     "build": "webpack",
-    "bump": "bump --preid alpha package.json package-lock.json README.md ./docs/index.md ./src/mushroom-strategy.ts",
+    "bump": "bumpp --preid alpha --no-commit --no-tag --no-push package.json package-lock.json README.md ./docs/index.md ./src/mushroom-strategy.ts",
     "prepare": "is-ci || husky"
   }
 }

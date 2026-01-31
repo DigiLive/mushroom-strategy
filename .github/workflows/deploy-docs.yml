@@ -22,7 +22,7 @@ jobs:
       changed: ${{ steps.check_files.outputs.any_changed }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -54,7 +54,7 @@ jobs:
           private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ steps.generate_token.outputs.token }}
           fetch-depth: 0
