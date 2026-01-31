@@ -156,9 +156,9 @@ abstract class AbstractView {
 
     this.baseConfiguration.headerCardConfiguration = {
       ...this.baseConfiguration.headerCardConfiguration,
-      showControls:
-        Registry.strategyOptions.domains[this.domain as Exclude<SupportedDomains, 'home'>]?.showControls ??
-        Registry.strategyOptions.domains['_'].showControls,
+      show_controls:
+        Registry.strategyOptions.domains[this.domain as Exclude<SupportedDomains, 'home'>]?.show_controls ??
+        Registry.strategyOptions.domains['_'].show_controls,
     };
 
     this.viewHeaderCardConfiguration = new HeaderCard(this.getDomainTargets(), {

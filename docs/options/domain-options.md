@@ -9,7 +9,7 @@ Each configuration is identified by a domain name and can have the following opt
 | hide_config_entities     | boolean | `true`            | Set to `false` to include config-entities to the dashboard.               |
 | hide_diagnostic_entities | boolean | `true`            | Set to `false` to include diagnostic-entities to the dashboard.           |
 | order                    | number  | `unset`           | Ordering position of the domain entities in a view.                       |
-| showControls             | boolean | `true`            | Whether to show controls in a view, to switch all entities of the domain. |
+| show_controls            | boolean | `true`            | Whether to show controls in a view, to switch all entities of the domain. |
 | stack_count              | object  | `{_: 1}`          | Cards per row.[^1]                                                        |
 | title                    | string  | `domain specific` | Title of the domain in a view.                                            |
 
@@ -20,7 +20,7 @@ The number of cards per row can be configured with this option.
 !!! note
 
     * Domain `default` represents any other domain than supported by this strategy.
-    * The `showControls` option will default to false for domain which can't be controlled.
+    * The `show_controls` option will default to false for domain which can't be controlled.
     * The `hide_config_entities` and `hide_diagnostic_entities` options are only available as an "All domains" option.
 
 ---
@@ -44,7 +44,7 @@ strategy:
         order: 1
       switch:
         stack_count: 3
-        showControls: false
+        show_controls: false
       default: # All other domains
         hidden: true
 ```

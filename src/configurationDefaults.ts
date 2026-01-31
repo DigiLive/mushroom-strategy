@@ -42,23 +42,23 @@ export const ConfigurationDefaults: StrategyDefaults = {
     _: {
       hide_config_entities: undefined,
       hide_diagnostic_entities: undefined,
-      showControls: true,
+      show_controls: true,
       stack_count: 1,
     },
     binary_sensor: {
       title: `${localize('sensor.binary')} ` + localize('sensor.sensors'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
       stack_count: 2,
     },
     camera: {
       title: localize('camera.cameras'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     climate: {
       title: localize('climate.climates'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     cover: {
@@ -71,7 +71,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
     default: {
       title: localize('generic.miscellaneous'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     fan: {
@@ -84,7 +84,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
     input_select: {
       title: localize('input_select.input_selects'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     light: {
@@ -97,33 +97,33 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
     lock: {
       title: localize('lock.locks'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     media_player: {
       title: localize('media_player.media_players'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     number: {
       title: localize('generic.numbers'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     scene: {
       title: localize('scene.scenes'),
-      showControls: false,
+      show_controls: false,
       onService: 'scene.turn_on',
       hidden: false,
     },
     select: {
       title: localize('select.selects'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     sensor: {
       title: localize('sensor.sensors'),
-      showControls: false,
+      show_controls: false,
       hidden: false,
     },
     switch: {

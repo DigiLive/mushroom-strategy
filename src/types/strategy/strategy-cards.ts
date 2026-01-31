@@ -12,7 +12,7 @@ export type AbstractCardConfig = LovelaceCardConfig & EntitySharedConfig & Appea
 /**
  * Header Card Config.
  *
- * @property {boolean} [showControls] - False to hide controls.
+ * @property {boolean} [show_controls] - False to hide controls.
  * @property {string} [iconOn] - Icon to show for switching entities from the off state.
  * @property {string} [iconOff] - Icon to show for switching entities to the off state.
  * @property {string} [onService=none] - Service to call for switching entities from the off state.
@@ -20,7 +20,7 @@ export type AbstractCardConfig = LovelaceCardConfig & EntitySharedConfig & Appea
  */
 export interface StrategyHeaderCardConfig extends MushroomTitleCardConfig {
   type: 'custom:mushroom-title-card';
-  showControls?: boolean;
+  show_controls?: boolean;
   iconOn?: string;
   iconOff?: string;
   onService?: string;

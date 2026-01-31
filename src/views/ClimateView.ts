@@ -24,7 +24,7 @@ class ClimateView extends AbstractView {
       icon: 'mdi:thermostat',
       subview: false,
       headerCardConfiguration: {
-        showControls: false,
+        show_controls: false,
       },
     };
   }

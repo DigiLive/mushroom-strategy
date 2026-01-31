@@ -65,10 +65,10 @@ The mushroom strategy has badges that indicate the number of entities for a spec
 state.  
 Hidden/Disabled entities are excluded from this count.
 
-- Tapping a badge will set corresponding entities to an "inactive" state.[^1]  
+* Tapping a badge will set corresponding entities to an "inactive" state.[^1]  
   _**Note:** The Switch badge requires a confirmation before executing its tap action to prevent accidental toggling of
   all switches._
-- Holding a badge, will navigate to the corresponding view.
+* Holding a badge, will navigate to the corresponding view.
 
 [^1]: For some badges, the tap action is disabled.
 
