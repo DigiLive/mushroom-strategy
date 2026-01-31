@@ -154,7 +154,6 @@ class MushroomStrategy extends HTMLTemplateElement {
               const options = {
                 ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
                 ...Registry.strategyOptions.card_options?.[entity.entity_id],
-                type: 'custom:mini-graph-card',
                 entities: [entity.entity_id],
               };
               return new SensorCard(entity, options).getCard();
