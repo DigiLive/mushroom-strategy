@@ -80,7 +80,7 @@ abstract class AbstractView {
   /**
    * Create the configuration of the cards to include in the view.
    */
-  protected async createSections(): Promise<LovelaceSectionRawConfig[]> {
+  protected async createSections(): Promise<LovelaceCardConfig[] | LovelaceSectionRawConfig[]> {
     const viewCards: LovelaceCardConfig[] = [];
     const moduleName = sanitizeClassName(this.domain + 'Card');
     const DomainCard = (await import(`../cards/${moduleName}`)).default;
