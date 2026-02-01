@@ -59,7 +59,7 @@ class HomeView extends AbstractView {
   /**
    * Get a view configuration.
    *
-   * The configuration includes the card configurations which are created by createCardConfigurations().
+   * The configuration includes the card configurations which are created by createSections().
    */
   async getView(): Promise<LovelaceViewConfig> {
     return {

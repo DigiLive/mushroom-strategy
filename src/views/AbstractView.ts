@@ -55,7 +55,7 @@ abstract class AbstractView {
   /**
    * Get a view configuration.
    *
-   * The configuration includes the card configurations which are created by createCardConfigurations().
+   * The configuration includes the card configurations which are created by createSections().
    */
   async getView(): Promise<LovelaceViewConfig | false> {
     const sectionsCards = await this.createSections();
