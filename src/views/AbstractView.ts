@@ -51,7 +51,7 @@ abstract class AbstractView {
     return (this.constructor as unknown as ViewConstructor).domain;
   }
 
-  // noinspection JSUnusedGlobalSymbols Methodd is dynamically called.
+  // noinspection JSUnusedGlobalSymbols Method is dynamically called.
   /**
    * Get a view configuration.
    *
