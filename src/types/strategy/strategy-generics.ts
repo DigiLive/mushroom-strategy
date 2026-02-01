@@ -218,7 +218,7 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
  * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show before the area cards.
  */
 export interface StrategyConfig {
-  areas: { [S: string]: StrategyArea };
+  areas: { [S: string]: StrategyArea | AllAreasConfig };
   card_options: { [S: string]: CustomCardConfig };
   badges: BadgeConfiguration;
   debug: boolean;
@@ -266,6 +266,7 @@ export interface StrategyArea extends AreaRegistryEntry {
  */
 export interface AllAreasConfig {
   type?: string;
+  hidden?: boolean;
 }
 
 /**
