@@ -15,7 +15,7 @@ The following sections can be hidden from the Home view:
 
 * areas
 * areasTitle
-* chips
+* badges
 * greeting
 * persons
 
@@ -58,20 +58,21 @@ home_view:
 
 ---
 
-## Chip Options
+## Badge Options
 
-The mushroom strategy has chips that indicate the number of entities for a specific domain which are in an "active"
+Badges are widgets that sit at the top of a panel, above all the cards.  
+The mushroom strategy has badges that indicate the number of entities for a specific domain which are in an "active"
 state.  
 Hidden/Disabled entities are excluded from this count.
 
-- Tapping a chip will set corresponding entities to an "inactive" state.[^1]  
-  _**Note:** The Switch chip requires a confirmation before executing its tap action to prevent accidental toggling of
+- Tapping a badge will set corresponding entities to an "inactive" state.[^1]  
+  _**Note:** The Switch badge requires a confirmation before executing its tap action to prevent accidental toggling of
   all switches._
-- Holding a chip, will navigate to the corresponding view.
+- Holding a badge, will navigate to the corresponding view.
 
-[^1]: For some chips, the tap action is disabled.
+[^1]: For some badges, the tap action is disabled.
 
-The `chips` group enables you to specify its configuration of chips.
+The `badges` group enables you to specify its configuration of badges.
 
 | Name             | type    | default | Description                                 |
 |:-----------------|:--------|:--------|:--------------------------------------------|
@@ -80,15 +81,15 @@ The `chips` group enables you to specify its configuration of chips.
 | `cover_count`    | boolean | `false` | Number of covers not closed. No tap action. |
 | `switch_count`   | boolean | `false` | Number of switches on.                      |
 | `climate_count`  | boolean | `false` | Number of climate not off. No tap action.   |
-| `weather_entity` | string  | `auto`  | Entity id for the weather chip to use.      |
-| `extra_chips`    | array   | `[]`    | List of extra chips to show.                |
+| `weather_entity` | string  | `auto`  | Entity id for the weather badge to use.     |
+| `extra_badges`   | array   | `[]`    | List of extra badges to show.               |
 
-If `weather_entity` is set to `auto`, the weather chip uses the first entity of the weather domain it finds.  
+If `weather_entity` is set to `auto`, the weather badge uses the first entity of the weather domain it finds.  
 You can define a custom entity to use by setting an entity id.
 
 !!! note
 
-    To hide the weather chip, you should hide or disable the entity itself.
+    To hide the weather badge, you should hide or disable the entity itself.
 
 ### Example
 
@@ -96,7 +97,7 @@ You can define a custom entity to use by setting an entity id.
 strategy:
   type: custom:mushroom-strategy
   options:
-    chips:
+    badges:
       climate_count: false
       cover_count: false
       weather_entity: weather.forecast_home
@@ -104,15 +105,15 @@ strategy:
 
 ---
 
-## Extra Chips
+## Extra Badges
 
-To add custom chips, you can configure them in `extra_chips`.  
-See [Mushroom Chips][chipDocUrl]{: target="_blank"} for all available chips.
+To add custom badges, you can configure them in `extra_badges`.  
+See [Mushroom Badges][MushroomBadgeDocUrl]{: target="_blank"} and [Home Assistant Badges][HassBadgeDocUrl]{: target="_blank"}
 
 !!! tip
 
-    You can build your chips in a temporary card in another dashboard and copy the `chips` group from the YAML of that
-    card into group `extra_chips` of the strategy configuration. The YAML can be found in the Raw configuration editor.
+    You can build your badges in a temporary card in another dashboard and copy the `badges` group from the YAML of that
+    card into group `extra_badges` of the strategy configuration. The YAML can be found in the Raw configuration editor.
 
 ### Example
 
@@ -120,19 +121,19 @@ See [Mushroom Chips][chipDocUrl]{: target="_blank"} for all available chips.
 strategy:
   type: custom:mushroom-strategy
   options:
-    chips:
-      extra_chips:
-        - type: conditional
-          conditions:
-            - entity: lock.front_door
-              state: unlocked
-          chip:
-            type: entity
-            entity: lock.front_door
-            icon_color: red
-            content_info: none
-            tap_action:
-              action: toggle
+    badges:
+      extra_badges:
+        - type: custom:mushroom-template-badge
+          content: Hello
+          icon: mdi:mushroom
+          color: red
+        - type: entity
+          show_name: false
+          show_state: true
+          show_icon: true
+          entity: light.kitchen
+          tap_action:
+            action: toggle
 ```
 
 ---
@@ -172,7 +173,7 @@ strategy:
 
 ---
 
-### Extra Cards
+## Extra Cards
 
 The `extra_cards` group enables you to specify the configuration of additional cards in the view.
 These cards will be shown below the areas.
@@ -183,7 +184,7 @@ Each card can have the options as described at [Card Options](card-options.md).
     You can build your view in a temporary dashboard and copy the `views` group from the YAML of that dashboard into
     group `extra_cards` of the strategy configuration. The YAML can be found in the Raw configuration editor.
 
-#### Example
+### Example
 
 ```yaml
 strategy:
@@ -201,4 +202,5 @@ strategy:
 
 <!-- references -->
 
-[chipDocUrl]: https://github.com/piitaya/lovelace-mushroom/blob/main/docs/cards/chips.md
+[MushroomBadgeDocUrl]: https://github.com/piitaya/lovelace-mushroom/blob/main/docs/badges/template.md
+[HassBadgeDocUrl]: https://www.home-assistant.io/dashboards/badges/

@@ -116,7 +116,7 @@ class Registry {
     const { ConfigurationDefaults } = await import('./configurationDefaults');
 
     try {
-      Registry._strategyOptions = deepmerge(ConfigurationDefaults, info.config?.strategy?.options ?? {});
+      Registry._strategyOptions = deepmerge(ConfigurationDefaults, info.config.strategy.options ?? {});
     } catch (e) {
       logMessage(lvlFatal, 'Error importing strategy options!', e);
     }
@@ -189,7 +189,6 @@ class Registry {
       Registry.strategyOptions.areas.undisclosed.type = 'default';
 
       // Remove hidden areas if configured as so and sort them by name.
-
       Registry._areas = new RegistryFilter(Registry.areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
     }
 
@@ -273,15 +272,15 @@ class Registry {
   /**
    * Get the names of the specified type which aren't set to hidden in the strategy options.
    *
-   * @param {string} type The type of options to filter ("domain", "view", "chip").
+   * @param {string} type The type of options to filter ("domain", "view", "badge").
    *
    * @returns {string[]} For domains and views: names of items that aren't hidden.
-   *                     For chips: names of items that are explicitly set to true.
+   *                     For badges: names of items that are explicitly set to true.
    */
-  static getExposedNames(type: 'domain' | 'view' | 'chip'): string[] {
-    // TODO: Align chip with other types.
-    if (type === 'chip') {
-      return Object.entries(Registry.strategyOptions.chips)
+  static getExposedNames(type: 'domain' | 'view' | 'badge'): string[] {
+    // TODO: Align badge with other types.
+    if (type === 'badge') {
+      return Object.entries(Registry.strategyOptions.badges)
         .filter(([_, value]) => value === true)
         .map(([key]) => key.split('_')[0]);
     }

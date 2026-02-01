@@ -5,9 +5,9 @@ import { LovelaceCardConfig } from '../homeassistant/data/lovelace/config/card';
 import { LovelaceConfig } from '../homeassistant/data/lovelace/config/types';
 import { LovelaceViewConfig, LovelaceViewRawConfig } from '../homeassistant/data/lovelace/config/view';
 import { HomeAssistant } from '../homeassistant/types';
-import { LovelaceChipConfig } from '../lovelace-mushroom/utils/lovelace/chip/types';
 import { StrategyHeaderCardConfig } from './strategy-cards';
 import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
+import { LovelaceBadgeConfig } from '../homeassistant/data/lovelace/config/badge';
 
 /**
  * List of supported domains.
@@ -60,11 +60,11 @@ const SUPPORTED_VIEWS = [
 ] as const;
 
 /**
- * List of supported chips.
+ * List of supported badges.
  *
- * This constant array defines the chips that are supported by the strategy.
+ * This constant array defines the badges that are supported by the strategy.
  */
-const SUPPORTED_CHIPS = ['light', 'fan', 'cover', 'switch', 'climate', 'weather'] as const;
+const SUPPORTED_BADGES = ['light', 'fan', 'cover', 'switch', 'climate', 'weather'] as const;
 
 /**
  * List of home view sections.
@@ -72,11 +72,11 @@ const SUPPORTED_CHIPS = ['light', 'fan', 'cover', 'switch', 'climate', 'weather'
  * This constant array defines the sections that are present in the home view.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const HOME_VIEW_SECTIONS = ['areas', 'areasTitle', 'chips', 'greeting', 'persons'] as const;
+const HOME_VIEW_SECTIONS = ['areas', 'areasTitle', 'badges', 'greeting', 'persons'] as const;
 
 export type SupportedDomains = (typeof SUPPORTED_DOMAINS)[number];
 export type SupportedViews = (typeof SUPPORTED_VIEWS)[number];
-export type SupportedChips = (typeof SUPPORTED_CHIPS)[number];
+export type SupportedBadges = (typeof SUPPORTED_BADGES)[number];
 export type HomeViewSections = (typeof HOME_VIEW_SECTIONS)[number];
 
 /**
@@ -205,7 +205,7 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
  *
  * @property {Object.<string, StrategyArea>} areas - The configuration of areas.
  * @property {Object.<string, CustomCardConfig>} card_options - Card options for entities.
- * @property {ChipConfiguration} chips - The configuration of chips in the Home view.
+ * @property {BadgeConfiguration} badges - The configuration of badges in the Home view.
  * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
  * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
  * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
@@ -218,7 +218,7 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
 export interface StrategyConfig {
   areas: { [S: string]: StrategyArea };
   card_options: { [S: string]: CustomCardConfig };
-  chips: ChipConfiguration;
+  badges: BadgeConfiguration;
   debug: boolean;
   domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
   extra_cards: LovelaceCardConfig[];
@@ -267,21 +267,21 @@ export interface AllAreasConfig {
 }
 
 /**
- * A list of chips to show in the Home view.
+ * A list of badges to show in the Home view.
  *
- * @property {boolean} climate_count - Chip to display the number of climates which are not off.
- * @property {boolean} cover_count - Chip to display the number of unclosed covers.
- * @property {LovelaceChipConfig[] | []} extra_chips - List of extra chips.
- * @property {boolean} fan_count - Chip to display the number of fans on.
- * @property {boolean} light_count - Chip to display the number of lights on.
- * @property {boolean} switch_count - Chip to display the number of switches on.
- * @property {'auto' | `weather.${string}`} weather_entity - Entity id for the weather chip to use.
+ * @property {boolean} climate_count - Badge to display the number of climates which are not off.
+ * @property {boolean} cover_count - Badge to display the number of unclosed covers.
+ * @property {LovelaceBadgeConfig[] | []} extra_badges - List of extra badges.
+ * @property {boolean} fan_count - Badge to display the number of fans on.
+ * @property {boolean} light_count - Badge to display the number of lights on.
+ * @property {boolean} switch_count - Badge to display the number of switches on.
+ * @property {'auto' | `weather.${string}`} weather_entity - Entity id for the weather badges to use.
  *                                                           Accepts `weather.` ids or `auto` only.
  */
-export interface ChipConfiguration {
+export interface BadgeConfiguration {
   climate_count: boolean;
   cover_count: boolean;
-  extra_chips: LovelaceChipConfig[] | [];
+  extra_badges: LovelaceBadgeConfig[] | [];
   fan_count: boolean;
   light_count: boolean;
   switch_count: boolean;
@@ -361,11 +361,11 @@ export function isSupportedDomain(id: string): id is SupportedDomains {
 }
 
 /**
- * Type guard to check if the strategy supports a given chip identifier.
+ * Type guard to check if the strategy supports a given badge identifier.
  *
- * @param {string} id - The chip identifier to check (e.g., "light", "climate", "weather").
- * @returns {boolean} - True if the identifier represents a supported chip type.
+ * @param {string} id - The badge identifier to check (e.g., "light", "climate", "weather").
+ * @returns {boolean} - True if the identifier represents a supported badge type.
  */
-export function isSupportedChip(id: string): id is SupportedChips {
-  return isInSupportedList(id, SUPPORTED_CHIPS);
+export function isSupportedBadge(id: string): id is SupportedBadges {
+  return isInSupportedList(id, SUPPORTED_BADGES);
 }

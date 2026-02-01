@@ -50,6 +50,7 @@ abstract class AbstractView {
     return (this.constructor as unknown as ViewConstructor).domain;
   }
 
+  // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
   /**
    * Get a view configuration.
    *

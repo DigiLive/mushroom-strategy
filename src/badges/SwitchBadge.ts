@@ -1,39 +1,39 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { Registry } from '../Registry';
-import { TemplateChipConfig } from '../types/lovelace-mushroom/utils/lovelace/chip/types';
-import AbstractChip from './AbstractChip';
 import RegistryFilter from '../utilities/RegistryFilter';
+import AbstractBadge from './AbstractBadge';
+import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
 import { localize } from '../utilities/localize';
 
 /**
- * Switch Chip class.
+ * Switch Badge class.
  *
- * Used to create a chip configuration to indicate how many switches are on and to switch them all off.
+ * Used to create a badge configuration to indicate how many switches are on and to switch them all off.
  */
-class SwitchChip extends AbstractChip {
+class SwitchBadge extends AbstractBadge {
   /**
    * Class Constructor.
    *
-   * @param {TemplateChipConfig} [customConfiguration] Custom chip configuration.
+   * @param {LovelaceBadgeConfig} [customConfiguration] Custom badge configuration.
    */
-  constructor(customConfiguration?: TemplateChipConfig) {
+  constructor(customConfiguration?: LovelaceBadgeConfig) {
     super();
 
-    this.configuration = { ...this.configuration, ...SwitchChip.getDefaultConfig(), ...customConfiguration };
+    this.configuration = { ...this.configuration, ...SwitchBadge.getDefaultConfig(), ...customConfiguration };
   }
 
-  /** Returns the default configuration object for the chip. */
-  static getDefaultConfig(): TemplateChipConfig {
+  /** Returns the default configuration object for the badge. */
+  static getDefaultConfig(): LovelaceBadgeConfig {
     return {
-      type: 'template',
+      type: 'custom:mushroom-template-badge',
       icon: 'mdi:dip-switch',
-      icon_color: 'blue',
+      color: 'blue',
       content: Registry.getCountTemplate('switch', 'eq', 'on'),
       tap_action: {
         action: 'perform-action',
         confirmation: {
-          text: localize('switch.chip_confirmation'),
+          text: localize('switch.badge_confirmation'),
         },
         perform_action: 'switch.turn_off',
         target: {
@@ -50,4 +50,4 @@ class SwitchChip extends AbstractChip {
   }
 }
 
-export default SwitchChip;
+export default SwitchBadge;
