@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/semver": "^7.7.1",
-    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.32.1",
     "bumpp": "^10.4.0",
     "eslint": "^9.39.2",
@@ -41,7 +41,7 @@
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
     "markdownlint-cli2": "^0.20.0",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "semver": "^7.7.3",
     "superstruct": "^2.0.2",
     "ts-loader": "^9.5.4",
