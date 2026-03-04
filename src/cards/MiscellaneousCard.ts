@@ -12,7 +12,7 @@ class MiscellaneousCard extends AbstractCard {
   static getDefaultConfig(): EntityCardConfig {
     return {
       type: 'custom:mushroom-entity-card',
-      icon_color: 'blue-grey',
+      icon: undefined,
     };
   }
 
