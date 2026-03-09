@@ -1,2 +1,8 @@
-/node_modules/
 # Don't add directory /dist/ to .gitignore, as it is used by the build script
+
+# Node.js
+/node_modules/
+
+# Documentation
+/site/
+.mike/

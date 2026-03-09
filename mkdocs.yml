@@ -43,6 +43,10 @@ theme:
     - content.action.edit
     - content.footnote.tooltips
 
+extra:
+  version:
+    provider: mike
+
 extra_css:
   - stylesheets/extra.css
 

@@ -3,12 +3,9 @@ name: Deploy Documentation
 on:
   release:
     types: [published]
-#  push:
-#    branches:
-#      - main
-#  pull_request:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -65,11 +62,20 @@ jobs:
           python-version: '3.x'
 
       - name: Install MkDocs and dependencies
-        run: pip install mkdocs mkdocs-material pymdown-extensions
+        run: pip install mkdocs mkdocs-material pymdown-extensions mike
 
       - name: Deploy Docs to GitHub Pages
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git remote set-url origin https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/DigiLive/mushroom-strategy.git
-          mkdocs gh-deploy --force --clean --message "${{ env.CI_COMMIT_MESSAGE }}"
+
+          git fetch origin gh-pages --depth=1
+
+          if [ "${{ github.event_name }}" == "release" ]; then
+            # Release: Create a permanent version folder.
+            mike deploy --push --update-aliases "${{ github.event.release.tag_name }}" latest
+          else
+            # Push: Update the /main/ folder
+            mike deploy --push main
+          fi
