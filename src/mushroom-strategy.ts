@@ -246,6 +246,10 @@ class MushroomStrategy extends HTMLTemplateElement {
    * @returns A promise that resolves when all notifications have been handled.
    */
   private static async handleNotifications(hass: HomeAssistant): Promise<void> {
+    if (NOTIFICATIONS.length === 0) {
+      return;
+    }
+
     const notificationManager = new PersistentNotification(hass, 'mushroom_strategy');
     const currentVersion = STRATEGY_VERSION.replace(/^v/, '');
     const version = semver.coerce(currentVersion) || '0.0.0';
