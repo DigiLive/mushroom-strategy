@@ -2,16 +2,33 @@ import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import globals from 'globals';
-import prettierPlugin from 'eslint-plugin-prettier/recommended';
+import prettierPlugin from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 
+/**
+ * ESLint configuration file.
+ * Following Flat Config standards for ESLint v10.
+ * Applying names to blocks for better transparency in the inspector.
+ */
 export default [
   {
+    name: 'global-ignores',
     ignores: ['dist/', 'node_modules/', 'src/types/homeassistant/', 'src/types/lovelace-mushroom/'],
   },
-  js.configs.recommended,
-  ...tsPlugin.configs['flat/recommended'],
-  prettierPlugin,
   {
+    name: 'eslint-recommended',
+    ...js.configs.recommended,
+  },
+  ...tsPlugin.configs['flat/recommended'].map((config, index) => ({
+    ...config,
+    name: `typescript-recommended-${index}`,
+  })),
+  {
+    name: 'main-project-rules',
+    files: ['**/*.{js,mjs,cjs,ts}'],
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+    },
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
@@ -38,12 +55,23 @@ export default [
     },
   },
   {
-    files: ['webpack.config.ts', 'webpack.dev.config.ts'],
+    name: 'config-overrides',
+    // Add the eslint config file here to prevent the "parserOptions.project" error
+    files: ['webpack.config.ts', 'webpack.dev.config.ts', 'eslint.config.mjs'],
     languageOptions: {
-      parser: tsParser,
       parserOptions: {
         project: null,
       },
+    },
+  },
+  {
+    name: 'prettier-final-override',
+    plugins: {
+      prettier: prettierPlugin,
+    },
+    rules: {
+      ...prettierConfig.rules,
+      'prettier/prettier': 'error',
     },
   },
 ];
