@@ -17,7 +17,7 @@ class GreetingCard {
     type: 'custom:mushroom-template-card',
     primary: `{% set time = now().hour %}
            {% if (time >= 18) %}
-             ${localize('generic.good_evening')},{{user}}!
+             ${localize('generic.good_evening')}, {{user}}!
            {% elif (time >= 12) %}
              ${localize('generic.good_afternoon')}, {{user}}!
            {% elif (time >= 6) %}
