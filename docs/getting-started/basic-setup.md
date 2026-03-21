@@ -1,16 +1,24 @@
 # ⚙️ Basic Setup
 
+If you haven't already done so, create a new dashboard, following the instructions in the 
+[Home Assistant documentation](https://www.home-assistant.io/dashboards/dashboards/#creating-a-new-dashboard).
+
 To apply the Mushroom Strategy to a dashboard:
 
 1. In the UI of the dashboard, select :material-pencil: in the top right corner.
-2. If not taken to a Raw Configuration editor, click the three-dot menu in the top right corner.
-3. Select `Raw configuration editor`.
-4. Empty the configuration and add the following lines:
+2. If not taken to a Raw Configuration editor:
+     1. Click the three-dot menu in the top right corner.
+     2. Select `Raw configuration editor`.
+3. Empty the current configuration and add the following lines:
 
-   ```yaml
-   strategy:
-     type: custom:mushroom-strategy
-   ```
+     ```yaml
+     strategy:
+       type: custom:mushroom-strategy
+       options: {}
+     ```
+
+4. Click `Save` and exit the edit mode.<br>
+   You should now see the Mushroom Strategy applied to your dashboard.
 
 !!!warning
 

@@ -1,15 +1,41 @@
+# ==============================================================================
+# HOW TO USE THIS WORKFLOW:
+# ==============================================================================
+# 1. PUSH TO 'main' BRANCH:
+#    - Automatically updates the '/main/' folder on the gh-pages branch.
+#    - NOTE: This only triggers if files in 'docs/' or 'mkdocs.yml' changed.
+#    - Use this for "Bleeding Edge" documentation.
+#
+# 2. PUBLISH A RELEASE:
+#    - Automatically creates a folder named after the tag (e.g., /v2.5.0/).
+#    - Automatically points the '/latest/' folder (alias) to that new tag.
+#    - Use this for official, stable version launches.
+#
+# 3. MANUAL RUN (GitHub Actions UI -> "Run workflow"):
+#    - "Version": The folder name you want to create or overwrite (e.g., v2.5.0).
+#    - "Alias": (Optional) The redirect folder you want to point to that version
+#      (e.g., enter 'latest' to move the latest pointer to the version above).
+#    - Use this to FIX an existing version folder without making a new release.
+# ==============================================================================
+
 name: Deploy Documentation
 
 on:
   release:
     types: [published]
-#  push:
-#    branches:
-#      - main
-#  pull_request:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g., v2.5.0 or main)'
+        required: true
+        default: 'main'
+      alias:
+        description: 'Alias to update (e.g., latest)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -39,7 +65,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: check-for-changes
-    if: needs.check-for-changes.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+    if: |
+      needs.check-for-changes.outputs.changed == 'true' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'release'
     env:
       CI_COMMIT_AUTHOR: 'CI Bot'
       CI_COMMIT_EMAIL: 'ci@noreply.github.com'
@@ -65,11 +94,29 @@ jobs:
           python-version: '3.x'
 
       - name: Install MkDocs and dependencies
-        run: pip install mkdocs mkdocs-material pymdown-extensions
+        run: pip install mkdocs mkdocs-material pymdown-extensions mike
 
       - name: Deploy Docs to GitHub Pages
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git remote set-url origin https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/DigiLive/mushroom-strategy.git
-          mkdocs gh-deploy --force --clean --message "${{ env.CI_COMMIT_MESSAGE }}"
+
+          git fetch origin gh-pages --depth=1
+
+          if [ "${{ github.event_name }}" == "release" ]; then
+            # Release: Create a permanent version folder and update latest alias.
+            mike deploy --push --update-aliases "${{ github.event.release.tag_name }}" latest
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            # Manual: Use UI inputs for version and optional alias.
+            VERSION="${{ github.event.inputs.version }}"
+            ALIAS="${{ github.event.inputs.alias }}"
+            if [ -n "$ALIAS" ]; then
+              mike deploy --push --update-aliases "$VERSION" "$ALIAS"
+            else
+              mike deploy --push "$VERSION"
+            fi
+          else
+            # Push: Update the /main/ folder
+            mike deploy --push main
+          fi

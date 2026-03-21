@@ -149,7 +149,6 @@ class MushroomStrategy extends HTMLTemplateElement {
               const options = {
                 ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
                 ...Registry.strategyOptions.card_options?.[entity.entity_id],
-                type: 'custom:mini-graph-card',
                 entities: [entity.entity_id],
               };
               return new SensorCard(entity, options).getCard();
@@ -242,6 +241,10 @@ class MushroomStrategy extends HTMLTemplateElement {
    * @returns A promise that resolves when all notifications have been handled.
    */
   private static async handleNotifications(hass: HomeAssistant): Promise<void> {
+    if (NOTIFICATIONS.length === 0) {
+      return;
+    }
+
     const notificationManager = new PersistentNotification(hass, 'mushroom_strategy');
     const currentVersion = STRATEGY_VERSION.replace(/^v/, '');
     const version = semver.coerce(currentVersion) || '0.0.0';
@@ -267,7 +270,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
 customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
 
-const STRATEGY_VERSION = 'v3.0.0-alpha.2';
+const STRATEGY_VERSION = 'v3.0.0';
 console.info(
   '%c Mushroom Strategy %c '.concat(STRATEGY_VERSION, ' '),
   'color: white; background: coral; font-weight: 700;',

@@ -21,6 +21,9 @@ The entire documentation lives in the `docs/` folder of this repository.
     The server will automatically reload in your browser as you make and save changes to the documentation files.  
     To stop the server, press **Ctrl + C** in the terminal.
 
+    !!! note
+        This command previews the "current" state of your files. It will not show the version selector dropdown.
+
 3. **Edit Markdown Files**: All documentation content is written in **Markdown** (`.md` files).
     You can find them within the `docs/` folder.
 
@@ -45,15 +48,35 @@ The entire documentation lives in the `docs/` folder of this repository.
 
 7. **Format and Lint Your Changes:**
 
-    - Build the linter with `npm run md:lint-fix`.
+    To keep the documentation clean and consistent, run the linter before committing.  
+    This checks for broken links, formatting issues, and common Markdown errors.
 
-     This task should result without errors.
+    ```bash
+    npm run md:lint-fix
+    ```
+   
+   This task should result without errors.
 
 8. **Commit Your Changes.**
 
 9. **Push to Your Fork.**
 
 10. **Open a Pull Request (PR).**
+
+---
+
+## How Versioning Works
+
+Our documentation uses `mike` to manage multiple versions of the documentation:
+
+- **The main version**: Every time a Pull Request is merged into the main branch, the documentation at /main/ is 
+  updated.  
+  This represents the "development" or "upcoming" version.
+
+- **The latest version**: This points to the most recent official release.
+
+- **Tagged versions**: When we create a new GitHub Release, a permanent, numbered version (e.g., v1.2.0) is created and
+  archived in the version selector.
 
 ---
 

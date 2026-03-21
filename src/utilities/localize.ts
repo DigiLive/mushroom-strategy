@@ -1,6 +1,7 @@
 import * as de from '../translations/de.json';
 import * as en from '../translations/en.json';
 import * as es from '../translations/es.json';
+import * as hu from '../translations/hu.json';
 import * as nl from '../translations/nl.json';
 import * as pt_br from '../translations/pt-BR.json';
 import { HomeAssistant } from '../types/homeassistant/types';
@@ -11,6 +12,7 @@ const languages: Record<string, unknown> = {
   de,
   en,
   es,
+  hu,
   nl,
   'pt-BR': pt_br,
 };

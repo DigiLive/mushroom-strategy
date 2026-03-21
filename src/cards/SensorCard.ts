@@ -11,9 +11,9 @@ class SensorCard extends AbstractCard {
   /** Returns the default configuration object for the card. */
   static getDefaultConfig(): EntityCardConfig {
     return {
-      type: 'custom:mushroom-entity-card',
-      icon: 'mdi:information',
+      type: 'custom:mini-graph-card',
       animate: true,
+      icon: 'mdi:information',
       line_color: 'green',
     };
   }
