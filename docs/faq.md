@@ -51,3 +51,42 @@
         1. Select `Settings` at the bottom of the sidebar.
         2. Select `Areas`.
         3. Select :material-pencil: of the area you want to get the id of.
+
+??? question "I'm presented with "Edit dashboard" instead of the "Raw configuration editor". What do I do?"
+
+    This happens if you've removed the `options` key from your dashboard configuration.
+    
+    The easiest way to fix this is to delete the dashboard and follow the steps of the 
+    [Basic Setup](getting-started/basic-setup.md) again.
+
+??? question "Can I get the raw YAML code which the strategy generates?"
+
+    You can get the generated YAML, but **NOT** without "Taking Control" of the dashboard.
+    
+    After setting up the strategy and options to your linking, you can follow these steps:
+    
+    1. Click the :material-pencil: icon in the top right corner of the dashboard.<br>
+       The **Raw configuration** editor will open.
+    2. Delete the entire content of the editor and replace it with the following code:
+    
+        ```yaml
+        strategy:
+          type: custom:mushroom-strategy
+        ```
+
+    3. Click `Save` and exit the edit mode.
+    4. Click the :material-pencil: icon in the top right corner of the dashboard.<br>
+       The **Dashboard** editor will open.
+    5. Click the three-dot menu in the top right corner of the editor.
+    6. Select `Take control`.
+    7. Click `Take control`.<br>
+       `Start with an empty dashboard` will not have any effect.
+    8. Click `Done` at the top right corner of the dashboard.
+    
+    You can now edit the dashboard as you would normally do with any other dashboard.
+
+    To get the YAML:
+
+    1. Click the :material-pencil: icon in the top right corner of the dashboard.
+    2. Click the three-dot menu in the top right corner of  the dashboard.
+    3. Select `Raw configuration editor`.
