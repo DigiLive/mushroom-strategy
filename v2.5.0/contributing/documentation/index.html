@@ -930,6 +930,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#how-versioning-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How Versioning Works
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation-style-and-quality" class="md-nav__link">
     <span class="md-ellipsis">
       Documentation Style and Quality
@@ -1019,6 +1028,10 @@ extending existing topics. This guide will walk you through the process of contr
 <p>This will usually launch a local server, at <code>http://127.0.0.1:8000</code>.
 The server will automatically reload in your browser as you make and save changes to the documentation files.<br />
 To stop the server, press <strong>Ctrl + C</strong> in the terminal.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command previews the "current" state of your files. It will not show the version selector dropdown.</p>
+</div>
 </li>
 <li>
 <p><strong>Edit Markdown Files</strong>: All documentation content is written in <strong>Markdown</strong> (<code>.md</code> files).
@@ -1051,11 +1064,14 @@ the sidebar. Follow the existing structure.</p>
 </li>
 <li>
 <p><strong>Format and Lint Your Changes:</strong></p>
-<ul>
-<li>Build the linter with <code>npm run md:lint-fix</code>.</li>
-</ul>
-<p>This task should result without errors.</p>
+<p>To keep the documentation clean and consistent, run the linter before committing.<br />
+This checks for broken links, formatting issues, and common Markdown errors.</p>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>run<span class="w"> </span>md:lint-fix
+</code></pre></div>
 </li>
+</ol>
+<p>This task should result without errors.</p>
+<ol>
 <li>
 <p><strong>Commit Your Changes.</strong></p>
 </li>
@@ -1066,6 +1082,23 @@ the sidebar. Follow the existing structure.</p>
 <p><strong>Open a Pull Request (PR).</strong></p>
 </li>
 </ol>
+<hr />
+<h2 id="how-versioning-works">How Versioning Works<a class="headerlink" href="#how-versioning-works" title="Permanent link">#</a></h2>
+<p>Our documentation uses <code>mike</code> to manage multiple versions of the documentation:</p>
+<ul>
+<li>
+<p><strong>The main version</strong>: Every time a Pull Request is merged into the main branch, the documentation at /main/ is 
+  updated.<br />
+  This represents the "development" or "upcoming" version.</p>
+</li>
+<li>
+<p><strong>The latest version</strong>: This points to the most recent official release.</p>
+</li>
+<li>
+<p><strong>Tagged versions</strong>: When we create a new GitHub Release, a permanent, numbered version (e.g., v1.2.0) is created and
+  archived in the version selector.</p>
+</li>
+</ul>
 <hr />
 <h2 id="documentation-style-and-quality">Documentation Style and Quality<a class="headerlink" href="#documentation-style-and-quality" title="Permanent link">#</a></h2>
 <p>To maintain consistency and quality:</p>

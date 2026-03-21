@@ -961,16 +961,28 @@
 
 
 <h1 id="basic-setup">⚙️ Basic Setup<a class="headerlink" href="#basic-setup" title="Permanent link">#</a></h1>
+<p>If you haven't already done so, create a new dashboard, following the instructions in the 
+<a href="https://www.home-assistant.io/dashboards/dashboards/#creating-a-new-dashboard">Home Assistant documentation</a>.</p>
 <p>To apply the Mushroom Strategy to a dashboard:</p>
 <ol>
 <li>In the UI of the dashboard, select <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> in the top right corner.</li>
-<li>If not taken to a Raw Configuration editor, click the three-dot menu in the top right corner.</li>
+<li>If not taken to a Raw Configuration editor:<ol>
+<li>Click the three-dot menu in the top right corner.</li>
 <li>Select <code>Raw configuration editor</code>.</li>
-<li>Empty the configuration and add the following lines:</li>
 </ol>
+</li>
+<li>
+<p>Empty the current configuration and add the following lines:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
+<span class="w">  </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
 </code></pre></div>
+</li>
+<li>
+<p>Click <code>Save</code> and exit the edit mode.<br>
+   You should now see the Mushroom Strategy applied to your dashboard.</p>
+</li>
+</ol>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>You may see the following error:</p>

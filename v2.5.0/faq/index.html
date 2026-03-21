@@ -1023,6 +1023,44 @@ to hide specific entities and devices.</p>
 </li>
 </ul>
 </details>
+<details class="question">
+<summary>I'm presented with "Edit dashboard" instead of the "Raw configuration editor". What do I do?</summary>
+<p>This happens if you've removed the <code>options</code> key from your dashboard configuration.</p>
+<p>The easiest way to fix this is to delete the dashboard and follow the steps of the 
+<a href="../getting-started/basic-setup/">Basic Setup</a> again.</p>
+</details>
+<details class="question">
+<summary>Can I get the raw YAML code which the strategy generates?</summary>
+<p>You can get the generated YAML, but <strong>NOT</strong> without "Taking Control" of the dashboard.</p>
+<p>After setting up the strategy and options to your linking, you can follow these steps:</p>
+<ol>
+<li>Click the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> icon in the top right corner of the dashboard.<br>
+   The <strong>Raw configuration</strong> editor will open.</li>
+<li>
+<p>Delete the entire content of the editor and replace it with the following code:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
+</code></pre></div>
+</li>
+<li>
+<p>Click <code>Save</code> and exit the edit mode.</p>
+</li>
+<li>Click the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> icon in the top right corner of the dashboard.<br>
+   The <strong>Dashboard</strong> editor will open.</li>
+<li>Click the three-dot menu in the top right corner of the editor.</li>
+<li>Select <code>Take control</code>.</li>
+<li>Click <code>Take control</code>.<br>
+   <code>Start with an empty dashboard</code> will not have any effect.</li>
+<li>Click <code>Done</code> at the top right corner of the dashboard.</li>
+</ol>
+<p>You can now edit the dashboard as you would normally do with any other dashboard.</p>
+<p>To get the YAML:</p>
+<ol>
+<li>Click the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> icon in the top right corner of the dashboard.</li>
+<li>Click the three-dot menu in the top right corner of  the dashboard.</li>
+<li>Select <code>Raw configuration editor</code>.</li>
+</ol>
+</details>
 
 
 
