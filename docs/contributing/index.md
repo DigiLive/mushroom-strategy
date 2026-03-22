@@ -25,11 +25,11 @@ Found a bug? That's not ideal, but your report helps us squash it!
    a [new issue](https://github.com/DigiLive/mushroom-strategy/issues/new?template=bug_report.yml).
 3. **Provide details:** In your report, please follow the instructions and template to include:
 
-   * A clear and concise description of the bug.
-   * Steps to reproduce the behavior.
-   * Expected behavior.
-   * Screenshots or animated GIFs (if applicable).
-   * Your Home Assistant version and Mushroom Strategy version.
+   - A clear and concise description of the bug.
+   - Steps to reproduce the behavior.
+   - Expected behavior.
+   - Screenshots or animated GIFs (if applicable).
+   - Your Home Assistant version and Mushroom Strategy version.
 
 ---
 

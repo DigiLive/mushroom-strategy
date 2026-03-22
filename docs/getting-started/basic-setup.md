@@ -1,6 +1,6 @@
 # ⚙️ Basic Setup
 
-If you haven't already done so, create a new dashboard, following the instructions in the 
+If you haven't already done so, create a new dashboard, following the instructions in the
 [Home Assistant documentation](https://www.home-assistant.io/dashboards/dashboards/#creating-a-new-dashboard).
 
 To apply the Mushroom Strategy to a dashboard:

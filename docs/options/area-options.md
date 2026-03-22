@@ -14,8 +14,8 @@ Each configuration is identified by an area id and can have the following option
 Also, all options from the Template mushroom card and/or Home Assistant Area card are supported.  
 Please follow the links below to see the additional options per card type.
 
-* [Mushroom Template Card][templateDocUrl]{: target="_blank"}.
-* [Home Assistant Area Card][areaDocUrl]{: target="_blank"}.
+- [Mushroom Template Card][templateDocUrl]{: target="_blank"}.
+- [Home Assistant Area Card][areaDocUrl]{: target="_blank"}.
 
 ## Extra Cards
 

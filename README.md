@@ -8,7 +8,7 @@
 
 **Effortlessly create stunning Home Assistant Dashboards with the Mushroom Dashboard Strategy!**
 
-* Are you tired of manually configuring your Home Assistant dashboards?
+- Are you tired of manually configuring your Home Assistant dashboards?
   Do you love the elegant design of Mushroom cards but wish for a simpler way to organize your entities,
   devices, and areas?
 
@@ -20,10 +20,10 @@ leveraging the power and aesthetics of Mushroom cards with minimal configuration
 
 ## ⭐ **Why Choose Mushroom Dashboard Strategy?**
 
-* **⚡️ Automatic Dashboard Generation:** Go from zero to a beautiful dashboard with just a few lines of YAML.
-* **🏡 Intelligent Organization:** Automatically creates intuitive views for your devices, areas, and entities.
-* **🎨 Highly Customizable:** Tailor your dashboard to your unique smart home setup with extensive options.
-* **📈 Integrated Insights:** Seamlessly displays mini graph cards for your sensor data.
+- **⚡️ Automatic Dashboard Generation:** Go from zero to a beautiful dashboard with just a few lines of YAML.
+- **🏡 Intelligent Organization:** Automatically creates intuitive views for your devices, areas, and entities.
+- **🎨 Highly Customizable:** Tailor your dashboard to your unique smart home setup with extensive options.
+- **📈 Integrated Insights:** Seamlessly displays mini graph cards for your sensor data.
 
 ---
 
@@ -47,13 +47,13 @@ The **Mushroom Dashboard Strategy** is available through HACS (Home Assistant Co
 
 We welcome contributions and feedback!
 
-* Have questions or need help?
+- Have questions or need help?
   Check out our [Discussions](https://github.com/DigiLive/mushroom-strategy/discussions) page.
 
-* Found a bug or have an idea?
+- Found a bug or have an idea?
   Open an [Issue](https://github.com/DigiLive/mushroom-strategy/issues).
 
-* Enjoying the Mushroom Strategy?
+- Enjoying the Mushroom Strategy?
   Consider giving our project a ⭐ [star on GitHub](https://github.com/DigiLive/mushroom-strategy) and exploring ways
   to ❤️ [sponsor the project](https://github.com/sponsors/DigiLive) to support its continued development!
   Your support helps us grow and improve.

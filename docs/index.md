@@ -14,19 +14,19 @@ your smart home.
 
 ## ✨ Key Features & Benefits
 
-* **Automated Dashboard Generation:** Create a comprehensive dashboard with minimal YAML, saving you countless hours.
-* **Leverages Mushroom Cards:** Enjoy the stunning aesthetics and rich functionality of Mushroom cards, renowned for
+- **Automated Dashboard Generation:** Create a comprehensive dashboard with minimal YAML, saving you countless hours.
+- **Leverages Mushroom Cards:** Enjoy the stunning aesthetics and rich functionality of Mushroom cards, renowned for
   their clean design and user-friendliness.
-* **Entity, Device, and Area-Aware:** Automatically organizes your Home Assistant components into logical, navigable
+- **Entity, Device, and Area-Aware:** Automatically organizes your Home Assistant components into logical, navigable
   views.
-* **Built-in Views:** Access pre-built views for specific domains like lights, fans, climate, and more, ensuring quick
+- **Built-in Views:** Access pre-built views for specific domains like lights, fans, climate, and more, ensuring quick
   control.
-* **Highly Customizable:** While automated, the strategy provides ample options to fine-tune the appearance and behavior
+- **Highly Customizable:** While automated, the strategy provides ample options to fine-tune the appearance and behavior
   to match your preferences.
-* **Responsive Design:** Your generated dashboard will look great and function seamlessly across all devices – mobile,
+- **Responsive Design:** Your generated dashboard will look great and function seamlessly across all devices – mobile,
   tablet, and desktop.
-* **Mini Graph:** Utilize [Mini Graphs](https://github.com/kalkih/mini-graph-card) to visualize data of sensors.
-* **Stateful Scenes Support:** Support for stateful scenes
+- **Mini Graph:** Utilize [Mini Graphs](https://github.com/kalkih/mini-graph-card) to visualize data of sensors.
+- **Stateful Scenes Support:** Support for stateful scenes
   from [Stateful Scenes](https://github.com/hugobloem/stateful_scenes).
 
 ## 🚀 Get Started in Minutes
@@ -34,13 +34,13 @@ your smart home.
 Ready to transform your Home Assistant interface? Follow these guides to get your Mushroom Strategy dashboard up and
 running:
 
-* [**Installation Guide**](getting-started/installation.md): Step-by-step instructions to install the strategy via HACS
+- [**Installation Guide**](getting-started/installation.md): Step-by-step instructions to install the strategy via HACS
   or manually.
-* [**Basic Setup**](getting-started/basic-setup.md): Learn the fundamental configuration to generate your first
+- [**Basic Setup**](getting-started/basic-setup.md): Learn the fundamental configuration to generate your first
   dashboard.
-* [**Configuration Options**](options/index.md): Dive deeper into all available settings to customize your dashboard to
+- [**Configuration Options**](options/index.md): Dive deeper into all available settings to customize your dashboard to
   perfection.
-* [**Usage Example**](full-example.md): An example to show most of the configuration options.
+- [**Usage Example**](full-example.md): An example to show most of the configuration options.
 
 ---
 
