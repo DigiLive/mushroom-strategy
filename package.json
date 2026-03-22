@@ -26,6 +26,9 @@
     "type": "git",
     "url": "https://github.com/DigiLive/mushroom-strategy"
   },
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "dependencies": {
     "deepmerge": "^4"
   },
@@ -38,7 +41,6 @@
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
-    "globals": "^17.4.0",
     "home-assistant-js-websocket": "^9.6.0",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
@@ -55,9 +57,11 @@
   "scripts": {
     "ts:format": "prettier --write \"**/*.ts\"",
     "json:format": "prettier --write \"**/*.json\"",
-    "mkdocs:serve": "mkdocs serve",
     "md:lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\"",
     "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" --fix",
+    "docs:serve": "mkdocs serve",
+    "docs:serve-versioned": "mike serve",
+    "docs:list": "mike list",
     "build-dev": "webpack --config webpack.dev.config.ts",
     "build": "webpack",
     "bump": "bumpp --preid alpha --no-commit --no-tag --no-push package.json package-lock.json README.md ./docs/index.md ./src/mushroom-strategy.ts",

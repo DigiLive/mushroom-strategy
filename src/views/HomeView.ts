@@ -201,14 +201,14 @@ class HomeView extends AbstractView {
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
   private async createPersonCards(): Promise<StackCardConfig | undefined> {
-    const greetingCard = Registry.strategyOptions.home_view.hidden.greeting
-      ? logMessage(lvlInfo, 'Greeting card is hidden.')
-      : new GreetingCard().getCard();
-
     if (Registry.strategyOptions.home_view.hidden.persons) {
       logMessage(lvlInfo, 'Persons section is hidden.');
       return;
     }
+
+    const greetingCard = Registry.strategyOptions.home_view.hidden.greeting
+      ? logMessage(lvlInfo, 'Greeting card is hidden.')
+      : new GreetingCard().getCard();
 
     const cardConfigurations: PersonCardConfig[] = [];
     const PersonCard = (await import('../cards/PersonCard')).default;

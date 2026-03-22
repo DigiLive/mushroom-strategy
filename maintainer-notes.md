@@ -53,7 +53,7 @@ Access at: `http://127.0.0.1:8000/main-local/`
 ## 4. Maintenance & Troubleshooting
 
 | Scenario                      | Command / Solution                                       |
-| :---------------------------- | :------------------------------------------------------- |
+|:------------------------------|:---------------------------------------------------------|
 | **Remove a ghost version**    | `mike delete <version_name>`                             |
 | **List all current versions** | `mike list`                                              |
 | **Sync local gh-pages**       | `git checkout gh-pages && git pull origin gh-pages`      |
@@ -84,11 +84,14 @@ To stay within the Node.js ecosystem, these scripts can be added to your `packag
 This ensures you don't need to remember the specific `mike` or `mkdocs` commands:
 
 ```json
-"scripts": {
-  "docs:serve": "mkdocs serve",
-  "docs:serve-versioned": "mike serve",
-  "docs:check": "npm run md:lint-fix",
-  "docs:list": "mike list"
+{
+  "...": "...",
+  "scripts": {
+    "docs:serve": "mkdocs serve",
+    "docs:serve-versioned": "mike serve",
+    "docs:list": "mike list",
+    "...": "..."
+  }
 }
 ```
 
@@ -159,7 +162,7 @@ When running documentation tools locally, a `site/` directory may be created.
   It renders the site and commits it directly to a temporary area before pushing to the `gh-pages` branch.
 
 ### The "Hands-Off" Rule
-The `site/` folder must **never** be comitted to the `main` branch.<br>
+The `site/` folder must **never** be committed to the `main` branch.<br>
 It contains generated assets that will cause merge conflicts and bloat the repository.
 
 ### Maintenance Actions:
