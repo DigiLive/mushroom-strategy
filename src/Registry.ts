@@ -3,17 +3,7 @@ import { HassEntities } from 'home-assistant-js-websocket';
 import { AreaRegistryEntry } from './types/homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
 import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
-import {
-  AllDomainsConfig,
-  DashboardInfo,
-  isSortable,
-  SingleDomainConfig,
-  StrategyArea,
-  StrategyConfig,
-  StrategyViewConfig,
-  SupportedDomains,
-  SupportedViews,
-} from './types/strategy/strategy-generics';
+import { DashboardInfo, StrategyArea, StrategyConfig, SupportedDomains } from './types/strategy/strategy-generics';
 import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
@@ -59,7 +49,11 @@ class Registry {
   /** Indicates whether this module is initialized. */
   private static _initialized: boolean = false;
 
-  /** Get the initialization status of the Registry class. */
+  /**
+   * Get the initialization status of the Registry class.
+   *
+   * @returns {boolean} True if the registry has been initialized.
+   */
   static get initialized(): boolean {
     return Registry._initialized;
   }
@@ -70,8 +64,9 @@ class Registry {
   /**
    * Home Assistant's Entity registry.
    *
-   * @remarks
-   * This module makes changes to the registry at {@link Registry.initialize}.
+   * @remarks This module makes changes to the registry at {@link Registry.initialize}.
+   *
+   * @returns {EntityRegistryEntry[]} An array of entity registry entries.
    */
   static get entities(): EntityRegistryEntry[] {
     return Registry._entities;
@@ -83,8 +78,9 @@ class Registry {
   /**
    * Home Assistant's Area registry.
    *
-   * @remarks
-   * This module makes changes to the registry at {@link Registry.initialize}.
+   * @remarks This module makes changes to the registry at {@link Registry.initialize}.
+   *
+   * @returns {StrategyArea[]} An array of strategy-specific area objects.
    */
   static get areas(): StrategyArea[] {
     return Registry._areas;
@@ -93,7 +89,11 @@ class Registry {
   /** The Custom strategy configuration. */
   private static _strategyOptions: StrategyConfig;
 
-  /** The configuration of the strategy. */
+  /**
+   * The configuration of the strategy.
+   *
+   * @returns {StrategyConfig} The merged strategy configuration options.
+   */
   static get strategyOptions(): StrategyConfig {
     return Registry._strategyOptions;
   }
@@ -107,6 +107,8 @@ class Registry {
    * This method must be called before using any other Registry functionality that depends on the imported data.
    *
    * @param {DashboardInfo} info Strategy information object.
+   *
+   * @returns {Promise<void>} A promise that resolves when initialization is complete.
    */
   static async initialize(info: DashboardInfo): Promise<void> {
     setupCustomLocalize(info.hass);
@@ -125,19 +127,10 @@ class Registry {
     setDebugLevel(Registry.strategyOptions.debug ? lvlFatal : lvlOff);
 
     // Import the registries of Home Assistant.
-    try {
-      // noinspection ES6MissingAwait False positive? https://youtrack.jetbrains.com/issue/WEB-63746
-      [Registry._entities, Registry._devices, Registry._areas] = await Promise.all([
-        info.hass.callWS({ type: 'config/entity_registry/list' }) as Promise<EntityRegistryEntry[]>,
-        info.hass.callWS({ type: 'config/device_registry/list' }) as Promise<DeviceRegistryEntry[]>,
-        info.hass.callWS({ type: 'config/area_registry/list' }) as Promise<AreaRegistryEntry[]>,
-      ]);
-    } catch (e) {
-      logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
-    }
+    await this.fetchRegistry(info);
 
-    // Process the entries of the Strategy Options.
-    Registry._strategyOptions.extra_views.map((view) => ({
+    // Process the extra views from the strategy options.
+    Registry._strategyOptions.extra_views = Registry._strategyOptions.extra_views.map((view) => ({
       ...view,
       subview: false,
     }));
@@ -151,76 +144,44 @@ class Registry {
       .isNotHidden()
       .whereDisabledBy(null)
       .orderBy(['name', 'original_name'], 'asc')
-      .toList();
-
-    Registry._entities = Registry.entities.map((entity) => ({
-      ...entity,
-      area_id: entity.area_id ?? 'undisclosed',
-    }));
+      .toList()
+      .map((entity) => ({ ...entity, area_id: entity.area_id ?? 'undisclosed' }));
 
     // Process entries of the HASS device registry.
     Registry._devices = new RegistryFilter(Registry.devices)
       .isNotHidden()
       .whereDisabledBy(null)
       .orderBy(['name_by_user', 'name'], 'asc')
-      .toList();
-
-    Registry._devices = Registry.devices.map((device) => ({
-      ...device,
-      area_id: device.area_id ?? 'undisclosed',
-    }));
+      .toList()
+      .map((device) => ({ ...device, area_id: device.area_id ?? 'undisclosed' }));
 
     // Process entries of the HASS area registry.
-    if (Registry.strategyOptions.areas._.hidden) {
-      Registry._areas = [];
-    } else {
-      // Create and add the undisclosed area if not hidden in the strategy options.
-      if (!Registry.strategyOptions.areas.undisclosed?.hidden) {
-        Registry.areas.push(ConfigurationDefaults.areas.undisclosed);
-      }
+    const areaList = [...Registry._areas];
 
-      // Merge area configurations of the Strategy options into the entries of the area registry.
-      // TODO: Check for to do the same for devices.
-      Registry._areas = Registry.areas.map((area) => {
-        return { ...area, ...Registry.strategyOptions.areas['_'], ...Registry.strategyOptions.areas?.[area.area_id] };
-      });
-
-      // Ensure the custom configuration of the undisclosed area doesn't overwrite the required property values.
-      (Registry.strategyOptions.areas.undisclosed as StrategyArea).area_id = 'undisclosed';
-      Registry.strategyOptions.areas.undisclosed.type = 'default';
-
-      // Remove hidden areas if configured as so and sort them by name.
-      Registry._areas = new RegistryFilter(Registry.areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
+    // Add the undisclosed area, if not hidden in the strategy options.
+    if (!Registry.strategyOptions.areas.undisclosed?.hidden) {
+      areaList.push(ConfigurationDefaults.areas.undisclosed);
     }
 
-    // Sort views by order first and then by title.
-    const sortViews = () => {
-      const entries = Object.entries(Registry.strategyOptions.views);
+    Registry._areas = areaList.map((area) => {
+      const isUndisclosed = area.area_id === 'undisclosed';
 
-      Registry.strategyOptions.views = Object.fromEntries(
-        entries.sort(([_, a], [__, b]) => {
-          return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
-        })
-      ) as Record<SupportedViews, StrategyViewConfig>;
-    };
+      return {
+        ...area,
+        ...Registry.strategyOptions.areas._, // Global defaults
+        ...Registry.strategyOptions.areas[area.area_id], // Specific overrides
+        ...(isUndisclosed ? { area_id: 'undisclosed', type: 'default' } : {}), // Force constraints for undisclosed
+      };
+    });
 
-    sortViews();
+    // Remove hidden areas if configured as so and sort them by name.
+    Registry._areas = new RegistryFilter(Registry._areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
 
-    // Sort domains by order first and then by title.
-    const sortDomains = () => {
-      const entries = Object.entries(Registry.strategyOptions.domains);
-      Registry.strategyOptions.domains = Object.fromEntries(
-        entries.sort(([, a], [, b]) => {
-          if (isSortable(a) && isSortable(b)) {
-            return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
-          }
-
-          return 0; // Maintain the original order when none or only one item is sortable.
-        })
-      ) as { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
-    };
-
-    sortDomains();
+    // Sort views and domains by order first and then by title.
+    Registry.strategyOptions.views = Registry.sortConfigByOrder(Registry.strategyOptions.views);
+    Registry.strategyOptions.domains = Registry.sortConfigByOrder(
+      Registry.strategyOptions.domains as Record<string, { order?: number; title?: string }>
+    ) as typeof Registry.strategyOptions.domains;
 
     Registry._initialized = true;
   }
@@ -234,30 +195,24 @@ class Registry {
    * @param {string} domain The domain of the entities.
    * @param {string} operator The comparison operator between state and value.
    * @param {string} value The value to which the state is compared against.
+   *
+   * @returns {string} A Home Assistant template string for counting entities.
    */
   static getCountTemplate(domain: SupportedDomains, operator: string, value: string): string {
-    // noinspection JSMismatchedCollectionQueryUpdate
-    /**
-     * Array of entity state-entries, filtered by domain.
-     *
-     * Each element contains a template-string which is used to access home assistant's state machine (state object) in
-     * a template; E.g. `states['light.kitchen']`.
-     */
-    const states: string[] = [];
-
     if (!Registry.initialized) {
       logMessage(lvlWarn, 'Registry is not initialized!');
 
       return '?';
     }
 
-    states.push(
-      ...new RegistryFilter(Registry.entities)
-        .whereDomain(domain)
-        .where((entity) => !entity.entity_id.endsWith('_stateful_scene') && entity.platform !== 'group')
-        .toList()
-        .map((entity) => `states['${entity.entity_id}']`)
-    );
+    // Filter entities by domain while excluding stateful scenes and groups.
+    const entities = new RegistryFilter(Registry.entities)
+      .whereDomain(domain)
+      .where((entity) => !entity.entity_id.endsWith('_stateful_scene') && entity.platform !== 'group')
+      .toList();
+
+    // Create an array of state-strings: e.g. "states['light.kitchen']".
+    const states = entities.map((entity) => `states['${entity.entity_id}']`);
 
     // noinspection SpellCheckingInspection
     return `{% set entities = [${states}] %}
@@ -273,7 +228,7 @@ class Registry {
   /**
    * Get the names of the specified type which aren't set to hidden in the strategy options.
    *
-   * @param {string} type The type of options to filter ("domain", "view", "badge").
+   * @param {'domain' | 'view' | 'badge'} type The type of options to filter ("domain", "view", "badge").
    *
    * @returns {string[]} For domains and views: names of items that aren't hidden.
    *                     For badges: names of items that are explicitly set to true.
@@ -289,6 +244,52 @@ class Registry {
     const group = Registry.strategyOptions[`${type}s`] as Record<string, { hidden?: boolean }>;
 
     return Object.keys(group).filter((key) => key !== '_' && key !== 'default' && !group[key].hidden);
+  }
+
+  /**
+   * Fetch the registries from Home Assistant.
+   *
+   * This method requests the entity, device, and area registries from the Home Assistant WebSocket API and populates
+   * the internal registry variables.
+   *
+   * @param {DashboardInfo} info Strategy information object containing the Home Assistant instance.
+   *
+   * @throws {Error} If the Home Assistant WebSocket API call fails.
+   * @returns {Promise<void>} A promise that resolves when all registries have been fetched and stored.
+   */
+  private static async fetchRegistry(info: DashboardInfo): Promise<void> {
+    try {
+      // noinspection ES6MissingAwait False positive? https://youtrack.jetbrains.com/issue/WEB-63746
+      [Registry._entities, Registry._devices, Registry._areas] = await Promise.all([
+        info.hass.callWS({ type: 'config/entity_registry/list' }) as Promise<EntityRegistryEntry[]>,
+        info.hass.callWS({ type: 'config/device_registry/list' }) as Promise<DeviceRegistryEntry[]>,
+        info.hass.callWS({ type: 'config/area_registry/list' }) as Promise<AreaRegistryEntry[]>,
+      ]);
+    } catch (e) {
+      logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
+    }
+  }
+
+  /**
+   * Sorts configuration entries by order (numeric) and then by title (alphabetic).
+   *
+   * @template T The type of the configuration entries, extending objects with optional order and title.
+   *
+   * @param {Record<string, T>} config The configuration object to sort.
+   *
+   * @returns {Record<string, T>} A new object with sorted entries.
+   */
+  private static sortConfigByOrder<T extends { order?: number; title?: string }>(
+    config: Record<string, T>
+  ): Record<string, T> {
+    return Object.fromEntries(
+      Object.entries(config).sort(([, a], [, b]) => {
+        const orderA = a.order ?? Infinity;
+        const orderB = b.order ?? Infinity;
+
+        return orderA - orderB || (a.title ?? '').localeCompare(b.title ?? '');
+      })
+    ) as Record<string, T>;
   }
 }
 
