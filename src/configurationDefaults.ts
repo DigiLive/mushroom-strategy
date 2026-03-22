@@ -46,22 +46,26 @@ export const ConfigurationDefaults: StrategyDefaults = {
       stack_count: 1,
     },
     binary_sensor: {
+      order: 2,
       title: `${localize('sensor.binary')} ` + localize('sensor.sensors'),
       show_controls: false,
       hidden: false,
       stack_count: 2,
     },
     camera: {
+      order: 3,
       title: localize('camera.cameras'),
       show_controls: false,
       hidden: false,
     },
     climate: {
+      order: 6,
       title: localize('climate.climates'),
       show_controls: false,
       hidden: false,
     },
     cover: {
+      order: 7,
       title: localize('cover.covers'),
       iconOn: 'mdi:arrow-up',
       iconOff: 'mdi:arrow-down',
@@ -70,11 +74,13 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     default: {
+      order: 15,
       title: localize('generic.miscellaneous'),
       show_controls: false,
       hidden: false,
     },
     fan: {
+      order: 5,
       title: localize('fan.fans'),
       iconOn: 'mdi:fan',
       iconOff: 'mdi:fan-off',
@@ -83,11 +89,13 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     input_select: {
+      order: 12,
       title: localize('input_select.input_selects'),
       show_controls: false,
       hidden: false,
     },
     light: {
+      order: 4,
       title: localize('light.lights'),
       iconOn: 'mdi:lightbulb',
       iconOff: 'mdi:lightbulb-off',
@@ -96,21 +104,25 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     lock: {
+      order: 1,
       title: localize('lock.locks'),
       show_controls: false,
       hidden: false,
     },
     media_player: {
+      order: 8,
       title: localize('media_player.media_players'),
       show_controls: false,
       hidden: false,
     },
     number: {
+      order: 13,
       title: localize('generic.numbers'),
       show_controls: false,
       hidden: false,
     },
     scene: {
+      order: 11,
       title: localize('scene.scenes'),
       show_controls: false,
       onService: 'scene.turn_on',
@@ -122,11 +134,13 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     sensor: {
+      order: 14,
       title: localize('sensor.sensors'),
       show_controls: false,
       hidden: false,
     },
     switch: {
+      order: 9,
       title: localize('switch.switches'),
       iconOn: 'mdi:power-plug',
       iconOff: 'mdi:power-plug-off',
@@ -135,6 +149,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     vacuum: {
+      order: 10,
       title: localize('vacuum.vacuums'),
       iconOn: 'mdi:robot-vacuum',
       iconOff: 'mdi:robot-vacuum-off',
