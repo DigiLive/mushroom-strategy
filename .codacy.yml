@@ -15,6 +15,9 @@ engines:
   # CSS & Web Standards
   stylelint:
     enabled: true
+    config:
+      rules:
+        function-allowwed-list: ["url", "var", "filter", "invert"]
 
   # Documentation & Config
   markdownlint:
