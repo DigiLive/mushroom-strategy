@@ -57,32 +57,34 @@ let currentLevel: DebugLevel = DebugLevel.Fatal;
  */
 function getCallerName(stack?: string): string {
   if (!stack) {
-    return 'unknown';
+    return 'unknown function';
   }
 
-  const lines = stack.split('\n').filter(Boolean);
+  // Filter out empty lines and the logMessage itself to find the true caller
+  const caller = stack
+    .split('\n')
+    .filter(Boolean)
+    .map(parseStackLine)
+    .find((name) => name !== null && name !== 'logMessage');
 
-  // Find the first line that contains '@' and is not logMessage itself
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (line.includes('@') && !line.startsWith('logMessage')) {
-      return line.split('@')[0] || 'anonymous';
-    }
-    // Fallback for anonymous functions
-    if (line.startsWith('@')) {
-      return 'anonymous function';
-    }
+  return caller ?? 'unknown function';
+}
+
+/**
+ * Extracts a caller name from a single stack trace line.
+ *
+ * @param {string} line The raw stack trace line.
+ * @returns {string|null} The function name or null if not found.
+ */
+function parseStackLine(line: string): string | null {
+  // Firefox/Safari: "functionName@url" or "@url"
+  if (line.includes('@')) {
+    return line.split('@')[0] || 'anonymous';
   }
 
-  // Chrome fallback
-  for (let i = 1; i < lines.length; i++) {
-    const match = lines[i].match(/at ([^( ]+)/);
-    if (match && match[1] && match[1] !== 'logMessage') {
-      return match[1];
-    }
-  }
-
-  return 'unknown function';
+  // Chrome/Edge/Node: "at functionName (url)"
+  const chromeMatch = line.match(/at ([^( ]+)/);
+  return chromeMatch ? chromeMatch[1] : null;
 }
 
 /**
