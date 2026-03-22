@@ -28,12 +28,12 @@ Explain why this change is needed and the impact it has on the project or users.
 
 Please check off the following tasks that apply to your change:
 
-* [ ] I have **reviewed the existing documentation** to ensure my changes are consistent with the current style and
+- [ ] I have **reviewed the existing documentation** to ensure my changes are consistent with the current style and
   tone.
-* [ ] I have checked for and fixed any **broken links** (internal or external).
-* [ ] I have confirmed that the new/updated content is **technically accurate**.
-* [ ] I have ensured any **code snippets or examples** are properly formatted and valid.
-* [ ] I have tested that the documentation **builds and displays correctly** (if applicable, by running the local
+- [ ] I have checked for and fixed any **broken links** (internal or external).
+- [ ] I have confirmed that the new/updated content is **technically accurate**.
+- [ ] I have ensured any **code snippets or examples** are properly formatted and valid.
+- [ ] I have tested that the documentation **builds and displays correctly** (if applicable, by running the local
   documentation server).
 
 ---

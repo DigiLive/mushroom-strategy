@@ -1,7 +1,6 @@
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import globals from 'globals';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
@@ -35,10 +34,6 @@ export default [
       parser: tsParser,
       parserOptions: {
         project: './tsconfig.json',
-      },
-      globals: {
-        ...globals.es2020,
-        ...globals.node,
       },
     },
     rules: {

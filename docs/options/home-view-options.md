@@ -2,10 +2,10 @@
 
 The `home_view` group enables you to specify the configuration of the Home view.
 
-| Option        | type   | default  | Description                                   |
-|:--------------|:-------|:---------|:----------------------------------------------|
-| `hidden`      | array  | `[]`     | Array of sections to hide from the home view. |
-| `stack_count` | object | `{_: 2}` | Cards per row.                                |
+| Option        | type   | default            | Description                                   |
+|:--------------|:-------|:-------------------|:----------------------------------------------|
+| `hidden`      | object | `{greeting: true}` | Array of sections to hide from the home view. |
+| `stack_count` | object | `{_: 2}`           | Cards per row.                                |
 
 ---
 
@@ -13,11 +13,11 @@ The `home_view` group enables you to specify the configuration of the Home view.
 
 The following sections can be hidden from the Home view:
 
-* areas
-* areasTitle
-* badges
-* greeting
-* persons
+- areas
+- areasTitle
+- badges
+- greeting
+- persons
 
 ### Example
 
@@ -27,8 +27,8 @@ strategy:
   options:
     home_view:
       hidden:
-        - greeting
-        - areasTitle
+        greeting: false
+        areasTitle: true
 ```
 
 ---
@@ -68,7 +68,7 @@ Hidden/Disabled entities are excluded from this count.
 - Tapping a badge will set corresponding entities to an "inactive" state.[^1]  
   _**Note:** The Switch badge requires a confirmation before executing its tap action to prevent accidental toggling of
   all switches._
-- Holding a badge, will navigate to the corresponding view.
+- Holding a badge will navigate to the corresponding view.
 
 [^1]: For some badges, the tap action is disabled.
 

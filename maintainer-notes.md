@@ -53,7 +53,7 @@ Access at: `http://127.0.0.1:8000/main-local/`
 ## 4. Maintenance & Troubleshooting
 
 | Scenario                      | Command / Solution                                       |
-| :---------------------------- | :------------------------------------------------------- |
+|:------------------------------|:---------------------------------------------------------|
 | **Remove a ghost version**    | `mike delete <version_name>`                             |
 | **List all current versions** | `mike list`                                              |
 | **Sync local gh-pages**       | `git checkout gh-pages && git pull origin gh-pages`      |
@@ -84,11 +84,14 @@ To stay within the Node.js ecosystem, these scripts can be added to your `packag
 This ensures you don't need to remember the specific `mike` or `mkdocs` commands:
 
 ```json
-"scripts": {
-  "docs:serve": "mkdocs serve",
-  "docs:serve-versioned": "mike serve",
-  "docs:check": "npm run md:lint-fix",
-  "docs:list": "mike list"
+{
+  "...": "...",
+  "scripts": {
+    "docs:serve": "mkdocs serve",
+    "docs:serve-versioned": "mike serve",
+    "docs:list": "mike list",
+    "...": "..."
+  }
 }
 ```
 
@@ -97,7 +100,7 @@ This ensures you don't need to remember the specific `mike` or `mkdocs` commands
 If the version selector disappears from the site, the `versions.json` file is likely missing from the root of the
 `gh-pages` branch.
 
-### How to Rebuild it:
+### How to Rebuild it
 
 You don't need to manually write the JSON. You can force `mike` to recreate it by "re-aliasing" your existing versions:
 
@@ -109,12 +112,14 @@ You don't need to manually write the JSON. You can force `mike` to recreate it b
    ```
 
 2. Re-generate the JSON:
+
    ```bash
    mike alias main main
    mike alias <your-latest-tag> latest
    ```
 
 3. **Verify and Push**: Check that versions.json exists in your folder, then:
+
    ```bash
    git add versions.json
    git commit -m "fix: restore versions.json"
@@ -126,11 +131,13 @@ You don't need to manually write the JSON. You can force `mike` to recreate it b
 The `versions.json` file lives only on the `gh-pages` branch. It tells the UI which versions exist and which aliases
 (like `latest`) point where.
 
-### Why it matters:
+### Why it matters
+
 - If a version isn't in this file, it won't show in the dropdown.
 - If this file is missing, the version selector disappears.
 
-### Structure Example:
+### Structure Example
+
 ```json
 [
   {
@@ -151,6 +158,7 @@ The `versions.json` file lives only on the `gh-pages` branch. It tells the UI wh
 When running documentation tools locally, a `site/` directory may be created.
 
 ### Local Behavior
+
 - **`mkdocs serve`**: Does not usually create a physical `site/` folder; it serves the site from memory.
 
 - **`mkdocs build`**: Generates a static version of the current docs into `site/`.
@@ -159,10 +167,12 @@ When running documentation tools locally, a `site/` directory may be created.
   It renders the site and commits it directly to a temporary area before pushing to the `gh-pages` branch.
 
 ### The "Hands-Off" Rule
-The `site/` folder must **never** be comitted to the `main` branch.<br>
+
+The `site/` folder must **never** be committed to the `main` branch.<br>
 It contains generated assets that will cause merge conflicts and bloat the repository.
 
-### Maintenance Actions:
+### Maintenance Actions
+
 1. **Ensure `.gitignore` includes `site/`**:
    Verify your `.gitignore` at the project root has a line for `/site/`.
 

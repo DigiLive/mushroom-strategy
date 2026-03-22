@@ -12,15 +12,15 @@ Examples: fr, fr-CA, zh-Hans.
    Each language has its own `locale.json` file (e.g., `en.json`, `nl.json`, `pt-BR.json`).
 3. **Create or Update:**
 
-      * **To create a new language:** Copy an existing `.json` file (e.g., `en.json`), rename it to your language
+      - **To create a new language:** Copy an existing `.json` file (e.g., `en.json`), rename it to your language
         code (e.g., `de.json` for German), and translate the property values.
-      * **To update an existing language:** Open the `.json` file for your language and update any missing or
+      - **To update an existing language:** Open the `.json` file for your language and update any missing or
         outdated translations.
 
 4. **Test Your Changes:** Thoroughly test your changes to ensure they work as expected and don't introduce new issues.
 
-     * You can build the strategy with `npm run build` (for production) or `npm run build-dev` (for development/testing).
-     * Copy the built files to your Home Assistant's `www/community/mushroom-strategy` directory for testing.  
+     - You can build the strategy with `npm run build` (for production) or `npm run build-dev` (for development/testing).
+     - Copy the built files to your Home Assistant's `www/community/mushroom-strategy` directory for testing.  
        **Remember to clear the cache of your Home Assistant client** to see the changes.
 
     !!! info
@@ -30,9 +30,9 @@ Examples: fr, fr-CA, zh-Hans.
 
 5. **Format and Lint Your Changes:**
 
-    * Run the formatter with `npm run json:format`.
-    * Run the formatter with `npm run ts:format`.
-    * Build the strategy with `npm run build`.
+    - Run the formatter with `npm run json:format`.
+    - Run the formatter with `npm run ts:format`.
+    - Build the strategy with `npm run build`.
 
      All of these tasks should result without errors.
 

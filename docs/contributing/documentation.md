@@ -11,7 +11,8 @@ The entire documentation lives in the `docs/` folder of this repository.
 1. **Follow the [Workflow](workflow.md):**
 
 2. **Serve the Documentation Locally**:
-   Start the local development server. This task needs to be run from the **project root** (where the `mkdocs.yml` file is):
+   Start the local development server.<br>
+   This task needs to be run from the **project root** (where the `mkdocs.yml` file is):
 
     ```bash
     mkdocs serve
@@ -54,7 +55,7 @@ The entire documentation lives in the `docs/` folder of this repository.
     ```bash
     npm run md:lint-fix
     ```
-   
+
    This task should result without errors.
 
 8. **Commit Your Changes.**
@@ -69,7 +70,7 @@ The entire documentation lives in the `docs/` folder of this repository.
 
 Our documentation uses `mike` to manage multiple versions of the documentation:
 
-- **The main version**: Every time a Pull Request is merged into the main branch, the documentation at /main/ is 
+- **The main version**: Every time a Pull Request is merged into the main branch, the documentation at /main/ is
   updated.  
   This represents the "development" or "upcoming" version.
 

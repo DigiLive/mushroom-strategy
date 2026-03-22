@@ -58,7 +58,7 @@ class HeaderCard {
     ];
 
     // Add controls to the card.
-    if (this.configuration.showControls) {
+    if (this.configuration.show_controls) {
       cards.push({
         type: 'horizontal-stack',
         cards: [

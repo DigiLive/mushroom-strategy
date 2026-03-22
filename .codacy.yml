@@ -1,0 +1,48 @@
+---
+engines:
+  # Modern Linting & Security
+  eslint9:
+    enabled: true
+  opengrep:
+    enabled: true
+
+  # Logic & Quality Metrics
+  lizard:
+    enabled: true
+  pmd7:
+    enabled: true
+
+  # CSS & Web Standards
+  stylelint:
+    enabled: true
+
+  # Documentation & Config
+  markdownlint:
+    enabled: true
+  spectral:
+    enabled: true
+  jackson-linter:
+    enabled: true
+
+  # Dependency Scanning (since you have package.json)
+  trivy:
+    enabled: true
+
+  # Explicitly disable Legacy
+  eslint:
+    enabled: false
+  tslint:
+    enabled: false
+  csslint:
+    enabled: false
+  pmd:
+    enabled: false
+  checkov:
+    enabled: false
+
+# Your specific exclusions
+exclude_paths:
+  - "dist/**"
+  - "src/types/homeassistant/**"
+  - "src/types/lovelace-mushroom/**"
+  - "node_modules/**"  # Standard practice to ensure speed

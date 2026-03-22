@@ -22,7 +22,7 @@ class SceneView extends AbstractView {
       icon: 'mdi:palette',
       subview: false,
       headerCardConfiguration: {
-        showControls: false,
+        show_controls: false,
       },
     };
   }

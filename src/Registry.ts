@@ -119,6 +119,7 @@ class Registry {
       Registry._strategyOptions = deepmerge(ConfigurationDefaults, info.config.strategy.options ?? {});
     } catch (e) {
       logMessage(lvlFatal, 'Error importing strategy options!', e);
+      Registry._strategyOptions = ConfigurationDefaults;
     }
 
     setDebugLevel(Registry.strategyOptions.debug ? lvlFatal : lvlOff);
@@ -185,7 +186,7 @@ class Registry {
       });
 
       // Ensure the custom configuration of the undisclosed area doesn't overwrite the required property values.
-      Registry.strategyOptions.areas.undisclosed.area_id = 'undisclosed';
+      (Registry.strategyOptions.areas.undisclosed as StrategyArea).area_id = 'undisclosed';
       Registry.strategyOptions.areas.undisclosed.type = 'default';
 
       // Remove hidden areas if configured as so and sort them by name.

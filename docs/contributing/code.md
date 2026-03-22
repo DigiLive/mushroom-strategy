@@ -8,8 +8,8 @@ Want to get your hands dirty with the code? Awesome! We appreciate all code cont
 
 3. **Test Your Changes:** Thoroughly test your changes to ensure they work as expected and don't introduce new issues.
 
-     * You can build the strategy with `npm run build` (for production) or `npm run build-dev` (for development/testing).
-     * Copy the built files to your Home Assistant's `www/community/mushroom-strategy` directory for testing.  
+     - You can build the strategy with `npm run build` (for production) or `npm run build-dev` (for development/testing).
+     - Copy the built files to your Home Assistant's `www/community/mushroom-strategy` directory for testing.  
        **Remember to clear the cache of your Home Assistant client** to see the changes.
 
     !!! info
@@ -19,8 +19,8 @@ Want to get your hands dirty with the code? Awesome! We appreciate all code cont
 
 4. **Format and Lint Your Changes:**
 
-    * Run the formatter with `npm run ts:format`.
-    * Build the strategy with `npm run build`.
+    - Run the formatter with `npm run ts:format`.
+    - Build the strategy with `npm run build`.
 
      Both of these tasks should result without errors.
 

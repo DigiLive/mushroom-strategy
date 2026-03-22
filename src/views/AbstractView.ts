@@ -11,6 +11,7 @@ import { sanitizeClassName } from '../utilities/auxiliaries';
 import { logMessage, lvlFatal } from '../utilities/debug';
 import RegistryFilter from '../utilities/RegistryFilter';
 import { stackHorizontal } from '../utilities/cardStacking';
+import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
 
 /**
  * Abstract View Class.
@@ -50,23 +51,36 @@ abstract class AbstractView {
     return (this.constructor as unknown as ViewConstructor).domain;
   }
 
-  // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+  // noinspection JSUnusedGlobalSymbols Method is dynamically called.
   /**
    * Get a view configuration.
    *
-   * The configuration includes the card configurations which are created by createCardConfigurations().
+   * The configuration includes the card configurations which are created by createSections().
    */
-  async getView(): Promise<LovelaceViewConfig> {
+  async getView(): Promise<LovelaceViewConfig | false> {
+    const sectionsCards = await this.createSections();
+
+    if (!sectionsCards.length) {
+      return false;
+    }
+
+    if (this.domain === 'home') {
+      return {
+        ...this.baseConfiguration,
+        sections: sectionsCards,
+      };
+    }
+
     return {
       ...this.baseConfiguration,
-      cards: await this.createCardConfigurations(),
+      cards: sectionsCards as LovelaceCardConfig[],
     };
   }
 
   /**
    * Create the configuration of the cards to include in the view.
    */
-  protected async createCardConfigurations(): Promise<LovelaceCardConfig[]> {
+  protected async createSections(): Promise<LovelaceCardConfig[] | LovelaceSectionRawConfig[]> {
     const viewCards: LovelaceCardConfig[] = [];
     const moduleName = sanitizeClassName(this.domain + 'Card');
     const DomainCard = (await import(`../cards/${moduleName}`)).default;
@@ -142,9 +156,9 @@ abstract class AbstractView {
 
     this.baseConfiguration.headerCardConfiguration = {
       ...this.baseConfiguration.headerCardConfiguration,
-      showControls:
-        Registry.strategyOptions.domains[this.domain as Exclude<SupportedDomains, 'home'>]?.showControls ??
-        Registry.strategyOptions.domains['_'].showControls,
+      show_controls:
+        Registry.strategyOptions.domains[this.domain as Exclude<SupportedDomains, 'home'>].show_controls ??
+        Registry.strategyOptions.domains['_'].show_controls,
     };
 
     this.viewHeaderCardConfiguration = new HeaderCard(this.getDomainTargets(), {

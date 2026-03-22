@@ -3,7 +3,6 @@
   "compilerOptions": {
     // 1. Language and Environment
     "target": "ES2020",
-    "jsx": "react",
     // 2. Module System
     "module": "ES2020",
     "moduleResolution": "Node",
