@@ -97,6 +97,10 @@ jobs:
         run: pip install mkdocs mkdocs-material pymdown-extensions mike
 
       - name: Deploy Docs to GitHub Pages
+        env:
+          MY_VERSION: ${{ github.event.inputs.version }}
+          MY_ALIAS: ${{ github.event.inputs.alias }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
@@ -106,15 +110,13 @@ jobs:
 
           if [ "${{ github.event_name }}" == "release" ]; then
             # Release: Create a permanent version folder and update latest alias.
-            mike deploy --push --update-aliases "${{ github.event.release.tag_name }}" latest
+            mike deploy --push --update-aliases "$RELEASE_TAG" latest
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             # Manual: Use UI inputs for version and optional alias.
-            VERSION="${{ github.event.inputs.version }}"
-            ALIAS="${{ github.event.inputs.alias }}"
-            if [ -n "$ALIAS" ]; then
-              mike deploy --push --update-aliases "$VERSION" "$ALIAS"
+            if [ -n "$MY_ALIAS" ]; then
+              mike deploy --push --update-aliases "$MY_VERSION" "$MY_ALIAS"
             else
-              mike deploy --push "$VERSION"
+              mike deploy --push "$MY_VERSION"
             fi
           else
             # Push: Update the /main/ folder
