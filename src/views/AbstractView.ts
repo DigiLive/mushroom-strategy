@@ -157,7 +157,7 @@ abstract class AbstractView {
     this.baseConfiguration.headerCardConfiguration = {
       ...this.baseConfiguration.headerCardConfiguration,
       show_controls:
-        Registry.strategyOptions.domains[this.domain as Exclude<SupportedDomains, 'home'>]?.show_controls ??
+        Registry.strategyOptions.domains[this.domain as Exclude<SupportedDomains, 'home'>].show_controls ??
         Registry.strategyOptions.domains['_'].show_controls,
     };
 

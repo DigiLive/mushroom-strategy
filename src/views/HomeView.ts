@@ -110,7 +110,7 @@ class HomeView extends AbstractView {
           'Persons and Areas',
           [personCards, areaCards].filter(Boolean),
           MEDIA_QUERY.LARGE,
-          !!(personCards || areaCards),
+          !!(personCards ?? areaCards),
         ],
         ['Quick Access Narrow', Registry.strategyOptions.quick_access_cards, MEDIA_QUERY.SMALL, true],
         ['Areas', [areaCards], MEDIA_QUERY.SMALL, !!areaCards],
@@ -206,10 +206,13 @@ class HomeView extends AbstractView {
       return;
     }
 
-    const greetingCard = Registry.strategyOptions.home_view.hidden.greeting
-      ? logMessage(lvlInfo, 'Greeting card is hidden.')
-      : new GreetingCard().getCard();
+    const greetingHidden = Registry.strategyOptions.home_view.hidden.greeting;
 
+    if (greetingHidden) {
+      logMessage(lvlInfo, 'Greeting card is hidden.');
+    }
+
+    const greetingCard = greetingHidden ? undefined : new GreetingCard().getCard();
     const cardConfigurations: PersonCardConfig[] = [];
     const PersonCard = (await import('../cards/PersonCard')).default;
 
@@ -237,15 +240,18 @@ class HomeView extends AbstractView {
    * If the section is marked as hidden in the strategy option, then the section is not created.
    */
   private async createAreaCards(): Promise<StackCardConfig | undefined> {
-    const titleCard = Registry.strategyOptions.home_view.hidden.areasTitle
-      ? logMessage(lvlInfo, 'Areas title is hidden.')
-      : new HeaderCard({}, { title: localize('generic.areas') }).createCard();
-
     if (Registry.strategyOptions.home_view.hidden.areas) {
       logMessage(lvlInfo, 'Areas section is hidden.');
       return;
     }
 
+    const titleHidden = Registry.strategyOptions.home_view.hidden.areasTitle;
+
+    if (titleHidden) {
+      logMessage(lvlInfo, 'Greeting titleHidden is hidden.');
+    }
+
+    const titleCard = titleHidden ? undefined : new HeaderCard({}, { title: localize('generic.areas') }).createCard();
     const cardConfigurations: (TemplateCardConfig | AreaCardConfig)[] = [];
 
     for (const area of Registry.areas) {
@@ -275,7 +281,9 @@ class HomeView extends AbstractView {
 
     return {
       type: 'vertical-stack',
-      columns: 'full',
+      grid_options: {
+        columns: 'full',
+      },
       cards: stackHorizontal(
         titleCard ? [titleCard, ...cardConfigurations] : cardConfigurations,
         Registry.strategyOptions.home_view.stack_count['_'],
