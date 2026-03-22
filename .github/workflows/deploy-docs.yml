@@ -20,6 +20,7 @@
 
 name: Deploy Documentation
 
+# checkov:skip=CKV_GHA_7: "Inputs are sanitized via regex in the run block to prevent injection"
 on:
   release:
     types: [published]
@@ -102,6 +103,18 @@ jobs:
           MY_ALIAS: ${{ github.event.inputs.alias }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
+          # Validate Version
+          if [[ ! "$MY_VERSION" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+            echo "::error::Invalid version name: $MY_VERSION. Only alphanumeric, dots, and hyphens allowed."
+            exit 1
+          fi
+
+          # Validate Alias
+          if [[ -n "$MY_ALIAS" && ! "$MY_ALIAS" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+            echo "::error::Invalid alias name: $MY_ALIAS. Only alphanumeric, dots, and hyphens allowed."
+            exit 1
+          fi
+
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git remote set-url origin https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/DigiLive/mushroom-strategy.git
