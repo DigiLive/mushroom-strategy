@@ -70,42 +70,43 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   /**
    * Filters entries by their `area_id`.
    *
-   * @param {string | undefined} areaId - The area id to match.
+   * @param {string|null} [areaId] - The area id to match.
    * @param {boolean} [expandToDevice=true] - Whether to evaluate the device's `area_id` (see remarks).
    *
    * @remarks
    * The entry's `area_id` must match `areaId` (with special handling for 'undisclosed').
    *
    * If `expandToDevice` is true, additional rules apply based on `areaId`:
-   * - `areaId` is `null`/`undefined`: The device's `area_id` must be `null`.
-   * - `areaId` is `'undisclosed'`: The device's `area_id` must match or be `'undisclosed'`/`null`.
-   * - For other `areaId` values: If entry's `area_id` is `'undisclosed'`, the device's `area_id` must match `areaId`.
+   * 1. `areaId` is `null`/`undefined`: The device's `area_id` must be `null`.
+   * 2. `areaId` is `'undisclosed'`: The device's `area_id` must match or be `'undisclosed'`/`null`.
+   * 3. For other `areaId` values: If entry's `area_id` is `'undisclosed'`, the device's `area_id` must match `areaId`.
    */
   whereAreaId(areaId?: string | null, expandToDevice: boolean = true): this {
     const predicate = (entry: T) => {
-      let deviceAreaId: string | null | undefined = undefined;
       const entryObject = entry as EntityRegistryEntry;
+      let deviceAreaId: string | null | undefined;
 
       if (expandToDevice && entryObject.device_id) {
         deviceAreaId = Registry.devices.find((device) => device.id === entryObject.device_id)?.area_id;
       }
 
+      // 1. No areaId provided.
       if (!areaId) {
         return entry.area_id === areaId && deviceAreaId === areaId;
       }
 
+      // 2: Handle the 'undisclosed' area specifically
       if (areaId === 'undisclosed') {
-        return entry.area_id === areaId && (deviceAreaId === areaId || deviceAreaId == null);
+        const isDeviceUndisclosed = deviceAreaId === 'undisclosed' || deviceAreaId == null;
+        return entry.area_id === 'undisclosed' && isDeviceUndisclosed;
       }
 
-      if (entry.area_id === areaId) {
-        return true;
-      }
-
-      return entry.area_id === 'undisclosed' && deviceAreaId === areaId;
+      // 3: Specific area match or fallback to device if entry is undisclosed
+      return entry.area_id === areaId || (entry.area_id === 'undisclosed' && deviceAreaId === areaId);
     };
 
     this.filters.push(this.checkInversion(predicate));
+
     return this;
   }
 

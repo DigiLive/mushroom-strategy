@@ -45,4 +45,5 @@ exclude_paths:
   - "dist/**"
   - "src/types/homeassistant/**"
   - "src/types/lovelace-mushroom/**"
-  - "node_modules/**"  # Standard practice to ensure speed
+  - "package-lock.json"
+  - "node_modules/**"
