@@ -72,10 +72,18 @@ class MushroomStrategy extends HTMLTemplateElement {
 
     // Extra views
     if (Registry.strategyOptions.extra_views) {
-      views.push(...Registry.strategyOptions.extra_views);
-
       views.sort((a, b) => {
-        return (a.order ?? Infinity) - (b.order ?? Infinity) || (a.title ?? '').localeCompare(b.title ?? '');
+        const orderA = a.order ?? Infinity;
+        const orderB = b.order ?? Infinity;
+
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+
+        const titleA = a.title ?? '';
+        const titleB = b.title ?? '';
+
+        return titleA.localeCompare(titleB);
       });
     }
 
