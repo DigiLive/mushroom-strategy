@@ -143,9 +143,16 @@ class Registry {
       .whereEntityCategory('diagnostic')
       .isNotHidden()
       .whereDisabledBy(null)
-      .orderBy(['name', 'original_name'], 'asc')
       .toList()
       .map((entity) => ({ ...entity, area_id: entity.area_id ?? 'undisclosed' }));
+
+    // Sort entities by display name.
+    Registry._entities = Registry._entities.sort((a, b) => {
+      const displayNameA = Registry.getDisplayName(a);
+      const displayNameB = Registry.getDisplayName(b);
+
+      return displayNameA.localeCompare(displayNameB, undefined, { numeric: true, sensitivity: 'base' });
+    });
 
     // Process entries of the HASS device registry.
     Registry._devices = new RegistryFilter(Registry.devices)
@@ -291,6 +298,44 @@ class Registry {
       })
     ) as Record<string, T>;
   }
+
+  /**
+   * Resolves the most appropriate display name for an entity based on a hierarchical lookup.
+   *
+   * The priority order is as follows:
+   * 1. User-defined name in the entity registry.
+   * 2. Device-linked name (combining device name and original entity name if applicable).
+   * 3. Original name provided by the integration.
+   * 4. A formatted version of the entity ID slug as a final fallback.
+   *
+   * @param {EntityRegistryEntry} entity - The entity registry entry to process.
+   * @returns {string} The resolved display name.
+   */
+  private static getDisplayName = (entity: EntityRegistryEntry): string => {
+    // 1. User defined name in registry (Manual Override)
+    if (entity.name) {
+      return entity.name;
+    }
+
+    // 2. Device Name Logic (When linked via has_entity_name)
+    if (entity.has_entity_name && entity.device_id) {
+      const device = Registry.devices.find((d) => d.id === entity.device_id);
+      const deviceName = device?.name_by_user ?? device?.name;
+
+      if (deviceName) {
+        return entity.original_name ? `${deviceName} ${entity.original_name}` : deviceName;
+      }
+    }
+
+    // 3. Integration defined name (When NOT linked or Device lookup failed)
+    if (entity.original_name) {
+      return entity.original_name;
+    }
+
+    // 4. Ultimate Fallback: The Entity ID Slug
+    const slug = entity.entity_id.split('.')[1] || entity.entity_id;
+    return slug.replace(/_/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase());
+  };
 }
 
 export { Registry };
