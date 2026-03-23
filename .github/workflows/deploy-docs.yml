@@ -20,13 +20,17 @@
 
 name: Deploy Documentation
 
+concurrency:
+  group: deploy-docs-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
   release:
     types: [published]
   push:
     branches:
       - main
-  # checkov:skip=CKV_GHA_7: Inputs are sanitized via regex in the run block to prevent injection
+  # checkov:skip=CKV_GHA_7: Inputs are sanitized via regex in the run block to prevent injection.
   workflow_dispatch:
     inputs:
       version:
@@ -39,7 +43,7 @@ on:
         default: ''
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   check-for-changes:
@@ -63,6 +67,8 @@ jobs:
 
   deploy:
     name: Deploy MkDocs Site
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: check-for-changes
@@ -93,9 +99,10 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.x'
+          cache: 'pip'
 
       - name: Install MkDocs and dependencies
-        run: pip install mkdocs mkdocs-material pymdown-extensions mike
+        run: pip install -r requirements.txt
 
       - name: Deploy Docs to GitHub Pages
         env:
@@ -103,35 +110,34 @@ jobs:
           MY_ALIAS: ${{ github.event.inputs.alias }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          # Validate Version
-          if [[ ! "$MY_VERSION" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-            echo "::error::Invalid version name: $MY_VERSION. Only alphanumeric, dots, and hyphens allowed."
-            exit 1
-          fi
-
-          # Validate Alias
-          if [[ -n "$MY_ALIAS" && ! "$MY_ALIAS" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-            echo "::error::Invalid alias name: $MY_ALIAS. Only alphanumeric, dots, and hyphens allowed."
-            exit 1
-          fi
-
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git remote set-url origin https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/DigiLive/mushroom-strategy.git
 
-          git fetch origin gh-pages --depth=1
+          if ! git fetch origin gh-pages --depth=1 2>/dev/null; then
+          echo "::notice::gh-pages branch does not exist yet. Mike will create it."
+          fi
 
           if [ "${{ github.event_name }}" == "release" ]; then
             # Release: Create a permanent version folder and update latest alias.
-            mike deploy --push --update-aliases "$RELEASE_TAG" latest
+            mike deploy --push --rebase --update-aliases "$RELEASE_TAG" latest
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             # Manual: Use UI inputs for version and optional alias.
+            if [[ ! "$MY_VERSION" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+              echo "::error::Invalid version name: $MY_VERSION. Only alphanumeric, dots, and hyphens allowed."
+              exit 1
+            fi
+            if [[ -n "$MY_ALIAS" && ! "$MY_ALIAS" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+              echo "::error::Invalid alias name: $MY_ALIAS. Only alphanumeric, dots, and hyphens allowed."
+              exit 1
+            fi
+
             if [ -n "$MY_ALIAS" ]; then
-              mike deploy --push --update-aliases "$MY_VERSION" "$MY_ALIAS"
+              mike deploy --push --rebase --update-aliases "$MY_VERSION" "$MY_ALIAS"
             else
-              mike deploy --push "$MY_VERSION"
+              mike deploy --push --rebase "$MY_VERSION"
             fi
           else
             # Push: Update the /main/ folder
-            mike deploy --push main
+            mike deploy --push --rebase main
           fi

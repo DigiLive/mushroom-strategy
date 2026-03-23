@@ -10,7 +10,7 @@ Ensure you have Python 3 installed. It is recommended to use a virtual environme
 
 ```bash
 # Install core documentation stack
-pip install mkdocs mkdocs-material mike pymdown-extensions
+pip install -r requirements.txt
 ```
 
 ## 2. One-Time Project Initialization
