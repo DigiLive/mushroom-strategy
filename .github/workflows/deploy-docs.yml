@@ -21,7 +21,7 @@
 name: Deploy Documentation
 
 concurrency:
-  group: deploy-docs-${{ github.ref }}
+  group: deploy-docs
   cancel-in-progress: false
 
 on:
@@ -30,7 +30,7 @@ on:
   push:
     branches:
       - main
-  # checkov:skip=CKV_GHA_7: Inputs are sanitized via regex in the run block to prevent injection.
+  # checkov:skip=CKV_GHA_7: Inputs are validated and sanitized via regex below to prevent injection.
   workflow_dispatch:
     inputs:
       version:
@@ -47,6 +47,7 @@ permissions:
 
 jobs:
   check-for-changes:
+    if: github.event_name == 'push'
     name: Check for changes
     runs-on: ubuntu-latest
     outputs:
@@ -71,17 +72,46 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: check-for-changes
+    needs: [check-for-changes]
     if: |
-      needs.check-for-changes.outputs.changed == 'true' ||
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'release'
+      github.event_name != 'push' ||
+      needs.check-for-changes.outputs.changed == 'true'
     env:
       CI_COMMIT_AUTHOR: 'CI Bot'
       CI_COMMIT_EMAIL: 'ci@noreply.github.com'
       CI_COMMIT_MESSAGE: 'Continuous Integration - Deploy Documentation'
 
     steps:
+      - name: Validate Inputs
+        id: validation
+        env:
+          MY_VERSION: ${{ github.event.inputs.version }}
+          MY_ALIAS: ${{ github.event.inputs.alias }}
+        # language=bash
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            if [[ ! "$MY_VERSION" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+              echo "::error::Invalid version name: $MY_VERSION. Only alphanumeric, dots, and hyphens allowed."
+              exit 1
+            fi
+            if [[ -n "$MY_ALIAS" && ! "$MY_ALIAS" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+              echo "::error::Invalid alias name: $MY_ALIAS. Only alphanumeric, dots, and hyphens allowed."
+              exit 1
+            fi
+          fi
+
+          if [ "${{ github.event_name }}" == "release" ]; then
+            TARGET_REF="${{ github.event.release.tag_name }}"
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TARGET_REF="${{ github.event.inputs.version }}"
+          else
+            TARGET_REF="${{ github.ref }}"
+          fi
+
+          echo "target_version=$MY_VERSION" >> "$GITHUB_OUTPUT"
+          echo "target_alias=$MY_ALIAS" >> "$GITHUB_OUTPUT"
+          echo "target_ref=$TARGET_REF" >> "$GITHUB_OUTPUT"
+
       - name: Generate GitHub App Token
         id: generate_token
         uses: actions/create-github-app-token@v3
@@ -93,6 +123,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           token: ${{ steps.generate_token.outputs.token }}
+          ref: ${{ steps.validation.outputs.target_ref }}
           fetch-depth: 0
 
       - name: Set up Python
@@ -105,37 +136,24 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Deploy Docs to GitHub Pages
-        env:
-          MY_VERSION: ${{ github.event.inputs.version }}
-          MY_ALIAS: ${{ github.event.inputs.alias }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        # language=bash
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
           git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git remote set-url origin https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/DigiLive/mushroom-strategy.git
 
           if ! git fetch origin gh-pages --depth=1 2>/dev/null; then
-          echo "::notice::gh-pages branch does not exist yet. Mike will create it."
+          echo "::notice::gh-pages branch does not exist yet. mike will create it."
           fi
 
           if [ "${{ github.event_name }}" == "release" ]; then
             # Release: Create a permanent version folder and update latest alias.
-            mike deploy --push --update-aliases "$RELEASE_TAG" latest
+            mike deploy --push --update-aliases "${{ github.event.release.tag_name }}" latest
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            # Manual: Use UI inputs for version and optional alias.
-            if [[ ! "$MY_VERSION" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-              echo "::error::Invalid version name: $MY_VERSION. Only alphanumeric, dots, and hyphens allowed."
-              exit 1
-            fi
-            if [[ -n "$MY_ALIAS" && ! "$MY_ALIAS" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-              echo "::error::Invalid alias name: $MY_ALIAS. Only alphanumeric, dots, and hyphens allowed."
-              exit 1
-            fi
-
-            if [ -n "$MY_ALIAS" ]; then
-              mike deploy --push --update-aliases "$MY_VERSION" "$MY_ALIAS"
+            if [ -n  "${{ steps.validation.outputs.target_alias }}" ]; then
+              mike deploy --push --update-aliases "${{ steps.validation.outputs.target_version }}" "${{ steps.validation.outputs.target_alias }}"
             else
-              mike deploy --push "$MY_VERSION"
+              mike deploy --push "${{ steps.validation.outputs.target_version }}"
             fi
           else
             # Push: Update the /main/ folder
