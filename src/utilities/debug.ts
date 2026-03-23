@@ -60,14 +60,20 @@ function getCallerName(stack?: string): string {
     return 'unknown function';
   }
 
-  // Filter out empty lines and the logMessage itself to find the true caller
-  const caller = stack
-    .split('\n')
-    .filter(Boolean)
-    .map(parseStackLine)
-    .find((name) => name !== null && name !== 'logMessage');
+  const lines = stack.split('\n');
 
-  return caller ?? 'unknown function';
+  for (const line of lines) {
+    if (!line) {
+      continue;
+    }
+
+    const name = parseStackLine(line);
+    if (name && name !== 'logMessage') {
+      return name;
+    }
+  }
+
+  return 'unknown function';
 }
 
 /**
