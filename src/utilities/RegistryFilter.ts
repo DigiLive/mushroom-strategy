@@ -365,6 +365,8 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
 
     // Create a new array to avoid mutating the original.
     const sortedEntries = [...this.entries].sort((a, b) => {
+      const sortDirection = direction === 'asc' ? 1 : -1;
+
       // Get the first defined value for each entry using the provided keys
       const valueA = getValue(a, keys);
       const valueB = getValue(b, keys);
@@ -380,26 +382,26 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
 
       // First, compare by priority (handles special values).
       if (priorityA !== priorityB) {
-        return (priorityA - priorityB) * (direction === 'asc' ? 1 : -1);
+        return (priorityA - priorityB) * sortDirection;
       }
 
       // For same priority, compare the actual values.
       // Handle undefined/null cases
-      if (comparableA === undefined || comparableA === null) {
+      if (comparableA == null) {
         return 1;
       }
 
-      if (comparableB === undefined || comparableB === null) {
+      if (comparableB == null) {
         return -1;
       }
 
       // String comparison.
       if (typeof comparableA === 'string' && typeof comparableB === 'string') {
-        return comparableA.localeCompare(comparableB) * (direction === 'asc' ? 1 : -1);
+        return comparableA.localeCompare(comparableB) * sortDirection;
       }
 
       // Numeric/other comparison.
-      return (comparableA < comparableB ? -1 : 1) * (direction === 'asc' ? 1 : -1);
+      return (comparableA < comparableB ? -1 : 1) * sortDirection;
     });
 
     // Create a new filter with the sorted entries.

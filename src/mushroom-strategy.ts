@@ -21,6 +21,7 @@ import { PersistentNotification } from './utilities/PersistentNotification';
 import { HomeAssistant } from './types/homeassistant/types';
 import semver from 'semver/preload';
 import { NOTIFICATIONS } from './notifications';
+import MiscellaneousCard from './cards/MiscellaneousCard';
 
 /**
  * Mushroom Dashboard Strategy.<br>
@@ -73,17 +74,9 @@ class MushroomStrategy extends HTMLTemplateElement {
     // Extra views
     if (Registry.strategyOptions.extra_views) {
       views.sort((a, b) => {
-        const orderA = a.order ?? Infinity;
-        const orderB = b.order ?? Infinity;
+        const diff = (a.order ?? Infinity) - (b.order ?? Infinity);
 
-        if (orderA !== orderB) {
-          return orderA - orderB;
-        }
-
-        const titleA = a.title ?? '';
-        const titleB = b.title ?? '';
-
-        return titleA.localeCompare(titleB);
+        return diff || (a.title ?? '').localeCompare(b.title ?? '');
       });
     }
 
@@ -151,16 +144,18 @@ class MushroomStrategy extends HTMLTemplateElement {
         const DomainCard = (await import(`./cards/${moduleName}`)).default;
 
         if (domain === 'sensor') {
-          let domainCards = entities
-            .filter((entity) => Registry.hassStates[entity.entity_id]?.attributes.unit_of_measurement)
-            .map((entity) => {
-              const options = {
-                ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
-                ...Registry.strategyOptions.card_options?.[entity.entity_id],
-                entities: [entity.entity_id],
-              };
-              return new SensorCard(entity, options).getCard();
-            });
+          let domainCards = entities.map((entity) => {
+            const isMeasurement = Registry.hassStates[entity.entity_id]?.attributes.unit_of_measurement;
+            const options = {
+              ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
+              ...Registry.strategyOptions.card_options?.[entity.entity_id],
+              entities: [entity.entity_id],
+            };
+
+            return isMeasurement
+              ? new SensorCard(entity, options).getCard()
+              : new MiscellaneousCard(entity, options).getCard();
+          });
 
           if (domainCards.length) {
             domainCards = stackHorizontal(

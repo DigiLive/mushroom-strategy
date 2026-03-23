@@ -20,13 +20,13 @@
 
 name: Deploy Documentation
 
-# checkov:skip=CKV_GHA_7: "Inputs are sanitized via regex in the run block to prevent injection"
 on:
   release:
     types: [published]
   push:
     branches:
       - main
+  # checkov:skip=CKV_GHA_7: Inputs are sanitized via regex in the run block to prevent injection
   workflow_dispatch:
     inputs:
       version:
