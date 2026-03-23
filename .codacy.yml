@@ -9,6 +9,11 @@ engines:
   # Logic & Quality Metrics
   lizard:
     enabled: true
+    config:
+      thresholds:
+        cyclomatic_complexity: 10
+        lines_of_code: 50
+        arguments: 4
   pmd7:
     enabled: true
 
