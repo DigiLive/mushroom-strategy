@@ -73,6 +73,8 @@ class MushroomStrategy extends HTMLTemplateElement {
 
     // Extra views
     if (Registry.strategyOptions.extra_views) {
+      views.push(...Registry.strategyOptions.extra_views);
+
       views.sort((a, b) => {
         const diff = (a.order ?? Infinity) - (b.order ?? Infinity);
 

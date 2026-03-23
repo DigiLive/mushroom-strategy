@@ -245,7 +245,7 @@ class HomeView extends AbstractView {
       return;
     }
 
-    const titleHidden = Registry.strategyOptions.home_view.hidden.areasTitle;
+    const titleHidden = Registry.strategyOptions.home_view.hidden.areas_title;
 
     if (titleHidden) {
       logMessage(lvlInfo, 'Greeting titleHidden is hidden.');

@@ -72,7 +72,7 @@ const SUPPORTED_BADGES = ['light', 'fan', 'cover', 'switch', 'climate', 'weather
  * This constant array defines the sections that are present in the home view.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const HOME_VIEW_SECTIONS = ['areas', 'areasTitle', 'badges', 'greeting', 'persons'] as const;
+const HOME_VIEW_SECTIONS = ['areas', 'areas_title', 'badges', 'greeting', 'persons'] as const;
 
 export type SupportedDomains = (typeof SUPPORTED_DOMAINS)[number];
 export type SupportedViews = (typeof SUPPORTED_VIEWS)[number];

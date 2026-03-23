@@ -14,7 +14,7 @@ strategy:
     home_view:
       hidden:
         greeting: false
-        areasTitle: true
+        areas_title: true
       stack_count:
         areas: [2, 1]
         persons: 3

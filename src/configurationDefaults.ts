@@ -173,7 +173,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
   home_view: {
     hidden: {
       areas: false,
-      areasTitle: false,
+      areas_title: false,
       badges: false,
       greeting: true,
       persons: false,

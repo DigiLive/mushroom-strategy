@@ -14,7 +14,7 @@ The `home_view` group enables you to specify the configuration of the Home view.
 The following sections can be hidden from the Home view:
 
 - areas
-- areasTitle
+- areas_title
 - badges
 - greeting
 - persons
@@ -28,7 +28,7 @@ strategy:
     home_view:
       hidden:
         greeting: false
-        areasTitle: true
+        areas_title: true
 ```
 
 ---
