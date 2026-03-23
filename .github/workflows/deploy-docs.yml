@@ -84,10 +84,10 @@ jobs:
     steps:
       - name: Generate GitHub App Token
         id: generate_token
-        uses: tibdex/github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -120,7 +120,7 @@ jobs:
 
           if [ "${{ github.event_name }}" == "release" ]; then
             # Release: Create a permanent version folder and update latest alias.
-            mike deploy --push --rebase --update-aliases "$RELEASE_TAG" latest
+            mike deploy --push --update-aliases "$RELEASE_TAG" latest
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             # Manual: Use UI inputs for version and optional alias.
             if [[ ! "$MY_VERSION" =~ ^[a-zA-Z0-9._-]+$ ]]; then
@@ -133,11 +133,11 @@ jobs:
             fi
 
             if [ -n "$MY_ALIAS" ]; then
-              mike deploy --push --rebase --update-aliases "$MY_VERSION" "$MY_ALIAS"
+              mike deploy --push --update-aliases "$MY_VERSION" "$MY_ALIAS"
             else
-              mike deploy --push --rebase "$MY_VERSION"
+              mike deploy --push "$MY_VERSION"
             fi
           else
             # Push: Update the /main/ folder
-            mike deploy --push --rebase main
+            mike deploy --push main
           fi
