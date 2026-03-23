@@ -21,6 +21,7 @@ import { PersistentNotification } from './utilities/PersistentNotification';
 import { HomeAssistant } from './types/homeassistant/types';
 import semver from 'semver/preload';
 import { NOTIFICATIONS } from './notifications';
+import MiscellaneousCard from './cards/MiscellaneousCard';
 
 /**
  * Mushroom Dashboard Strategy.<br>
@@ -151,16 +152,18 @@ class MushroomStrategy extends HTMLTemplateElement {
         const DomainCard = (await import(`./cards/${moduleName}`)).default;
 
         if (domain === 'sensor') {
-          let domainCards = entities
-            .filter((entity) => Registry.hassStates[entity.entity_id]?.attributes.unit_of_measurement)
-            .map((entity) => {
-              const options = {
-                ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
-                ...Registry.strategyOptions.card_options?.[entity.entity_id],
-                entities: [entity.entity_id],
-              };
-              return new SensorCard(entity, options).getCard();
-            });
+          let domainCards = entities.map((entity) => {
+            const isMeasurement = Registry.hassStates[entity.entity_id]?.attributes.unit_of_measurement;
+            const options = {
+              ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
+              ...Registry.strategyOptions.card_options?.[entity.entity_id],
+              entities: [entity.entity_id],
+            };
+
+            return isMeasurement
+              ? new SensorCard(entity, options).getCard()
+              : new MiscellaneousCard(entity, options).getCard();
+          });
 
           if (domainCards.length) {
             domainCards = stackHorizontal(
