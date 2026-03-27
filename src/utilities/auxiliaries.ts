@@ -41,14 +41,17 @@ export function deepClone<T>(obj: T): T {
  * Compares two values according to a sort direction.
  *
  * Comparison rules:
- * 1. Strings are compared using locale-aware comparison with numeric sorting.
- * 2. Numbers and booleans are compared naturally.
- * 3. Any other types are considered equal if strictly equal, otherwise `a` comes first.
+ * 1. `null` and `undefined` are ordered first and second respectively.
+ * 2. Strings are compared using locale-aware comparison with numeric sorting.
+ * 3. Numbers and booleans are compared naturally.
+ * 4. Any other types are considered equal (i.e., do not affect sort order).
  *
  * Returns:
  * - A negative number if `a` should come **before** `b` in the specified `direction`.
  * - A positive number if `a` should come **after** `b` in the specified `direction`.
- * - A `0` if `a` and `b` are considered equal for sorting.
+ * - `0` if `a` and `b` are considered equal for sorting.
+ *
+ * This implementation ensures a deterministic and stable sort for `Array.prototype.sort`.
  *
  * @param {unknown} a The first value.
  * @param {unknown} b The second value.
@@ -59,25 +62,25 @@ export function deepClone<T>(obj: T): T {
 export function compareValues(a: unknown, b: unknown, direction: 'asc' | 'desc' = 'asc'): number {
   const sortDirection = direction === 'asc' ? 1 : -1;
 
-  // Compare string values.
-  if (typeof a === 'string' && typeof b === 'string') {
-    const result = a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
-    if (result !== 0) return result * sortDirection;
-    // Values are considered equal under the chosen locale/sensitivity; treat them as equal.
-    return 0;
+  // Handle null / undefined explicitly.
+  if (a == null || b == null) {
+    if (a === b) return 0;
+    return (a == null ? -1 : 1) * sortDirection;
   }
 
-  // Compare numbers and boolean values.
+  // Strings.
+  if (typeof a === 'string' && typeof b === 'string') {
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }) * sortDirection;
+  }
+
+  // Numbers / booleans.
   if ((typeof a === 'number' || typeof a === 'boolean') && (typeof b === 'number' || typeof b === 'boolean')) {
     if (a < b) return -1 * sortDirection;
-    if (a > b) return sortDirection;
+    if (a > b) return 1 * sortDirection;
     return 0;
   }
 
-  // Compare other types.
-  if (a !== b) return sortDirection;
-
-  // Otherwise, treat the values as equal.
+  // All other types: treat as equal.
   return 0;
 }
 
