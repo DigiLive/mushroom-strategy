@@ -18,7 +18,7 @@ class LockView extends AbstractView {
   /** Returns the default configuration object for the view. */
   static getDefaultConfig(): ViewConfig {
     return {
-      title: localize('locks.locks'),
+      title: localize('lock.locks'),
       path: 'locks',
       icon: 'mdi:lock-open',
       subview: false,
