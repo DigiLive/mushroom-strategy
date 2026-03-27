@@ -60,11 +60,13 @@ export function deepClone<T>(obj: T): T {
  * @returns {number} The comparison result.
  */
 export function compareValues(a: unknown, b: unknown, direction: 'asc' | 'desc' = 'asc'): number {
+  // Values are equal.
+  if (a === b) return 0;
+
   const sortDirection = direction === 'asc' ? 1 : -1;
 
   // Handle null / undefined explicitly.
   if (a == null || b == null) {
-    if (a === b) return 0;
     return (a == null ? -1 : 1) * sortDirection;
   }
 
@@ -74,10 +76,10 @@ export function compareValues(a: unknown, b: unknown, direction: 'asc' | 'desc' 
   }
 
   // Numbers / booleans.
-  if ((typeof a === 'number' || typeof a === 'boolean') && (typeof b === 'number' || typeof b === 'boolean')) {
-    if (a < b) return -1 * sortDirection;
-    if (a > b) return 1 * sortDirection;
-    return 0;
+  const isNumeric = (val: unknown) => typeof val === 'number' || typeof val === 'boolean';
+
+  if (isNumeric(a) && isNumeric(b)) {
+    return (+a - +b) * sortDirection;
   }
 
   // All other types: treat as equal.
