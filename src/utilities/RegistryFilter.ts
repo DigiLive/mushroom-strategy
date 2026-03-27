@@ -5,6 +5,7 @@ import { DeviceRegistryEntry } from '../types/homeassistant/data/device_registry
 import { EntityCategory, EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
 import { RegistryEntry, StrategyConfig } from '../types/strategy/strategy-generics';
 import { logMessage, lvlWarn } from './debug';
+import { compareValues, getSortPriority } from './auxiliaries';
 
 /**
  * A class for filtering and sorting arrays of Home Assistant's registry entries.
@@ -12,7 +13,7 @@ import { logMessage, lvlWarn } from './debug';
  * Supports chaining for building complex filter queries.
  *
  * @template T The specific type of RegistryEntry being filtered.
- * @template K - A property key of T.
+ * @template K A property name of the specific entry-type.
  */
 class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   private readonly entries: T[];
@@ -329,79 +330,47 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
-   * Sorts the entries based on the specified keys in priority order.
+   * Sorts the entries based on the specified keys in order of priority.
    *
-   * @param {Array<keyof T>} keys - Array of property keys to sort by, in order of priority.
-   * @param {'asc' | 'desc'} [direction='asc'] - Sort direction.
-   * @returns {RegistryFilter<T>} A new RegistryFilter instance with sorted entries.
-   * @template T - The type of registry entry
+   * @param {K[]} propertyNames An array of property names to sort by, in order of priority.
+   * @param {'asc' | 'desc'} [direction='asc'] The sort direction: 'asc' for ascending, 'desc' for descending.
+   *
+   * @returns {RegistryFilter<T>} A new RegistryFilter instance with the entries sorted.
+   * @remarks
+   * - Each property in `propertyNames` is used in order to break ties from the previous property.
+   * - Special values like `null`, `undefined`, `Infinity`, and `-Infinity` are handled via `getSortPriority`.
+   * - If all specified properties are equal between two entries, their order is considered equivalent (`return 0`).
    */
-  orderBy(keys: K[], direction: 'asc' | 'desc' = 'asc'): RegistryFilter<T> {
-    // Helper to get the first defined value from an entry for the given keys.
-    const getValue = (entry: T, keys: K[]): unknown => {
-      for (const key of keys) {
-        const value = entry[key];
-        if (value !== null && value !== undefined) {
-          return value;
-        }
-      }
-      return undefined;
-    };
+  orderBy(propertyNames: K[], direction: 'asc' | 'desc' = 'asc'): RegistryFilter<T> {
+    const sortDirection = direction === 'asc' ? 1 : -1;
 
-    // Assign sort priorities for special values.
-    const getSortValue = (value: unknown): [number, unknown] => {
-      switch (value) {
-        case -Infinity:
-          return [0, 0]; // First.
-        case undefined:
-        case null:
-          return [2, 0]; // In between.
-        case Infinity:
-          return [3, 0]; // Last.
-        default:
-          return [1, value]; // Normal value comparison.
-      }
-    };
-
-    // Create a new array to avoid mutating the original.
+    // Sort the entries by creating a new array to avoid mutating the original.
     const sortedEntries = [...this.entries].sort((a, b) => {
-      const sortDirection = direction === 'asc' ? 1 : -1;
+      for (const name of propertyNames) {
+        const propertyValueA = a[name];
+        const propertyValueB = b[name];
 
-      // Get the first defined value for each entry using the provided keys
-      const valueA = getValue(a, keys);
-      const valueB = getValue(b, keys);
+        // If the values are equal, continue to the next property.
+        if (propertyValueA === propertyValueB) continue;
 
-      // If values are strictly equal, they're in the same position.
-      if (valueA === valueB) {
-        return 0;
+        // Determine the sorting priority of the values.
+        const [priorityA, comparableA] = getSortPriority(propertyValueA);
+        const [priorityB, comparableB] = getSortPriority(propertyValueB);
+
+        // Compare priorities first.
+        if (priorityA !== priorityB) {
+          return (priorityA - priorityB) * sortDirection;
+        }
+
+        // For the same priority, compare the values themselves.
+        const result = compareValues(comparableA, comparableB, direction);
+        if (result !== 0) return result;
+
+        // The values are equal.
       }
 
-      // Get sort priorities and comparable values
-      const [priorityA, comparableA] = getSortValue(valueA);
-      const [priorityB, comparableB] = getSortValue(valueB);
-
-      // First, compare by priority (handles special values).
-      if (priorityA !== priorityB) {
-        return (priorityA - priorityB) * sortDirection;
-      }
-
-      // For same priority, compare the actual values.
-      // Handle undefined/null cases
-      if (comparableA == null) {
-        return 1;
-      }
-
-      if (comparableB == null) {
-        return -1;
-      }
-
-      // String comparison.
-      if (typeof comparableA === 'string' && typeof comparableB === 'string') {
-        return comparableA.localeCompare(comparableB) * sortDirection;
-      }
-
-      // Numeric/other comparison.
-      return (comparableA < comparableB ? -1 : 1) * sortDirection;
+      // The priorities and the values are equal.
+      return 0;
     });
 
     // Create a new filter with the sorted entries.
@@ -409,6 +378,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
 
     // Copy over existing filters.
     newFilter.filters = [...this.filters];
+
     return newFilter;
   }
 
