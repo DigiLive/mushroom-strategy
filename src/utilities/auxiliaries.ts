@@ -63,6 +63,8 @@ export function compareValues(a: unknown, b: unknown, direction: 'asc' | 'desc' 
   if (typeof a === 'string' && typeof b === 'string') {
     const result = a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
     if (result !== 0) return result * sortDirection;
+    // Values are considered equal under the chosen locale/sensitivity; treat them as equal.
+    return 0;
   }
 
   // Compare numbers and boolean values.
