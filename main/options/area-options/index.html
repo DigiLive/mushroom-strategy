@@ -700,6 +700,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sorting-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorting Areas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#undisclosed-area" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1265,6 +1276,16 @@ These cards will be shown last in the view.</p>
 <span class="w">            </span><span class="nt">vacuum_platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 <span class="nt">views</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 </code></pre></div>
+<h2 id="sorting-areas">Sorting Areas<a class="headerlink" href="#sorting-areas" title="Permanent link">#</a></h2>
+<p>The <code>order</code> property gives you control over how your areas are arranged in a view.</p>
+<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
+<ul>
+<li>Any area assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
+  see.</li>
+<li>If two areas share the same order value, the system will use their names to determine which one comes first.</li>
+<li>Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.</li>
+</ul>
 <h2 id="undisclosed-area">Undisclosed Area<a class="headerlink" href="#undisclosed-area" title="Permanent link">#</a></h2>
 <p>The strategy has a special area, named <code>undisclosed</code>.
 This area is enabled by default and includes the entities that aren't linked to any Home Assistant area.</p>

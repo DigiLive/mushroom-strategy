@@ -734,6 +734,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#sorting-domains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorting Domains
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setting-options-for-all-domains" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1200,6 +1211,16 @@ Each configuration is identified by a domain name and can have the following opt
 </ul>
 </div>
 <hr />
+<h2 id="sorting-domains">Sorting Domains<a class="headerlink" href="#sorting-domains" title="Permanent link">#</a></h2>
+<p>The <code>order</code> property gives you control over how the domains are arranged in a view.</p>
+<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
+<ul>
+<li>Any domain assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used domains—like lights or fans—so they are always the first things you
+  see.</li>
+<li>If two domains share the same order value, the system will use their names to determine which one comes first.</li>
+<li>Any domain without an order property will be placed after/below your prioritized list, sorted alphabetically by name.</li>
+</ul>
 <h2 id="setting-options-for-all-domains">Setting options for all domains<a class="headerlink" href="#setting-options-for-all-domains" title="Permanent link">#</a></h2>
 <p>Use <code>_</code> as the identifier to set options for all domains.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
