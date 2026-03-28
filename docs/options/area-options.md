@@ -64,6 +64,18 @@ strategy:
 views: []
 ```
 
+## Sorting Areas
+
+The `order` property gives you control over how your areas are arranged in a view.
+
+To make the most of this, it helps to understand how the system prioritizes your list:
+
+- Any area assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
+  see.
+- If two areas share the same order value, the system will use their names to determine which one comes first.
+- Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.
+
 ## Undisclosed Area
 
 The strategy has a special area, named `undisclosed`.

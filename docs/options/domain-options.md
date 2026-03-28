@@ -25,6 +25,18 @@ The number of cards per row can be configured with this option.
 
 ---
 
+## Sorting Domains
+
+The `order` property gives you control over how the domains are arranged in a view.
+
+To make the most of this, it helps to understand how the system prioritizes your list:
+
+- Any domain assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used domains—like lights or fans—so they are always the first things you
+  see.
+- If two domains share the same order value, the system will use their names to determine which one comes first.
+- Any domain without an order property will be placed after/below your prioritized list, sorted alphabetically by name.
+
 ## Setting options for all domains
 
 Use `_` as the identifier to set options for all domains.
