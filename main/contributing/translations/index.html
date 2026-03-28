@@ -1075,7 +1075,7 @@
 
 <h1 id="translations">🌐 Translations<a class="headerlink" href="#translations" title="Permanent link">#</a></h1>
 <p>Help us make Mushroom Strategy accessible to more users around the world by contributing and improving translations!</p>
-<p>Language tags have to follow <a href="https://tools.ietf.org/html/bcp47">BCP 47</a>.<br />
+<p>Language tags have to follow <a href="https://tools.ietf.org/html/bcp47">BCP 47</a>.<br>
 A list of most language tags can be found here:
 <a href="http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry">IANA subtag registry</a>.
 Examples: fr, fr-CA, zh-Hans.</p>
@@ -1096,8 +1096,8 @@ Examples: fr, fr-CA, zh-Hans.</p>
 <p><strong>Test Your Changes:</strong> Thoroughly test your changes to ensure they work as expected and don't introduce new issues.</p>
 <ul>
 <li>You can build the strategy with <code>npm run build</code> (for production) or <code>npm run build-dev</code> (for development/testing).</li>
-<li>Copy the built files to your Home Assistant's <code>www/community/mushroom-strategy</code> directory for testing.<br />
-<strong>Remember to clear the cache of your Home Assistant client</strong> to see the changes.</li>
+<li>Copy the built files to your Home Assistant's <code>www/community/mushroom-strategy</code> directory for testing.<br>
+   <strong>Remember to clear the cache of your Home Assistant client</strong> to see the changes.</li>
 </ul>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -1124,7 +1124,6 @@ delete it.</p>
 <p><strong>Open a Pull Request (PR).</strong></p>
 </li>
 </ol>
-<hr />
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p><strong>Integrating a new Translation:</strong></p>
@@ -1138,9 +1137,9 @@ delete it.</p>
 If you are adding a country-specific locale (e.g., <code>es-ES</code> for Spanish (Spain) or <code>en-GB</code> for English 
 (United Kingdom)), you should create a file like <code>en-GB.json</code> in the <code>translations</code> folder. In 
 <code>src/utilities/localize.ts</code>, you'll import it similarly and add it to the <code>languages</code> map using the full locale 
-code.<br />
+code.<br>
 Please ensure you follow existing patterns for <code>language-country</code> codes, which typically use a hyphen (<code>-</code>) + a 
-UPPER-cased country code in the file name and an underscore (<code>_</code>) + a lower-cased country code in the import key.  </p>
+UPPER-cased country code in the file name and an underscore (<code>_</code>) + a lower-cased country code in the import key.<br></p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">en</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../translations/en.json&#39;</span><span class="p">;</span>

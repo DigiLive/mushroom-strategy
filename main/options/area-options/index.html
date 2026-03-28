@@ -678,6 +678,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#sorting-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorting Areas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#extra-cards" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -693,17 +704,6 @@
     <span class="md-ellipsis">
       
         Example
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sorting-areas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sorting Areas
       
     </span>
   </a>
@@ -1185,7 +1185,7 @@
 
 
 <h1 id="area-options">🛋️ Area Options<a class="headerlink" href="#area-options" title="Permanent link">#</a></h1>
-<p>The <code>areas</code> group enables you to specify the configuration of specific areas.<br />
+<p>The <code>areas</code> group enables you to specify the configuration of specific areas.<br>
 Each configuration is identified by an area id and can have the following options:</p>
 <table>
 <thead>
@@ -1229,14 +1229,24 @@ Each configuration is identified by an area id and can have the following option
 </tr>
 </tbody>
 </table>
-<p>Also, all options from the Template mushroom card and/or Home Assistant Area card are supported.<br />
+<p>Also, all options from the Template mushroom card and/or Home Assistant Area card are supported.<br>
 Please follow the links below to see the additional options per card type.</p>
 <ul>
 <li><a href="https://github.com/piitaya/lovelace-mushroom/blob/main/docs/cards/template.md" target="_blank">Mushroom Template Card</a>.</li>
 <li><a href="https://www.home-assistant.io/dashboards/area/#configuration-variables" target="_blank">Home Assistant Area Card</a>.</li>
 </ul>
+<h2 id="sorting-areas">Sorting Areas<a class="headerlink" href="#sorting-areas" title="Permanent link">#</a></h2>
+<p>The <code>order</code> property gives you control over how your areas are arranged in a view.</p>
+<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
+<ul>
+<li>Any area assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
+  see.</li>
+<li>If two areas share the same order value, the system will use their names to determine which one comes first.</li>
+<li>Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.</li>
+</ul>
 <h2 id="extra-cards">Extra Cards<a class="headerlink" href="#extra-cards" title="Permanent link">#</a></h2>
-<p>The <code>extra_cards</code> group enables you to specify the configuration of additional cards an Area view.<br />
+<p>The <code>extra_cards</code> group enables you to specify the configuration of additional cards an Area view.<br>
 These cards will be shown last in the view.</p>
 <p>See Home View Options → <a href="#extra-cards">Extra Cards</a> for more information.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
@@ -1276,23 +1286,13 @@ These cards will be shown last in the view.</p>
 <span class="w">            </span><span class="nt">vacuum_platform</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
 <span class="nt">views</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 </code></pre></div>
-<h2 id="sorting-areas">Sorting Areas<a class="headerlink" href="#sorting-areas" title="Permanent link">#</a></h2>
-<p>The <code>order</code> property gives you control over how your areas are arranged in a view.</p>
-<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
-<ul>
-<li>Any area assigned an order value will automatically move to the front/top.<br>
-  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
-  see.</li>
-<li>If two areas share the same order value, the system will use their names to determine which one comes first.</li>
-<li>Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.</li>
-</ul>
 <h2 id="undisclosed-area">Undisclosed Area<a class="headerlink" href="#undisclosed-area" title="Permanent link">#</a></h2>
-<p>The strategy has a special area, named <code>undisclosed</code>.
+<p>The strategy has a special area, named <code>undisclosed</code>.<br>
 This area is enabled by default and includes the entities that aren't linked to any Home Assistant area.</p>
-<p>The area can be configured like any other area as described above.
+<p>The area can be configured like any other area as described above.<br>
 To exclude this area from the dashboard and views, set its property <code>hidden</code> to <code>true</code>.</p>
 <h2 id="setting-options-for-all-areas">Setting options for all areas<a class="headerlink" href="#setting-options-for-all-areas" title="Permanent link">#</a></h2>
-<p>Use <code>_</code> as an identifier to set the options for all areas.<br />
+<p>Use <code>_</code> as an identifier to set the options for all areas.<br>
 The following example sets the type of all area-cards to the one of Home Assistant:</p>
 <h3 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>

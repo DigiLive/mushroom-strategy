@@ -1146,7 +1146,104 @@
 
 
 <h1 id="domain-options">💡 Domain Options<a class="headerlink" href="#domain-options" title="Permanent link">#</a></h1>
-<p>The <code>domains</code> group enables you to specify the configuration of a domain in a view.<br />
+<p>Mushroom strategy supports several domains to control/view entities of.<br></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Domain</th>
+<th style="text-align: center;">Ordering Position</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Lock</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">Security devices for locking and unlocking doors or gates.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Binary Sensor</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: left;">On/Off sensors such as motion, door/window contacts, or smoke.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Camera</td>
+<td style="text-align: center;">30</td>
+<td style="text-align: left;">Video stream entities from doorbells or security cameras.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Light</td>
+<td style="text-align: center;">40</td>
+<td style="text-align: left;">Light bulbs and LED strips.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Scene</td>
+<td style="text-align: center;">50</td>
+<td style="text-align: left;">Predefined states for a group of entities (e.g., "Movie Night").</td>
+</tr>
+<tr>
+<td style="text-align: left;">Climate</td>
+<td style="text-align: center;">60</td>
+<td style="text-align: left;">HVAC systems, thermostats, and temperature control units.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Fan</td>
+<td style="text-align: center;">70</td>
+<td style="text-align: left;">Speed-controlled or toggle devices specifically for air movement.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cover</td>
+<td style="text-align: center;">80</td>
+<td style="text-align: left;">Motorized blinds, curtains, garage doors, or shutters.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Media Player</td>
+<td style="text-align: center;">90</td>
+<td style="text-align: left;">Audio and video playback devices like TVs, speakers, and receivers.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Switch</td>
+<td style="text-align: center;">100</td>
+<td style="text-align: left;">Basic toggles (e.g., for outlets or non-dimmable devices.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vacuum</td>
+<td style="text-align: center;">110</td>
+<td style="text-align: left;">Robotic cleaners with controls for docking and cleaning cycles.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Valve</td>
+<td style="text-align: center;">120</td>
+<td style="text-align: left;">Controls for gas or water flow, including irrigation systems.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Select</td>
+<td style="text-align: center;">130</td>
+<td style="text-align: left;">Configuration entities allowing a choice from a list of options.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Input Select</td>
+<td style="text-align: center;">140</td>
+<td style="text-align: left;">Helper entities for choosing options within the UI or automations.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Number</td>
+<td style="text-align: center;">150</td>
+<td style="text-align: left;">Entities representing a numerical value with a specific range.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sensor</td>
+<td style="text-align: center;">160</td>
+<td style="text-align: left;">State entities for data like temperature, humidity, or power usage.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Other</td>
+<td style="text-align: center;">170</td>
+<td style="text-align: left;">Any other domain not explicitly categorized above.</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>domains</code> group enables you to specify the configuration of a domain in a view.<br>
 Each configuration is identified by a domain name and can have the following options:</p>
 <table>
 <thead>
@@ -1210,7 +1307,6 @@ Each configuration is identified by a domain name and can have the following opt
 <li>The <code>hide_config_entities</code> and <code>hide_diagnostic_entities</code> options are only available as an "All domains" option.</li>
 </ul>
 </div>
-<hr />
 <h2 id="sorting-domains">Sorting Domains<a class="headerlink" href="#sorting-domains" title="Permanent link">#</a></h2>
 <p>The <code>order</code> property gives you control over how the domains are arranged in a view.</p>
 <p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
@@ -1240,36 +1336,11 @@ Each configuration is identified by a domain name and can have the following opt
 <span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c1"># All other domains</span>
 <span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
-<details class="info">
-<summary>Click to expand the full list of supported domains</summary>
-<ul>
-<li>_ (All domains)</li>
-<li>area</li>
-<li>binary_sensor</li>
-<li>camera</li>
-<li>climate</li>
-<li>cover</li>
-<li>default (Miscellaneous)</li>
-<li>fan</li>
-<li>input_select</li>
-<li>light</li>
-<li>lock</li>
-<li>media_player</li>
-<li>number</li>
-<li>person</li>
-<li>scene</li>
-<li>select</li>
-<li>sensor</li>
-<li>switch</li>
-<li>vacuum</li>
-<li>valve</li>
-</ul>
-</details>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.<br />
+<p>In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
 The number of cards per row can be configured with this option.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
