@@ -90,3 +90,12 @@
     1. Click the :material-pencil: icon in the top right corner of the dashboard.
     2. Click the three-dot menu in the top right corner of  the dashboard.
     3. Select `Raw configuration editor`.
+
+??? question "How to reload the dashboard after installing a new version manually?"
+
+    Standard cache clears like CTRL+F5 often fail in Home Assistant due to its reliance on Service Workers.
+
+    To ensure a clean reload, open the Developer Tools (F12 for most browsers), enable 'Disable cache' in the Network
+    tab, and refresh the page twice to update all resources.
+
+    **Don't forget to re-enable the cache again when you're finished.**
