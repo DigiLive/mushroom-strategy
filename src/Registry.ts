@@ -181,7 +181,7 @@ class Registry {
       };
     });
 
-    // Remove hidden areas if configured as so and sort them by name.
+    // Remove hidden areas if configured as so and sort them by order first, then by name.
     Registry._areas = new RegistryFilter(Registry._areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
 
     // Sort views and domains by order first and then by title.
