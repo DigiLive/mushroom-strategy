@@ -5,29 +5,29 @@ Hidden/Disabled entities or linked to a hidden area are excluded from the view.
 
 The following views are supported and enabled by default:
 
-| View    | Type   | Description                                |
-|:--------|:-------|:-------------------------------------------|
-| camera  | object | View to control cameras.                   |
-| climate | object | View to control climates.                  |
-| cover   | object | View to control covers.                    |
-| fan     | object | View to control fans.                      |
-| home    | object | An overview of several entities and areas. |
-| light   | object | View to control lights.                    |
-| lock    | object | View to control locks.                     |
-| scene   | object | View to control scenes.                    |
-| switch  | object | View to control switches.                  |
-| vacuum  | object | View to control vacuums.                   |
-| valve   | object | View to control valves.                    |
+| View    | Ordering Position | Type   | Description               |
+|:--------|:-----------------:|:-------|:--------------------------|
+| home    |        10         | object | The strategy's Home View. |
+| light   |        20         | object | View to control lights.   |
+| fan     |        30         | object | View to control fans.     |
+| cover   |        40         | object | View to control covers.   |
+| switch  |        50         | object | View to control switches. |
+| climate |        60         | object | View to control climates. |
+| camera  |        70         | object | View to control cameras.  |
+| vacuum  |        80         | object | View to control vacuums.  |
+| scene   |        90         | object | View to control scenes.   |
+| lock    |        100        | object | View to control locks.    |
+| valve   |        110        | object | View to control valves.   |
 
 The `views` group enables you to specify the configuration of a view.
 Each configuration is identified by a view name and can have the following options:
 
-| name   | type    | Default                                                                      | description                                                                                    |
-|:-------|:--------|:-----------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------|
-| hidden | boolean | `false`                                                                      | Set to `true` to exclude the view from the dashboard                                           |
-| icon   | string  | `domain specific`                                                            | Icon of the view in the navigation bar.                                                        |
-| order  | string  | home, light, fan, cover, switch, climate, camera, vacuum, scene, lock, valve | Ordering position of the view in the navigation bar.                                           |
-| title  | string  | `domain specific`                                                            | Title of the view in the navigation bar. (Shown when no icon is defined or hovering above it.) |
+| name   | type    | Default                              | description                                                                                    |
+|:-------|:--------|:-------------------------------------|:-----------------------------------------------------------------------------------------------|
+| hidden | boolean | `false`                              | Set to `true` to exclude the view from the dashboard                                           |
+| icon   | string  | domain specific                      | Icon of the view in the navigation bar.                                                        |
+| order  | number  | domain specific<br>(See table above) | Ordering position of the view in the navigation bar.                                           |
+| title  | string  | domain specific                      | Title of the view in the navigation bar. (Shown when no icon is defined or hovering above it.) |
 
 ## Example
 
@@ -46,14 +46,26 @@ strategy:
 views: []
 ```
 
----
+## Sorting Views
+
+The `order` property gives you control over how the views are arranged.
+
+To make the most of this, it helps to understand how the system prioritizes your list:
+
+- Any view assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used views—like the Lights or Fans—so they are always the first things you
+  see.
+- If two views share the same order value, the system will use their names to determine which one comes first.
+- Any views without an order property will be placed after/below your prioritized list, sorted alphabetically by name.
+
+!!! note
+
+    Keep in mind that the build-in views have a default order as shown in the table above.
 
 ## Extra Views
 
 The `extra_views` group enables you to specify the configuration of additional views.
 Each view can have the options as described in the [Home Assistant documentation][viewDocUrl]{: target="_blank"}.
-
-Extra views are sorted by order first and then by title, together with the build-in views.
 
 !!! tip
 

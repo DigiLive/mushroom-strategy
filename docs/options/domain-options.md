@@ -1,5 +1,27 @@
 # 💡 Domain Options
 
+Mushroom strategy supports several domains to control/view entities of.<br>
+
+| Domain        | Ordering Position | Description                                                         |
+|:--------------|:-----------------:|:--------------------------------------------------------------------|
+| Lock          |        10         | Security devices for locking and unlocking doors or gates.          |
+| Binary Sensor |        20         | On/Off sensors such as motion, door/window contacts, or smoke.      |
+| Camera        |        30         | Video stream entities from doorbells or security cameras.           |
+| Light         |        40         | Light bulbs and LED strips.                                         |
+| Scene         |        50         | Predefined states for a group of entities (e.g., "Movie Night").    |
+| Climate       |        60         | HVAC systems, thermostats, and temperature control units.           |
+| Fan           |        70         | Speed-controlled or toggle devices specifically for air movement.   |
+| Cover         |        80         | Motorized blinds, curtains, garage doors, or shutters.              |
+| Media Player  |        90         | Audio and video playback devices like TVs, speakers, and receivers. |
+| Switch        |        100        | Basic toggles (e.g., for outlets or non-dimmable devices.           |
+| Vacuum        |        110        | Robotic cleaners with controls for docking and cleaning cycles.     |
+| Valve         |        120        | Controls for gas or water flow, including irrigation systems.       |
+| Select        |        130        | Configuration entities allowing a choice from a list of options.    |
+| Input Select  |        140        | Helper entities for choosing options within the UI or automations.  |
+| Number        |        150        | Entities representing a numerical value with a specific range.      |
+| Sensor        |        160        | State entities for data like temperature, humidity, or power usage. |
+| Other         |        170        | Any other domain not explicitly categorized above.                  |
+
 The `domains` group enables you to specify the configuration of a domain in a view.  
 Each configuration is identified by a domain name and can have the following options:
 
@@ -22,8 +44,6 @@ The number of cards per row can be configured with this option.
     * Domain `default` represents any other domain than supported by this strategy.
     * The `show_controls` option will default to false for domain which can't be controlled.
     * The `hide_config_entities` and `hide_diagnostic_entities` options are only available as an "All domains" option.
-
----
 
 ## Sorting Domains
 
@@ -60,26 +80,3 @@ strategy:
       default: # All other domains
         hidden: true
 ```
-
-??? info "Click to expand the full list of supported domains"
-
-    - _ (All domains)
-    - area
-    - binary_sensor
-    - camera
-    - climate
-    - cover
-    - default (Miscellaneous)
-    - fan
-    - input_select
-    - light
-    - lock
-    - media_player
-    - number
-    - person
-    - scene
-    - select
-    - sensor
-    - switch
-    - vacuum
-    - valve

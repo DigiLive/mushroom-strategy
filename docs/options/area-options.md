@@ -17,6 +17,18 @@ Please follow the links below to see the additional options per card type.
 - [Mushroom Template Card][templateDocUrl]{: target="_blank"}.
 - [Home Assistant Area Card][areaDocUrl]{: target="_blank"}.
 
+## Sorting Areas
+
+The `order` property gives you control over how your areas are arranged in a view.
+
+To make the most of this, it helps to understand how the system prioritizes your list:
+
+- Any area assigned an order value will automatically move to the front/top.<br>
+  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
+  see.
+- If two areas share the same order value, the system will use their names to determine which one comes first.
+- Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.
+
 ## Extra Cards
 
 The `extra_cards` group enables you to specify the configuration of additional cards an Area view.  
@@ -64,24 +76,12 @@ strategy:
 views: []
 ```
 
-## Sorting Areas
-
-The `order` property gives you control over how your areas are arranged in a view.
-
-To make the most of this, it helps to understand how the system prioritizes your list:
-
-- Any area assigned an order value will automatically move to the front/top.<br>
-  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
-  see.
-- If two areas share the same order value, the system will use their names to determine which one comes first.
-- Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.
-
 ## Undisclosed Area
 
-The strategy has a special area, named `undisclosed`.
+The strategy has a special area, named `undisclosed`.<br>
 This area is enabled by default and includes the entities that aren't linked to any Home Assistant area.
 
-The area can be configured like any other area as described above.
+The area can be configured like any other area as described above.<br>
 To exclude this area from the dashboard and views, set its property `hidden` to `true`.
 
 ## Setting options for all areas

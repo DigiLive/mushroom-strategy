@@ -46,26 +46,26 @@ export const ConfigurationDefaults: StrategyDefaults = {
       stack_count: 1,
     },
     lock: {
-      order: 1,
+      order: 10,
       title: localize('lock.locks'),
       show_controls: false,
       hidden: false,
     },
     binary_sensor: {
-      order: 2,
+      order: 20,
       title: `${localize('sensor.binary')} ` + localize('sensor.sensors'),
       show_controls: false,
       hidden: false,
       stack_count: 2,
     },
     camera: {
-      order: 3,
+      order: 30,
       title: localize('camera.cameras'),
       show_controls: false,
       hidden: false,
     },
     light: {
-      order: 4,
+      order: 40,
       title: localize('light.lights'),
       iconOn: 'mdi:lightbulb',
       iconOff: 'mdi:lightbulb-off',
@@ -74,20 +74,20 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     scene: {
-      order: 5,
+      order: 50,
       title: localize('scene.scenes'),
       show_controls: false,
       onService: 'scene.turn_on',
       hidden: false,
     },
     climate: {
-      order: 6,
+      order: 60,
       title: localize('climate.climates'),
       show_controls: false,
       hidden: false,
     },
     fan: {
-      order: 7,
+      order: 70,
       title: localize('fan.fans'),
       iconOn: 'mdi:fan',
       iconOff: 'mdi:fan-off',
@@ -96,7 +96,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     cover: {
-      order: 8,
+      order: 80,
       title: localize('cover.covers'),
       iconOn: 'mdi:arrow-up',
       iconOff: 'mdi:arrow-down',
@@ -105,13 +105,13 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     media_player: {
-      order: 9,
+      order: 90,
       title: localize('media_player.media_players'),
       show_controls: false,
       hidden: false,
     },
     switch: {
-      order: 10,
+      order: 100,
       title: localize('switch.switches'),
       iconOn: 'mdi:power-plug',
       iconOff: 'mdi:power-plug-off',
@@ -120,7 +120,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     vacuum: {
-      order: 11,
+      order: 110,
       title: localize('vacuum.vacuums'),
       iconOn: 'mdi:robot-vacuum',
       iconOff: 'mdi:robot-vacuum-off',
@@ -129,7 +129,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     valve: {
-      order: 12,
+      order: 120,
       title: localize('valve.valves'),
       iconOn: 'mdi:valve-open',
       iconOff: 'mdi:valve-closed',
@@ -138,31 +138,31 @@ export const ConfigurationDefaults: StrategyDefaults = {
       hidden: false,
     },
     select: {
-      order: 13,
+      order: 130,
       title: localize('select.selects'),
       show_controls: false,
       hidden: false,
     },
     input_select: {
-      order: 14,
+      order: 140,
       title: localize('input_select.input_selects'),
       show_controls: false,
       hidden: false,
     },
     number: {
-      order: 15,
+      order: 150,
       title: localize('generic.numbers'),
       show_controls: false,
       hidden: false,
     },
     sensor: {
-      order: 16,
+      order: 160,
       title: localize('sensor.sensors'),
       show_controls: false,
       hidden: false,
     },
     default: {
-      order: 17,
+      order: 170,
       title: localize('generic.miscellaneous'),
       show_controls: false,
       hidden: false,
@@ -184,47 +184,47 @@ export const ConfigurationDefaults: StrategyDefaults = {
   },
   views: {
     camera: {
-      order: 7,
+      order: 70,
       hidden: false,
     },
     climate: {
-      order: 6,
+      order: 60,
       hidden: false,
     },
     cover: {
-      order: 4,
+      order: 40,
       hidden: false,
     },
     fan: {
-      order: 3,
+      order: 30,
       hidden: false,
     },
     home: {
-      order: 1,
-      hidden: false,
-    },
-    light: {
-      order: 2,
-      hidden: false,
-    },
-    lock: {
       order: 10,
       hidden: false,
     },
+    light: {
+      order: 20,
+      hidden: false,
+    },
+    lock: {
+      order: 100,
+      hidden: false,
+    },
     scene: {
-      order: 9,
+      order: 90,
       hidden: false,
     },
     switch: {
-      order: 5,
+      order: 50,
       hidden: false,
     },
     vacuum: {
-      order: 8,
+      order: 80,
       hidden: false,
     },
     valve: {
-      order: 11,
+      order: 110,
       hidden: false,
     },
   },
