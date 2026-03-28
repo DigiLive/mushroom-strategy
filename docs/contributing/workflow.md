@@ -2,22 +2,20 @@
 
 This guide outlines a common workflow for contributing to our project.
 
----
-
 1. **Fork the Repository**
-   Start by forking **our repository** (the upstream project) to your own GitHub account.  
+   Start by forking **our repository** (the upstream project) to your own GitHub account.<br>
    This creates a personal copy where you can make your changes without affecting the original project directly.
 
 2. **Clone Your Fork**
    Clone your forked repository from your GitHub account to your local machine.
 
 3. **Set Up Your Local Development Environment**
-   Before making changes, ensure your local environment is ready.  
+   Before making changes, ensure your local environment is ready.<br>
    See [Getting Started](getting-started.md).
 
 4. **Make Your Changes**
    Work in a new branch for better organization and easier pull requests and Implement your bug fix, new feature, or
-   documentation update.  
+   documentation update.<br>
    See chapters [Code](code.md), [Documentation](documentation.md), and [Translations](translations.md) for guidance and
    details.
 
@@ -26,11 +24,11 @@ This guide outlines a common workflow for contributing to our project.
    new issues or regressions.
 
 6. **Format and Lint Your Changes**
-   Your code should be well-formatted and linted to ensure consistency and readability.  
+   Your code should be well-formatted and linted to ensure consistency and readability.<br>
    If you've set up the project correctly, the tools for this should already be available to this project.
 
 7. **Commit Your Changes**
-   Stage your changes and commit them with a clear, descriptive message.  
+   Stage your changes and commit them with a clear, descriptive message.<br>
    Aim for a concise subject line followed by a more detailed body if necessary.
    E.g.:
 

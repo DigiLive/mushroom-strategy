@@ -22,7 +22,7 @@ Mushroom strategy supports several domains to control/view entities of.<br>
 | Sensor        |        160        | State entities for data like temperature, humidity, or power usage. |
 | Other         |        170        | Any other domain not explicitly categorized above.                  |
 
-The `domains` group enables you to specify the configuration of a domain in a view.  
+The `domains` group enables you to specify the configuration of a domain in a view.<br>
 Each configuration is identified by a domain name and can have the following options:
 
 | Option                   | type    | Default           | Description                                                               |
@@ -36,7 +36,7 @@ Each configuration is identified by a domain name and can have the following opt
 | title                    | string  | `domain specific` | Title of the domain in a view.                                            |
 
 [^1]:
-In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.  
+In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
 The number of cards per row can be configured with this option.
 
 !!! note

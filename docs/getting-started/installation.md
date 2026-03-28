@@ -3,12 +3,12 @@
 ## ⚙️ Prerequisites
 
 Mushroom dashboard strategy and dependencies are available in [HACS][hacsUrl]{: target="_blank"} (Home Assistant
-Community Store).  
-Install HACS if you don't have it already.  
+Community Store).<br>
+Install HACS if you don't have it already.<br>
 For assistance, you can follow the [installation guide][hacsInstallationGuideUrl]{: target="_blank"}.
 
-Once you have HACS installed, you can install custom integration and plug-ins.  
-This guide offers you badges to open your Home Assistant on the correct page.  
+Once you have HACS installed, you can install custom integration and plug-ins.<br>
+This guide offers you badges to open your Home Assistant on the correct page.<br>
 If the badges don't work, try installing from HACS manually:
 
 1. Open HACS in Home Assistant (Usually in the menu on the left side).
@@ -16,12 +16,12 @@ If the badges don't work, try installing from HACS manually:
 3. Select the `three-dot` menu on the right side of the component and select `Download`.
 4. Choose the desired version and select `Download` again.
 
-You need to install the following HACS integrations before you can use this strategy.  
-Click the badges below and follow the installation instructions.  
+You need to install the following HACS integrations before you can use this strategy.<br>
+Click the badges below and follow the installation instructions.<br>
 They will open the HACS repository at your Home Assistant instance directly.
 
 [![Open in HACS at your Home Assistant instance.][hacsBadge]][hacsMushroomUrl]{: target="_blank"} to install
-[Mushroom][mushroomUrl]{: target="_blank"}.  
+[Mushroom][mushroomUrl]{: target="_blank"}.<br>
 [![Open in HACS at your Home Assistant instance.][hacsBadge]][hacsMiniGraphUrl]{: target="_blank"} to
 install [Mini graph card][miniGraphUrl]{: target="_blank"}.
 
@@ -33,7 +33,7 @@ If you meet all the prerequisites, click the badge below to install the strategy
 
 ## 🛠️ Local Installation
 
-Please install the strategy with HACS as described above.  
+Please install the strategy with HACS as described above.<br>
 If you require testing a custom build for debug purposes, follow these steps:
 
 1. Build the strategy with `npm build` or `npm build-dev`.
@@ -47,7 +47,7 @@ If you require testing a custom build for debug purposes, follow these steps:
 
 ## 🔄 Updating
 
-By default, Home Assistant will notify you when an update of the strategy is available.  
+By default, Home Assistant will notify you when an update of the strategy is available.<br>
 You can update the strategy by going to `Settings` found at the bottom of the sidebar.
 
 !!! tip

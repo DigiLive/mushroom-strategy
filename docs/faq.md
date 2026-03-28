@@ -12,13 +12,13 @@
 
     !!! warning
         If you created an entity manually (in your `configuration.yaml`), you may need to create a `unique_id` before 
-        you can set an area to it.  
+        you can set an area to it.<br>
         See Home Assistant's [documentation](https://www.home-assistant.io/faq/unique_id){: target="_blank"} for more 
         info about unique ids.
 
 ??? question "How do I hide entities from the Strategy?"
 
-    When creating this dashboard for the first time, you might be overwhelmed by the number of entities.  
+    When creating this dashboard for the first time, you might be overwhelmed by the number of entities.<br>
     To reduce the number of entities shown, you can hide these entities by following the steps below:
     
     1. Click and hold the entity.

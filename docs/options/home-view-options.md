@@ -35,10 +35,10 @@ strategy:
 
 ## Stack Count
 
-The `stack_count` option is a map of sections to define the number of cards per row.  
+The `stack_count` option is a map of sections to define the number of cards per row.<br>
 The key of the map is the section, while the value is the number of cards per row.
 
-The `areas` section is a special case, where the value is an array of two numbers.  
+The `areas` section is a special case, where the value is an array of two numbers.<br>
 The first number is the number of default cards per row, while the second number is the number of
 [Home Assistant cards](https://www.home-assistant.io/dashboards/area/) per row.
 
@@ -60,9 +60,9 @@ home_view:
 
 ## Badge Options
 
-Badges are widgets that sit at the top of a panel, above all the cards.  
+Badges are widgets that sit at the top of a panel, above all the cards.<br>
 The mushroom strategy has badges that indicate the number of entities for a specific domain which are in an "active"
-state.  
+state.<br>
 Hidden/Disabled entities are excluded from this count.
 
 - Tapping a badge will set corresponding entities to an "inactive" state.[^1]  
@@ -84,7 +84,7 @@ The `badges` group enables you to specify its configuration of badges.
 | `weather_entity` | string  | `auto`  | Entity id for the weather badge to use.     |
 | `extra_badges`   | array   | `[]`    | List of extra badges to show.               |
 
-If `weather_entity` is set to `auto`, the weather badge uses the first entity of the weather domain it finds.  
+If `weather_entity` is set to `auto`, the weather badge uses the first entity of the weather domain it finds.<br>
 You can define a custom entity to use by setting an entity id.
 
 !!! note
@@ -107,7 +107,7 @@ strategy:
 
 ## Extra Badges
 
-To add custom badges, you can configure them in `extra_badges`.  
+To add custom badges, you can configure them in `extra_badges`.<br>
 See [Mushroom Badges][MushroomBadgeDocUrl]{: target="_blank"} and [Home Assistant Badges][HassBadgeDocUrl]{: target="_blank"}
 
 !!! tip

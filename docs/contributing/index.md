@@ -8,10 +8,8 @@ Please take a moment to review this guide before making a contribution.
 ## 📜 Code of Conduct
 
 To ensure a welcoming and inclusive environment, all contributors are expected to adhere to
-our [Code of Conduct](https://github.com/DigiLive/mushroom-strategy/blob/main/CODE_OF_CONDUCT.md). Please read it
-carefully.
-
----
+our [Code of Conduct](https://github.com/DigiLive/mushroom-strategy/blob/main/CODE_OF_CONDUCT.md).<br>
+Please read it carefully.
 
 ## 🐞 Reporting Bugs
 
@@ -31,8 +29,6 @@ Found a bug? That's not ideal, but your report helps us squash it!
    - Screenshots or animated GIFs (if applicable).
    - Your Home Assistant version and Mushroom Strategy version.
 
----
-
 ## ✨ Suggesting Features
 
 Have a great idea for a new feature or enhancement? We'd love to hear it!
@@ -44,8 +40,6 @@ Have a great idea for a new feature or enhancement? We'd love to hear it!
    a [new issue](https://github.com/DigiLive/mushroom-strategy/issues/new?template=feature_request.yml).
 3. **Describe your idea:** Clearly explain the feature, why you think it's useful, and any potential use cases by
    following the instructions and template.
-
----
 
 ## 🙏 Get Support
 

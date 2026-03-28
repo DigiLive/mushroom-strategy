@@ -19,7 +19,7 @@ The entire documentation lives in the `docs/` folder of this repository.
     ```
 
     This will usually launch a local server, at `http://127.0.0.1:8000`.
-    The server will automatically reload in your browser as you make and save changes to the documentation files.  
+    The server will automatically reload in your browser as you make and save changes to the documentation files.<br>
     To stop the server, press **Ctrl + C** in the terminal.
 
     !!! note
@@ -49,7 +49,7 @@ The entire documentation lives in the `docs/` folder of this repository.
 
 7. **Format and Lint Your Changes:**
 
-    To keep the documentation clean and consistent, run the linter before committing.  
+    To keep the documentation clean and consistent, run the linter before committing.<br>
     This checks for broken links, formatting issues, and common Markdown errors.
 
     ```bash
@@ -64,22 +64,18 @@ The entire documentation lives in the `docs/` folder of this repository.
 
 10. **Open a Pull Request (PR).**
 
----
-
 ## How Versioning Works
 
 Our documentation uses `mike` to manage multiple versions of the documentation:
 
 - **The main version**: Every time a Pull Request is merged into the main branch, the documentation at /main/ is
-  updated.  
+  updated.<br>
   This represents the "development" or "upcoming" version.
 
 - **The latest version**: This points to the most recent official release.
 
 - **Tagged versions**: When we create a new GitHub Release, a permanent, numbered version (e.g., v1.2.0) is created and
   archived in the version selector.
-
----
 
 ## Documentation Style and Quality
 

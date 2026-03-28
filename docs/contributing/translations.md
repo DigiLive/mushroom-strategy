@@ -2,7 +2,7 @@
 
 Help us make Mushroom Strategy accessible to more users around the world by contributing and improving translations!
 
-Language tags have to follow [BCP 47](https://tools.ietf.org/html/bcp47).  
+Language tags have to follow [BCP 47](https://tools.ietf.org/html/bcp47).<br>
 A list of most language tags can be found here:
 [IANA subtag registry](http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry).
 Examples: fr, fr-CA, zh-Hans.
@@ -20,7 +20,7 @@ Examples: fr, fr-CA, zh-Hans.
 4. **Test Your Changes:** Thoroughly test your changes to ensure they work as expected and don't introduce new issues.
 
      - You can build the strategy with `npm run build` (for production) or `npm run build-dev` (for development/testing).
-     - Copy the built files to your Home Assistant's `www/community/mushroom-strategy` directory for testing.  
+     - Copy the built files to your Home Assistant's `www/community/mushroom-strategy` directory for testing.<br>
        **Remember to clear the cache of your Home Assistant client** to see the changes.
 
     !!! info
@@ -42,8 +42,6 @@ Examples: fr, fr-CA, zh-Hans.
 
 8. **Open a Pull Request (PR).**
 
----
-
 !!! info
 
     **Integrating a new Translation:**
@@ -57,9 +55,9 @@ Examples: fr, fr-CA, zh-Hans.
     If you are adding a country-specific locale (e.g., `es-ES` for Spanish (Spain) or `en-GB` for English 
     (United Kingdom)), you should create a file like `en-GB.json` in the `translations` folder. In 
     `src/utilities/localize.ts`, you'll import it similarly and add it to the `languages` map using the full locale 
-    code.  
+    code.<br>
     Please ensure you follow existing patterns for `language-country` codes, which typically use a hyphen (`-`) + a 
-    UPPER-cased country code in the file name and an underscore (`_`) + a lower-cased country code in the import key.  
+    UPPER-cased country code in the file name and an underscore (`_`) + a lower-cased country code in the import key.<br>
 
     !!! example
         ```typescript

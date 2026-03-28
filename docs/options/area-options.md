@@ -1,6 +1,6 @@
 # 🛋️ Area Options
 
-The `areas` group enables you to specify the configuration of specific areas.  
+The `areas` group enables you to specify the configuration of specific areas.<br>
 Each configuration is identified by an area id and can have the following options:
 
 | Name          | Type           | Default         | Description                                                                |
@@ -11,7 +11,7 @@ Each configuration is identified by an area id and can have the following option
 | `order`       | number         | `unset`         | Ordering position of the area in the list of available areas.              |
 | `type`        | string         | `default`       | Set to a type of area card. (Currently supported: `default` & `HaAreaCard` |
 
-Also, all options from the Template mushroom card and/or Home Assistant Area card are supported.  
+Also, all options from the Template mushroom card and/or Home Assistant Area card are supported.<br>
 Please follow the links below to see the additional options per card type.
 
 - [Mushroom Template Card][templateDocUrl]{: target="_blank"}.
@@ -31,7 +31,7 @@ To make the most of this, it helps to understand how the system prioritizes your
 
 ## Extra Cards
 
-The `extra_cards` group enables you to specify the configuration of additional cards an Area view.  
+The `extra_cards` group enables you to specify the configuration of additional cards an Area view.<br>
 These cards will be shown last in the view.
 
 See Home View Options → [Extra Cards](#extra-cards) for more information.
@@ -86,7 +86,7 @@ To exclude this area from the dashboard and views, set its property `hidden` to 
 
 ## Setting options for all areas
 
-Use `_` as an identifier to set the options for all areas.  
+Use `_` as an identifier to set the options for all areas.<br>
 The following example sets the type of all area-cards to the one of Home Assistant:
 
 ### Example

@@ -1,6 +1,6 @@
 # 👀 View Options
 
-Mushroom strategy includes several views to control/view entities of a specific domain.  
+Mushroom strategy includes several views to control/view entities of a specific domain.<br>
 Hidden/Disabled entities or linked to a hidden area are excluded from the view.
 
 The following views are supported and enabled by default:

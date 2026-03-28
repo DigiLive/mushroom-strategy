@@ -31,7 +31,7 @@ To apply the Mushroom Strategy to a dashboard:
          be registered
     ```
 
-This is mainly because of cache issues or HACS didn't create a reference.  
+This is mainly because of cache issues or HACS didn't create a reference.<br>
 Try clearing the cache of your client and/or re-downloading the strategy from HACS.
 
 If it still doesn't work, please consult guide
