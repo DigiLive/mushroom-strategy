@@ -69,6 +69,19 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
+   * Applies a set of filters only if a condition is met.
+   *
+   * @param {boolean} condition The condition to check.
+   * @param {(filter: this) => this} callback A function that receives the filter instance and applies more filters.
+   */
+  when(condition: boolean, callback: (filter: this) => this): this {
+    if (condition) {
+      return callback(this);
+    }
+    return this;
+  }
+
+  /**
    * Filters entries by their `area_id`.
    *
    * @param {string|null} [areaId] - The area id to match.
