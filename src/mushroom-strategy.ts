@@ -124,9 +124,15 @@ class MushroomStrategy extends HTMLTemplateElement {
     // Prepare promises for all supported domains
     const domainCardPromises = exposedDomainNames.filter(isSupportedDomain).map(async (domain) => {
       const moduleName = sanitizeClassName(domain + 'Card');
+      const domainOptions = {
+        ...Registry.strategyOptions.domains['_'],
+        ...Registry.strategyOptions.domains[domain],
+      };
 
       const entities = new RegistryFilter(areaEntities)
         .whereDomain(domain)
+        .when(domainOptions.hide_config_entities, (filter) => filter.not().whereEntityCategory('config'))
+        .when(domainOptions.hide_diagnostic_entities, (filter) => filter.not().whereEntityCategory('diagnostic'))
         .where((entity) => !(domain === 'switch' && entity.entity_id.endsWith('_stateful_scene')))
         .toList();
 
@@ -136,10 +142,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
       const headerCard = new HeaderCard(
         { entity_id: entities.map((entity) => entity.entity_id) },
-        {
-          ...Registry.strategyOptions.domains['_'],
-          ...Registry.strategyOptions.domains[domain],
-        }
+        domainOptions
       ).createCard();
 
       try {
