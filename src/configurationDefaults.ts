@@ -40,8 +40,8 @@ export const ConfigurationDefaults: StrategyDefaults = {
   debug: false,
   domains: {
     _: {
-      hide_config_entities: undefined,
-      hide_diagnostic_entities: undefined,
+      hide_config_entities: true,
+      hide_diagnostic_entities: true,
       show_controls: true,
       stack_count: 1,
     },
