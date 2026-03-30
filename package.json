@@ -35,7 +35,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/semver": "^7.7.1",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
     "@typescript-eslint/parser": "^8.32.1",
     "bumpp": "^11.0.1",
     "eslint": "^10.1.0",
@@ -50,7 +50,7 @@
     "superstruct": "^2.0.2",
     "ts-loader": "^9.5.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.2",
     "webpack": "^5.105.4",
     "webpack-cli": "^7.0.2"
   },
