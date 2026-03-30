@@ -26,6 +26,7 @@ strategy:
         order: 1
         stack_count: 2
         title: "My cool lights"
+        hide_diagnostic_entities: false
     badges:
       weather_entity: weather.forecast_home
       climate_count: false

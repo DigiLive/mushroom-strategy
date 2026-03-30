@@ -137,10 +137,6 @@ class Registry {
 
     // Process entries of the HASS entity registry.
     Registry._entities = new RegistryFilter(Registry.entities)
-      .not()
-      .whereEntityCategory('config')
-      .not()
-      .whereEntityCategory('diagnostic')
       .isNotHidden()
       .whereDisabledBy(null)
       .toList()

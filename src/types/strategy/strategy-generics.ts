@@ -175,16 +175,16 @@ export interface ViewInfo {
 /**
  * All-Domains Configuration.
  *
- * @property {boolean} [hide_config_entities] - If True, all configuration entities are hidden from the dashboard.
- * @property {boolean} [hide_diagnostic_entities] - If True, all diagnostic entities are hidden from the dashboard.
- * @property {boolean} [show_controls] - False to hide controls.
- * @property {number} [stack_count] - Number of cards per row.
+ * @property {boolean} hide_config_entities - If True, all configuration entities are hidden from the dashboard.
+ * @property {boolean} hide_diagnostic_entities - If True, all diagnostic entities are hidden from the dashboard.
+ * @property {boolean} show_controls - False to hide controls.
+ * @property {number} stack_count - Number of cards per row.
  */
 export interface AllDomainsConfig {
-  hide_config_entities?: boolean;
-  hide_diagnostic_entities?: boolean;
-  show_controls?: boolean;
-  stack_count?: number;
+  hide_config_entities: boolean;
+  hide_diagnostic_entities: boolean;
+  show_controls: boolean;
+  stack_count: number;
 }
 
 /**

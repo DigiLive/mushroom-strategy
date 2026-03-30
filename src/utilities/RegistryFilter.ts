@@ -69,6 +69,19 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
+   * Applies a set of filters only if a condition is met.
+   *
+   * @param {boolean} condition The condition to check.
+   * @param {(filter: this) => this} callback A function that receives the filter instance and applies more filters.
+   */
+  when(condition: boolean, callback: (filter: this) => this): this {
+    if (condition) {
+      return callback(this);
+    }
+    return this;
+  }
+
+  /**
    * Filters entries by their `area_id`.
    *
    * @param {string|null} [areaId] - The area id to match.
@@ -280,29 +293,9 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
   }
 
   /**
-   * Filters entries **strictly** by their `entity_category`.
+   * Filters entries strictly by their `entity_category`.
    *
-   * - Without `.not()`: returns only entries where `entity_category` exactly matches the given argument (e.g.,
-   *   'config', 'diagnostic', null, or undefined).
-   * - With `.not()`: returns all entries where `entity_category` does NOT match the given argument.
-   *
-   * @param {EntityCategory | null} entityCategory The desired entity_category (e.g., 'config', 'diagnostic', null, or
-   *   undefined)
-   *
-   * @remarks
-   * Visibility via the strategy options:
-   * - If `hide_{category}_entities: true` is set, entries of that category are NEVER kept, regardless of the filter.
-   * - If `hide_{category}_entities: false` is set, entries of that category are ALWAYS kept when filtering for that
-   *   category, even when preceded by `.not()`.
-   * - If neither is set:
-   *   - If preceded by not(), entries of that category are implicitly filtered out.
-   *   - Otherwise they are implicitly kept.
-   *
-   * @example
-   *  .whereEntityCategory('config')           // Only 'config' entries (unless explicitly hidden)
-   *  .not().whereEntityCategory('diagnostic') // All except 'diagnostic' entries
-   *  .whereEntityCategory(null)               // Only entries with 'entity_category: null'
-   *  .whereEntityCategory()                   // Only entries without an 'entity_category' field
+   * @param {EntityCategory | null} entityCategory The desired entity_category (e.g., 'config', 'diagnostic', or null).
    */
   whereEntityCategory(entityCategory?: EntityCategory | null): this {
     const invert = this.invertNext;
@@ -310,18 +303,6 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
 
     const predicate = (entry: T) => {
       const category = 'entity_category' in entry ? entry.entity_category : undefined;
-      const hideOption =
-        typeof category === 'string'
-          ? Registry.strategyOptions?.domains?.['_']?.[`hide_${category}_entities`]
-          : undefined;
-
-      if (hideOption === true) {
-        return false;
-      }
-
-      if (hideOption === false && category === entityCategory) {
-        return true;
-      }
 
       return invert ? category !== entityCategory : category === entityCategory;
     };
