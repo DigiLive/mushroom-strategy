@@ -159,18 +159,16 @@ class Registry {
       .map((device) => ({ ...device, area_id: device.area_id ?? 'undisclosed' }));
 
     // Process entries of the HASS area registry.
-    const areaList = [...Registry._areas];
+    const areaList = new RegistryFilter(Registry._areas).orderBy(['name'], 'asc').toList();
 
-    // Add the undisclosed area, if not hidden in the strategy options.
-    if (!Registry.strategyOptions.areas.undisclosed?.hidden) {
-      areaList.push(ConfigurationDefaults.areas.undisclosed);
-    }
+    areaList.push(ConfigurationDefaults.areas.undisclosed);
 
-    Registry._areas = areaList.map((area) => {
+    Registry._areas = areaList.map((area, index) => {
       const isUndisclosed = area.area_id === 'undisclosed';
 
       return {
         ...area,
+        order: (index + 1) * 10,
         ...Registry.strategyOptions.areas._, // Global defaults
         ...Registry.strategyOptions.areas[area.area_id], // Specific overrides
         ...(isUndisclosed ? { area_id: 'undisclosed', type: 'default' } : {}), // Force constraints for undisclosed
