@@ -24,8 +24,8 @@ import { NOTIFICATIONS } from './notifications';
 import MiscellaneousCard from './cards/MiscellaneousCard';
 
 /**
- * Mushroom Dashboard Strategy.<br>
- * <br>
+ * Mushroom Dashboard Strategy.
+ *
  * Mushroom dashboard strategy provides a strategy for Home-Assistant to create a dashboard automatically.<br>
  * The strategy makes use Mushroom and Mini Graph cards to represent your entities.
  *
