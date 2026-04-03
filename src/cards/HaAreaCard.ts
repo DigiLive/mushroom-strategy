@@ -3,6 +3,9 @@
 import { AreaRegistryEntry } from '../types/homeassistant/data/area_registry';
 import { AreaCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
 import AbstractCard from './AbstractCard';
+import { StrategyArea } from '../types/strategy/strategy-generics';
+import { Registry } from "../Registry";
+import { localize } from "../utilities/localize";
 
 /**
  * HA Area Card Class
@@ -21,10 +24,10 @@ class AreaCard extends AbstractCard {
   /**
    * Class constructor.
    *
-   * @param {AreaRegistryEntry} area The HASS entity to create a card configuration for.
+   * @param {StrategyArea} area The HASS entity to create a card configuration for.
    * @param {AreaCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(area: AreaRegistryEntry, customConfiguration?: AreaCardConfig) {
+  constructor(area: StrategyArea, customConfiguration?: AreaCardConfig) {
     super(area);
 
     // Initialize the default configuration.
@@ -32,6 +35,10 @@ class AreaCard extends AbstractCard {
 
     configuration.area = area.area_id;
     configuration.navigation_path = configuration.area;
+
+    if (Registry.strategyOptions.show_positions) {
+      configuration.name = `${area.name} - ${localize('generic.ordering_position')}: ${area.order}`;
+    }
 
     this.configuration = {
       ...this.configuration,

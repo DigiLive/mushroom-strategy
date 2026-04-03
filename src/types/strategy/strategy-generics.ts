@@ -214,6 +214,7 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
  * @property {Record<HomeViewSections, boolean>} home_view.hidden - Visibility settings for the home view sections.
  * @property {Object} home_view.stack_count - Controls the number of cards per row in different sections.
  * @property {number} home_view.stack_count._ - Default number of cards per row.
+ * @property {bool} show_positions Whether to show a positional item's position.
  * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
  * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show before the area cards.
  */
@@ -232,12 +233,16 @@ export interface StrategyConfig {
     hidden: Record<HomeViewSections, boolean>;
     stack_count: { _: number } & { [K in HomeViewSections]?: K extends 'areas' ? [number, number] : number };
   };
+  show_positions: boolean;
   views: Record<SupportedViews, StrategyViewConfig>;
   quick_access_cards: LovelaceCardConfig[];
 }
 
 /**
  * Represents the default configuration for a strategy.
+ *
+ * @property {AllAreasConfig} areas._ Global default settings applied to all areas.
+ * @property {StrategyArea} areas.undisclosed Forced configuration for the undisclosed area.
  */
 export type StrategyDefaults = Omit<StrategyConfig, 'areas'> & {
   areas: {
@@ -250,10 +255,10 @@ export type StrategyDefaults = Omit<StrategyConfig, 'areas'> & {
  * Strategy Area.
  *
  * @property {boolean} [hidden] True if the entity should be hidden from the dashboard.
- * @property {object[]} [extra_cards] - An array of card configurations.
- *                                      The configured cards are added to the dashboard.
- * @property {number} [order] - Ordering position of the area in the list of available areas.
- * @property {string} [type] - The type of area card.
+ * @property {object[]} [extra_cards] An array of card configurations.
+ *                                    The configured cards are added to the dashboard.
+ * @property {number} [order] Ordering position of the area in the list of available areas.
+ * @property {string} [type] The type of area card.
  */
 export interface StrategyArea extends AreaRegistryEntry {
   extra_cards?: LovelaceCardConfig[];

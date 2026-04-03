@@ -159,9 +159,9 @@ class Registry {
       .map((device) => ({ ...device, area_id: device.area_id ?? 'undisclosed' }));
 
     // Process entries of the HASS area registry.
-    const areaList = new RegistryFilter(Registry._areas).orderBy(['name'], 'asc').toList();
+    Registry._areas.push(ConfigurationDefaults.areas.undisclosed);
 
-    areaList.push(ConfigurationDefaults.areas.undisclosed);
+    const areaList = new RegistryFilter(Registry._areas).isNotHidden().orderBy(['name'], 'asc').toList();
 
     Registry._areas = areaList.map((area, index) => {
       const isUndisclosed = area.area_id === 'undisclosed';
@@ -176,7 +176,7 @@ class Registry {
     });
 
     // Remove hidden areas if configured as so and sort them by order first, then by name.
-    Registry._areas = new RegistryFilter(Registry._areas).isNotHidden().orderBy(['order', 'name'], 'asc').toList();
+    Registry._areas = new RegistryFilter(Registry._areas).orderBy(['order', 'name'], 'asc').toList();
 
     // Sort views and domains by order first and then by title.
     Registry.strategyOptions.views = Registry.sortConfigByOrder(Registry.strategyOptions.views);
