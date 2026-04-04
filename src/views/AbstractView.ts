@@ -12,6 +12,7 @@ import { logMessage, lvlFatal } from '../utilities/debug';
 import RegistryFilter from '../utilities/RegistryFilter';
 import { stackHorizontal } from '../utilities/cardStacking';
 import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
+import { localize } from '../utilities/localize';
 
 /**
  * Abstract View Class.
@@ -91,13 +92,14 @@ abstract class AbstractView {
 
     // Create card configurations for each area.
     for (const area of Registry.areas) {
+      const areaEntities = new RegistryFilter(domainEntities).whereAreaId(area.area_id).toList();
+
       let areaCards: AbstractCardConfig[] = [];
 
       // Set the target of the Header card to the current area.
       let target: HassServiceTarget = {
         area_id: [area.area_id],
       };
-      const areaEntities = new RegistryFilter(domainEntities).whereAreaId(area.area_id).toList();
 
       // Set the target of the Header card to entities without an area.
       if (area.area_id === 'undisclosed') {
@@ -126,7 +128,15 @@ abstract class AbstractView {
           'headerCardConfiguration' in this.baseConfiguration ? this.baseConfiguration.headerCardConfiguration : {}
         ) as CustomHeaderCardConfig;
 
-        areaCards.unshift(new HeaderCard(target, { title: area.name, ...areaHeaderCardOptions }).createCard());
+        areaCards.unshift(
+          new HeaderCard(target, {
+            title: area.name,
+            ...areaHeaderCardOptions,
+            subtitle: Registry.strategyOptions.show_positions
+              ? `${localize('generic.ordering_position')}: ${area.order}`
+              : undefined,
+          }).createCard()
+        );
 
         viewCards.push({ type: 'vertical-stack', cards: areaCards });
       }
