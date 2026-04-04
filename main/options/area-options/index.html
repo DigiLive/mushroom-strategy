@@ -1212,13 +1212,13 @@ Each configuration is identified by an area id and can have the following option
 <tr>
 <td style="text-align: left;"><code>name</code></td>
 <td style="text-align: left;">string</td>
-<td style="text-align: left;"><code>Area specific</code></td>
+<td style="text-align: left;">Area specific</td>
 <td style="text-align: left;">The name of the area.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>order</code></td>
 <td style="text-align: left;">number</td>
-<td style="text-align: left;"><code>unset</code></td>
+<td style="text-align: left;">Area specific</td>
 <td style="text-align: left;">Ordering position of the area in the list of available areas.</td>
 </tr>
 <tr>
@@ -1236,15 +1236,21 @@ Please follow the links below to see the additional options per card type.</p>
 <li><a href="https://www.home-assistant.io/dashboards/area/#configuration-variables" target="_blank">Home Assistant Area Card</a>.</li>
 </ul>
 <h2 id="sorting-areas">Sorting Areas<a class="headerlink" href="#sorting-areas" title="Permanent link">#</a></h2>
-<p>The <code>order</code> property gives you control over how your areas are arranged in a view.</p>
-<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
+<p>The <code>order</code> property gives you control over how areas are arranged in a view.</p>
+<p>To make the most of this, it helps to understand how the strategy prioritizes these elements, as explained in chapter
+<a href="../#element-positioning">Element Positioning</a>.</p>
+<p>Possible values for <code>order</code> are:</p>
 <ul>
-<li>Any area assigned an order value will automatically move to the front/top.<br>
-  This allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so they are always the first things you
-  see.</li>
-<li>If two areas share the same order value, the system will use their names to determine which one comes first.</li>
-<li>Any areas without an order property will be placed after/below your prioritized list, sorted alphabetically by name.</li>
+<li>Any number, with lower values appearing first. For example, an area with <code>order: 10</code> will appear before an area with
+  <code>order: 20</code>.</li>
+<li><code>undefined</code> or missing <code>order</code> property, which will follow your prioritized list, sorted alphabetically by name.</li>
+<li><code>Infinity</code> or <code>-Infinity</code> to always show an area last or first, respectively.</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, the strategy assigns the highest possible <code>order</code> value to the <a href="#undisclosed-area">undisclosed</a> area,
+ensuring it appears last in the list.</p>
+</div>
 <h2 id="extra-cards">Extra Cards<a class="headerlink" href="#extra-cards" title="Permanent link">#</a></h2>
 <p>The <code>extra_cards</code> group enables you to specify the configuration of additional cards an Area view.<br>
 These cards will be shown last in the view.</p>
@@ -1253,12 +1259,13 @@ These cards will be shown last in the view.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
 <span class="w">  </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">show_positions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">areas</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">family_room_id</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Family Room</span>
 <span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:television</span>
 <span class="w">        </span><span class="nt">icon_color</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">green</span>
-<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">        </span><span class="nt">extra_cards</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-chips-card</span>
 <span class="w">            </span><span class="nt">chips</span><span class="p">:</span>
@@ -1271,7 +1278,7 @@ These cards will be shown last in the view.</p>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kitchen</span>
 <span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:silverware-fork-knife</span>
 <span class="w">        </span><span class="nt">icon_color</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">red</span>
-<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 <span class="w">      </span><span class="nt">garage_id</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">hallway_id</span><span class="p">:</span>

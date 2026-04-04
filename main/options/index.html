@@ -650,6 +650,34 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#global-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Global Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#element-positioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Element Positioning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1150,70 +1178,100 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">areas</td>
+<td style="text-align: left;"><code>show_positions</code></td>
+<td style="text-align: left;">bool</td>
+<td style="text-align: left;">false</td>
+<td style="text-align: left;">Toggles the visibility of positioned elements (Area, View, Domain).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>areas</code></td>
 <td style="text-align: left;">object</td>
-<td style="text-align: left;">undisclosed</td>
+<td style="text-align: left;">{undisclosed}</td>
 <td style="text-align: left;">See <a href="area-options/">Area Options</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">card_options</td>
+<td style="text-align: left;"><code>card_options</code></td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">empty</td>
 <td style="text-align: left;">See <a href="card-options/">Card Options</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">domains</td>
+<td style="text-align: left;"><code>domains</code></td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">All supported domains</td>
 <td style="text-align: left;">See <a href="domain-options/">Domain Options</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">home_view</td>
+<td style="text-align: left;"><code>home_view</code></td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">unset</td>
 <td style="text-align: left;">See <a href="home-view-options/">Home View Options</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">badges</td>
+<td style="text-align: left;"><code>badges</code></td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">All supported badges</td>
 <td style="text-align: left;">See <a href="home-view-options/#badge-options">Badge Options</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">quick_access_cards</td>
+<td style="text-align: left;"><code>quick_access_cards</code></td>
 <td style="text-align: left;">array of cards</td>
 <td style="text-align: left;">empty</td>
 <td style="text-align: left;">List of cards to show between the greeting card and the area cards.<br>See <a href="home-view-options/#quick-access-cards">Quick Access Cards</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">extra_cards</td>
+<td style="text-align: left;"><code>extra_cards</code></td>
 <td style="text-align: left;">array of cards</td>
 <td style="text-align: left;">empty</td>
 <td style="text-align: left;">List of cards to show below the area cards.<br>See <a href="home-view-options/#extra-cards">extra Cards</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">views</td>
+<td style="text-align: left;"><code>views</code></td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">All supported views</td>
 <td style="text-align: left;">See <a href="view-options/">View Options</a>.</td>
 </tr>
 <tr>
-<td style="text-align: left;">extra_views</td>
+<td style="text-align: left;"><code>extra_views</code></td>
 <td style="text-align: left;">array of views</td>
 <td style="text-align: left;">empty</td>
 <td style="text-align: left;">List of user defined views to add to the dashboard.<br>See <a href="view-options/#extra-views">Extra Views</a>.</td>
 </tr>
 </tbody>
 </table>
+<h2 id="global-options">Global Options<a class="headerlink" href="#global-options" title="Permanent link">#</a></h2>
+<h3 id="element-positioning">Element Positioning<a class="headerlink" href="#element-positioning" title="Permanent link">#</a></h3>
+<p>Elements like <strong>Areas</strong>, <strong>Views</strong>, and <strong>Domains</strong> are automatically assigned an <code>order</code> value based on their position
+in their respective alphabetically sorted list. This value gives you control over how those elements are arranged in the
+dashboard, with lower values appearing first.</p>
+<p>To make the most of this, it helps to understand how the strategy prioritizes a sorted list:</p>
+<ul>
+<li>Each element is assigned an <code>order</code> value that corresponds to its position in the alphabetically sorted list.<br>
+  For example, if you have three areas named "Bedroom", "Kitchen", and "Living Room", they would be assigned <code>order</code>
+  values of 10, 20, and 30 respectively.</li>
+<li>Setting this value in the configuration allows you to "pin" your most-used elements in between others.</li>
+<li>If two elements share the same order value, the strategy will use their names to determine which one comes first.</li>
+<li>Elements missing the <code>order</code> property (or set to <code>undefined</code>) will follow the prioritized list, sorted alphabetically
+  by name.</li>
+</ul>
+<p>The visibility of the ordering positions can be toggled with the <code>show_positions</code> option<br>
+This can be helpful when you have a long list and want to quickly identify their order values.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
 <span class="w">  </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">show_positions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">areas</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">family_room_id</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Family Room</span>
 <span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:sofa</span>
 <span class="w">        </span><span class="nt">icon_color</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">green</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">      </span><span class="nt">kitchen_id</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Kitchen</span>
+<span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:fridge</span>
+<span class="w">        </span><span class="nt">icon_color</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">blue</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 </code></pre></div>
 
 

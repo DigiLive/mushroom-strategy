@@ -1274,43 +1274,43 @@ Each configuration is identified by a domain name and can have the following opt
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">hidden</td>
+<td style="text-align: left;"><code>hidden</code></td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;"><code>false</code></td>
 <td style="text-align: left;">Set to <code>true</code> to exclude the domain from the dashboard.</td>
 </tr>
 <tr>
-<td style="text-align: left;">hide_config_entities</td>
+<td style="text-align: left;"><code>hide_config_entities</code></td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;"><code>true</code></td>
 <td style="text-align: left;">Set to <code>false</code> to include config-entities to the dashboard.</td>
 </tr>
 <tr>
-<td style="text-align: left;">hide_diagnostic_entities</td>
+<td style="text-align: left;"><code>hide_diagnostic_entities</code></td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;"><code>true</code></td>
 <td style="text-align: left;">Set to <code>false</code> to include diagnostic-entities to the dashboard.</td>
 </tr>
 <tr>
-<td style="text-align: left;">order</td>
+<td style="text-align: left;"><code>order</code></td>
 <td style="text-align: left;">number</td>
-<td style="text-align: left;"><code>unset</code></td>
+<td style="text-align: left;">domain specific</td>
 <td style="text-align: left;">Ordering position of the domain entities in a view.</td>
 </tr>
 <tr>
-<td style="text-align: left;">show_controls</td>
+<td style="text-align: left;"><code>show_controls</code></td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;"><code>true</code></td>
 <td style="text-align: left;">Whether to show controls in a view, to switch all entities of the domain.</td>
 </tr>
 <tr>
-<td style="text-align: left;">stack_count</td>
+<td style="text-align: left;"><code>stack_count</code></td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;"><code>1</code><br>(set by <code>_</code>)</td>
 <td style="text-align: left;">Cards per row.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
 </tr>
 <tr>
-<td style="text-align: left;">title</td>
+<td style="text-align: left;"><code>title</code></td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">domain specific</td>
 <td style="text-align: left;">Title of the domain in a view.</td>
@@ -1325,33 +1325,39 @@ Each configuration is identified by a domain name and can have the following opt
 </ul>
 </div>
 <h2 id="sorting-domains">Sorting Domains<a class="headerlink" href="#sorting-domains" title="Permanent link">#</a></h2>
-<p>The <code>order</code> property gives you control over how the domains are arranged in a view.</p>
-<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
+<p>The <code>order</code> property gives you control over how domains are arranged in a view.</p>
+<p>To make the most of this, it helps to understand how the strategy prioritizes these elements, as explained in chapter
+<a href="../#element-positioning">Element Positioning</a>.</p>
+<p>Possible values for <code>order</code> are:</p>
 <ul>
-<li>Any domain assigned an order value will automatically move to the front/top.<br>
-  This allows you to "pin" your most-used domains—like lights or fans—so they are always the first things you
-  see.</li>
-<li>If two domains share the same order value, the system will use their names to determine which one comes first.</li>
-<li>Domains missing an <code>order</code> property or set to <code>undefined</code> will follow your prioritized list, sorted alphabetically by
-  name.</li>
+<li>Any number, with lower values appearing first. For example, a domain with <code>order: 10</code> will appear before domian with
+  <code>order: 20</code>.</li>
+<li><code>undefined</code> or missing <code>order</code> property, which will follow your prioritized list, sorted alphabetically by name.</li>
+<li><code>Infinity</code> or <code>-Infinity</code> to always show a domain last or first, respectively.</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Keep in mind that the domains have a default order as shown in the table above.</p>
+</div>
 <h2 id="setting-options-for-all-domains">Setting options for all domains<a class="headerlink" href="#setting-options-for-all-domains" title="Permanent link">#</a></h2>
 <p>Use <code>_</code> as the identifier to set options for all domains.</p>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
 <span class="w">  </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">show_positions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">domains</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">_</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">stack_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
 <span class="w">        </span><span class="nt">hide_config_entities</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">      </span><span class="nt">light</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;My</span><span class="nv"> </span><span class="s">cool</span><span class="nv"> </span><span class="s">lights&quot;</span>
-<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
 <span class="w">      </span><span class="nt">switch</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">stack_count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
 <span class="w">        </span><span class="nt">show_controls</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">hide_diagnostic_entities</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
 <span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c1"># All other domains</span>
 <span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>

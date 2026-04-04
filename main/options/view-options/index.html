@@ -790,10 +790,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
+  <a href="#sorting-views" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Example
+        Sorting Views
       
     </span>
   </a>
@@ -801,10 +801,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sorting-views" class="md-nav__link">
+  <a href="#example" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sorting Views
+        Example
       
     </span>
   </a>
@@ -1170,6 +1170,7 @@ Hidden/Disabled entities or linked to a hidden area are excluded from the view.<
 <thead>
 <tr>
 <th style="text-align: left;">View</th>
+<th style="text-align: left;">name</th>
 <th style="text-align: center;">Ordering Position</th>
 <th style="text-align: left;">Type</th>
 <th style="text-align: left;">Description</th>
@@ -1177,67 +1178,78 @@ Hidden/Disabled entities or linked to a hidden area are excluded from the view.<
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">home</td>
+<td style="text-align: left;"><code>home</code></td>
+<td style="text-align: left;">Home</td>
 <td style="text-align: center;">10</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">The strategy's Home View.</td>
 </tr>
 <tr>
-<td style="text-align: left;">light</td>
+<td style="text-align: left;"><code>light</code></td>
+<td style="text-align: left;">Lights</td>
 <td style="text-align: center;">20</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control lights.</td>
 </tr>
 <tr>
-<td style="text-align: left;">fan</td>
+<td style="text-align: left;"><code>fan</code></td>
+<td style="text-align: left;">Fans</td>
 <td style="text-align: center;">30</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control fans.</td>
 </tr>
 <tr>
-<td style="text-align: left;">cover</td>
+<td style="text-align: left;"><code>cover</code></td>
+<td style="text-align: left;">Covers</td>
 <td style="text-align: center;">40</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control covers.</td>
 </tr>
 <tr>
-<td style="text-align: left;">switch</td>
+<td style="text-align: left;"><code>switch</code></td>
+<td style="text-align: left;">Switches</td>
 <td style="text-align: center;">50</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control switches.</td>
 </tr>
 <tr>
-<td style="text-align: left;">climate</td>
+<td style="text-align: left;"><code>climate</code></td>
+<td style="text-align: left;">Climates</td>
 <td style="text-align: center;">60</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control climates.</td>
 </tr>
 <tr>
-<td style="text-align: left;">camera</td>
+<td style="text-align: left;"><code>camera</code></td>
+<td style="text-align: left;">Cameras</td>
 <td style="text-align: center;">70</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control cameras.</td>
 </tr>
 <tr>
-<td style="text-align: left;">vacuum</td>
+<td style="text-align: left;"><code>vacuum</code></td>
+<td style="text-align: left;">Vacuums</td>
 <td style="text-align: center;">80</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control vacuums.</td>
 </tr>
 <tr>
-<td style="text-align: left;">scene</td>
+<td style="text-align: left;"><code>scene</code></td>
+<td style="text-align: left;">Scenes</td>
 <td style="text-align: center;">90</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control scenes.</td>
 </tr>
 <tr>
-<td style="text-align: left;">lock</td>
+<td style="text-align: left;"><code>lock</code></td>
+<td style="text-align: left;">Locks</td>
 <td style="text-align: center;">100</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control locks.</td>
 </tr>
 <tr>
-<td style="text-align: left;">valve</td>
+<td style="text-align: left;"><code>valve</code></td>
+<td style="text-align: left;">Valves</td>
 <td style="text-align: center;">110</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control valves.</td>
@@ -1257,59 +1269,64 @@ Each configuration is identified by a view name and can have the following optio
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">hidden</td>
+<td style="text-align: left;"><code>hidden</code></td>
 <td style="text-align: left;">boolean</td>
 <td style="text-align: left;"><code>false</code></td>
 <td style="text-align: left;">Set to <code>true</code> to exclude the view from the dashboard</td>
 </tr>
 <tr>
-<td style="text-align: left;">icon</td>
+<td style="text-align: left;"><code>icon</code></td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">domain specific</td>
 <td style="text-align: left;">Icon of the view in the navigation bar.</td>
 </tr>
 <tr>
-<td style="text-align: left;">order</td>
+<td style="text-align: left;"><code>order</code></td>
 <td style="text-align: left;">number</td>
 <td style="text-align: left;">domain specific<br>(See table above)</td>
 <td style="text-align: left;">Ordering position of the view in the navigation bar.</td>
 </tr>
 <tr>
-<td style="text-align: left;">title</td>
+<td style="text-align: left;"><code>title</code></td>
 <td style="text-align: left;">string</td>
 <td style="text-align: left;">domain specific</td>
 <td style="text-align: left;">Title of the view in the navigation bar. (Shown when no icon is defined or hovering above it.)</td>
 </tr>
 </tbody>
 </table>
-<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
-<span class="w">  </span><span class="nt">options</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">views</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">light</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">illumination</span>
-<span class="w">      </span><span class="nt">switch</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:toggle-switch</span>
-<span class="nt">views</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
-</code></pre></div>
 <h2 id="sorting-views">Sorting Views<a class="headerlink" href="#sorting-views" title="Permanent link">#</a></h2>
-<p>The <code>order</code> property gives you control over how the views are arranged.</p>
-<p>To make the most of this, it helps to understand how the system prioritizes your list:</p>
+<p>The <code>order</code> property gives you control over how views are arranged in the top of the dashboard.</p>
+<p>To make the most of this, it helps to understand how the strategy prioritizes these elements, as explained in chapter
+<a href="../#element-positioning">Element Positioning</a>.</p>
+<p>Possible values for <code>order</code> are:</p>
 <ul>
-<li>Any view assigned an order value will automatically move to the front/top.<br>
-  This allows you to "pin" your most-used views—like the Lights or Fans—so they are always the first things you
-  see.</li>
-<li>If two views share the same order value, the system will use their names to determine which one comes first.</li>
-<li>Any views without an order property will be placed after/below your prioritized list, sorted alphabetically by name.</li>
+<li>Any number, with lower values appearing first. For example, a view with <code>order: 10</code> will appear before an area with
+  <code>order: 20</code>.</li>
+<li><code>undefined</code> or missing <code>order</code> property, which will follow your prioritized list, sorted alphabetically by name.</li>
+<li><code>Infinity</code> or <code>-Infinity</code> to always show a view last or first, respectively.</li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Keep in mind that the build-in views have a default order as shown in the table above.</p>
 </div>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
+<span class="w">  </span><span class="nt">show_positions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">views</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">light</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">        </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">illumination</span>
+<span class="w">      </span><span class="nt">switch</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:toggle-switch</span>
+<span class="w">      </span><span class="nt">fan</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">        </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdi:fan</span>
+<span class="nt">views</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+</code></pre></div>
 <h2 id="extra-views">Extra Views<a class="headerlink" href="#extra-views" title="Permanent link">#</a></h2>
 <p>The <code>extra_views</code> group enables you to specify the configuration of additional views.
 Each view can have the options as described in the <a href="https://www.home-assistant.io/dashboards/views/#views" target="_blank">Home Assistant documentation</a>.</p>
