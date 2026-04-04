@@ -182,6 +182,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
       _: 2,
     },
   },
+  show_positions: false,
   views: {
     camera: {
       order: 70,

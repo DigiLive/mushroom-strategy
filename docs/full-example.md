@@ -4,9 +4,10 @@
 strategy:
   type: custom:mushroom-strategy
   options:
+    show_positions: true
     views:
       light:
-        order: 1
+        order: 10
         title: illumination
       switches:
         hidden: true
@@ -23,7 +24,7 @@ strategy:
         hide_config_entities: true
         stack_count: 1
       light:
-        order: 1
+        order: 10
         stack_count: 2
         title: "My cool lights"
         hide_diagnostic_entities: false
@@ -62,7 +63,7 @@ strategy:
         name: Kitchen
         icon: mdi:silverware-fork-knife
         icon_color: red
-        order: 1
+        order: 10
       master_bedroom_id:
         name: Master Bedroom
         icon: mdi:bed-king

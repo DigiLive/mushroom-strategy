@@ -1,6 +1,8 @@
-import { AreaRegistryEntry } from '../types/homeassistant/data/area_registry';
 import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
 import AbstractCard from './AbstractCard';
+import { Registry } from '../Registry';
+import { StrategyArea } from '../types/strategy/strategy-generics';
+import { localize } from '../utilities/localize';
 
 /**
  * Area Card Class
@@ -23,10 +25,10 @@ class AreaCard extends AbstractCard {
   /**
    * Class constructor.
    *
-   * @param {AreaRegistryEntry} area The HASS area to create a card configuration for.
+   * @param {StrategyArea} area The HASS area to create a card configuration for.
    * @param {TemplateCardConfig} [customConfiguration] Custom card configuration.
    */
-  constructor(area: AreaRegistryEntry, customConfiguration?: TemplateCardConfig) {
+  constructor(area: StrategyArea, customConfiguration?: TemplateCardConfig) {
     super(area);
 
     const configuration = AreaCard.getDefaultConfig();
@@ -35,6 +37,10 @@ class AreaCard extends AbstractCard {
 
     configuration.primary = area.name;
     configuration.icon = area.icon || configuration.icon;
+
+    if (Registry.strategyOptions.show_positions) {
+      configuration.secondary = `${localize('generic.ordering_position')}: ${area.order}`;
+    }
 
     if (configuration.tap_action && 'navigation_path' in configuration.tap_action) {
       configuration.tap_action.navigation_path = area.area_id;
