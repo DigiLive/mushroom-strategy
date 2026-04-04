@@ -19,20 +19,22 @@ Please follow the links below to see the additional options per card type.
 
 ## Sorting Areas
 
-The `order` property gives you control over how your areas are arranged in a view.
+The `order` property gives you control over how areas are arranged in a view.
 
-To make the most of this, it helps to understand how the strategy prioritizes your list:
+To make the most of this, it helps to understand how the strategy prioritizes these elements, as explained in chapter
+[Element Positioning](index.md#element-positioning).
 
-- Each area is assigned an `order` value that corresponds to its position in the alphabetically sorted list.<br>
-  For example, if you have three areas named "Bedroom", "Kitchen", and "Living Room", they would be assigned `order` 
-  values of 10, 20, and 30 respectively.
-- Setting this value in the configuration allows you to "pin" your most-used rooms—like the Kitchen or Living Room—so
-  they are always the first things you see.
-- If two areas share the same order value, the strategy will use their names to determine which one comes first.
-- Areas missing the `order` property (or set to `undefined`) will follow your prioritized list, sorted alphabetically by
-  name.
-- By default, the strategy assigns the highest possible `order` value to the undisclosed area, ensuring it appears last
-  in the list.
+Possible values for `order` are:
+
+- Any number, with lower values appearing first. For example, an area with `order: 10` will appear before an area with
+  `order: 20`.
+- `undefined` or missing `order` property, which will follow your prioritized list, sorted alphabetically by name.
+- `Infinity` or `-Infinity` to always show an area last or first, respectively.
+
+!!! note
+
+    By default, the strategy assigns the highest possible `order` value to the [undisclosed](#undisclosed-area) area,
+    ensuring it appears last in the list.
 
 ## Extra Cards
 
@@ -47,12 +49,13 @@ See Home View Options → [Extra Cards](#extra-cards) for more information.
 strategy:
   type: custom:mushroom-strategy
   options:
+    show_positions: true
     areas:
       family_room_id:
         name: Family Room
         icon: mdi:television
         icon_color: green
-        order: 1
+        order: 10
         extra_cards:
           - type: custom:mushroom-chips-card
             chips:
@@ -65,7 +68,7 @@ strategy:
         name: Kitchen
         icon: mdi:silverware-fork-knife
         icon_color: red
-        order: 2
+        order: 20
       garage_id:
         hidden: true
       hallway_id:
