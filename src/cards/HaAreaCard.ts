@@ -1,11 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { AreaRegistryEntry } from '../types/homeassistant/data/area_registry';
 import { AreaCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
 import AbstractCard from './AbstractCard';
 import { StrategyArea } from '../types/strategy/strategy-generics';
-import { Registry } from "../Registry";
-import { localize } from "../utilities/localize";
+import { Registry } from '../Registry';
+import { localize } from '../utilities/localize';
 
 /**
  * HA Area Card Class
