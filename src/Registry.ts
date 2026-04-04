@@ -288,7 +288,10 @@ class Registry {
         const orderA = a.order ?? Infinity;
         const orderB = b.order ?? Infinity;
 
-        return orderA - orderB || (a.title ?? '').localeCompare(b.title ?? '');
+        return (
+          orderA - orderB ||
+          (a.title ?? '').localeCompare(b.title ?? '', undefined, { numeric: true, sensitivity: 'base' })
+        );
       })
     ) as Record<string, T>;
   }
