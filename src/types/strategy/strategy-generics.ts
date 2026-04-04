@@ -124,12 +124,12 @@ export type RegistryEntry = StrategyArea | DeviceRegistryEntry | EntityRegistryE
 /**
  * View Configuration of the strategy.
  *
- * @property {boolean} hidden - If True, the view is hidden from the dashboard.
- * @property {number} order - Ordering position of the views at the top of the dashboard.
+ * @property {boolean} [hidden] - If True, the view is hidden from the dashboard.
+ * @property {number} [order] - Ordering position of the views at the top of the dashboard.
  */
 export interface StrategyViewConfig extends LovelaceViewConfig {
-  hidden: boolean;
-  order: number;
+  hidden?: boolean;
+  order?: number;
 }
 
 /**
