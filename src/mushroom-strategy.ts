@@ -9,6 +9,7 @@ import {
   DashboardInfo,
   isSupportedDomain,
   isSupportedView,
+  SingleDomainConfig,
   StrategyArea,
   StrategyViewConfig,
   ViewInfo,
@@ -22,6 +23,7 @@ import { HomeAssistant } from './types/homeassistant/types';
 import semver from 'semver/preload';
 import { NOTIFICATIONS } from './notifications';
 import MiscellaneousCard from './cards/MiscellaneousCard';
+import { localize } from './utilities/localize';
 
 /**
  * Mushroom Dashboard Strategy.
@@ -48,8 +50,6 @@ class MushroomStrategy extends HTMLTemplateElement {
 
     await MushroomStrategy.handleNotifications(info.hass);
 
-    const views: StrategyViewConfig[] = [];
-
     // Parallelize view imports and creation.
     const viewPromises = Registry.getExposedNames('view')
       .filter(isSupportedView)
@@ -67,18 +67,31 @@ class MushroomStrategy extends HTMLTemplateElement {
         return null;
       });
 
-    const resolvedViews = (await Promise.all(viewPromises)).filter(Boolean) as StrategyViewConfig[];
+    let views: StrategyViewConfig[] = (await Promise.all(viewPromises)).filter(Boolean) as StrategyViewConfig[];
 
-    views.push(...resolvedViews);
+    views.push(...Registry.strategyOptions.extra_views);
 
-    // Extra views
-    if (Registry.strategyOptions.extra_views) {
-      views.push(...Registry.strategyOptions.extra_views);
+    views.sort((viewA, viewB) => {
+      const orderA = viewA.order ?? Infinity;
+      const orderB = viewB.order ?? Infinity;
 
-      views.sort((a, b) => {
-        const diff = (a.order ?? Infinity) - (b.order ?? Infinity);
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
 
-        return diff || (a.title ?? '').localeCompare(b.title ?? '');
+      return (viewA.title ?? '').localeCompare(viewB.title ?? '', undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      });
+    });
+
+    if (Registry.strategyOptions.show_positions) {
+      views = views.map((view) => {
+        return {
+          ...view,
+          title: `${view.title}: ${view.order}`,
+          show_icon_and_title: true,
+        };
       });
     }
 
@@ -128,6 +141,11 @@ class MushroomStrategy extends HTMLTemplateElement {
         ...Registry.strategyOptions.domains['_'],
         ...Registry.strategyOptions.domains[domain],
       };
+
+      if (Registry.strategyOptions.show_positions && domain !== '_') {
+        (domainOptions as SingleDomainConfig).subtitle =
+          `${localize('generic.ordering_position')}: ${Registry.strategyOptions.domains[domain].order}`;
+      }
 
       const entities = new RegistryFilter(areaEntities)
         .whereDomain(domain)

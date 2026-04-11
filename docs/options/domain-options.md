@@ -60,7 +60,9 @@ Possible values for `order` are:
 
 !!! note
 
-    Keep in mind that the domains have a default order as shown in the table above.
+    By default…
+
+    - The strategy pre-assigns a position to each domain, regardless if the domain is hidden or not.
 
 ## Setting options for all domains
 
