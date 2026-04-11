@@ -1180,77 +1180,77 @@ Hidden/Disabled entities or linked to a hidden area are excluded from the view.<
 <tr>
 <td style="text-align: left;"><code>home</code></td>
 <td style="text-align: left;">Home</td>
-<td style="text-align: center;">10</td>
+<td style="text-align: center;">-Infinity</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">The strategy's Home View.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>light</code></td>
 <td style="text-align: left;">Lights</td>
-<td style="text-align: center;">20</td>
+<td style="text-align: center;">10</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control lights.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>fan</code></td>
 <td style="text-align: left;">Fans</td>
-<td style="text-align: center;">30</td>
+<td style="text-align: center;">20</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control fans.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>cover</code></td>
 <td style="text-align: left;">Covers</td>
-<td style="text-align: center;">40</td>
+<td style="text-align: center;">30</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control covers.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>switch</code></td>
 <td style="text-align: left;">Switches</td>
-<td style="text-align: center;">50</td>
+<td style="text-align: center;">40</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control switches.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>climate</code></td>
 <td style="text-align: left;">Climates</td>
-<td style="text-align: center;">60</td>
+<td style="text-align: center;">50</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control climates.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>camera</code></td>
 <td style="text-align: left;">Cameras</td>
-<td style="text-align: center;">70</td>
+<td style="text-align: center;">60</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control cameras.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>vacuum</code></td>
 <td style="text-align: left;">Vacuums</td>
-<td style="text-align: center;">80</td>
+<td style="text-align: center;">70</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control vacuums.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>scene</code></td>
 <td style="text-align: left;">Scenes</td>
-<td style="text-align: center;">90</td>
+<td style="text-align: center;">80</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control scenes.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>lock</code></td>
 <td style="text-align: left;">Locks</td>
-<td style="text-align: center;">100</td>
+<td style="text-align: center;">90</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control locks.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>valve</code></td>
 <td style="text-align: left;">Valves</td>
-<td style="text-align: center;">110</td>
+<td style="text-align: center;">100</td>
 <td style="text-align: left;">object</td>
 <td style="text-align: left;">View to control valves.</td>
 </tr>
@@ -1307,7 +1307,11 @@ Each configuration is identified by a view name and can have the following optio
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Keep in mind that the build-in views have a default order as shown in the table above.</p>
+<p>By default…</p>
+<ul>
+<li>The strategy pre-assigns a position to the build-in views, regardless if the view is hidden or not.</li>
+<li>The Home view is assigned the lowest possible <code>order</code> value, ensuring it appears first in the list.</li>
+</ul>
 </div>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
