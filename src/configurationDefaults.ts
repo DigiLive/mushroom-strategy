@@ -185,47 +185,47 @@ export const ConfigurationDefaults: StrategyDefaults = {
   show_positions: false,
   views: {
     camera: {
-      order: 70,
-      hidden: false,
-    },
-    climate: {
       order: 60,
       hidden: false,
     },
-    cover: {
-      order: 40,
-      hidden: false,
-    },
-    fan: {
-      order: 30,
-      hidden: false,
-    },
-    home: {
-      order: 10,
-      hidden: false,
-    },
-    light: {
-      order: 20,
-      hidden: false,
-    },
-    lock: {
-      order: 100,
-      hidden: false,
-    },
-    scene: {
-      order: 90,
-      hidden: false,
-    },
-    switch: {
+    climate: {
       order: 50,
       hidden: false,
     },
-    vacuum: {
+    cover: {
+      order: 30,
+      hidden: false,
+    },
+    fan: {
+      order: 20,
+      hidden: false,
+    },
+    home: {
+      order: -Infinity,
+      hidden: false,
+    },
+    light: {
+      order: 10,
+      hidden: false,
+    },
+    lock: {
+      order: 90,
+      hidden: false,
+    },
+    scene: {
       order: 80,
       hidden: false,
     },
+    switch: {
+      order: 40,
+      hidden: false,
+    },
+    vacuum: {
+      order: 70,
+      hidden: false,
+    },
     valve: {
-      order: 110,
+      order: 100,
       hidden: false,
     },
   },

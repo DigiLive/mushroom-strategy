@@ -7,17 +7,17 @@ The following views are supported and enabled by default:
 
 | View      | name     | Ordering Position | Type   | Description               |
 |:----------|:---------|:-----------------:|:-------|:--------------------------|
-| `home`    | Home     |        10         | object | The strategy's Home View. |
-| `light`   | Lights   |        20         | object | View to control lights.   |
-| `fan`     | Fans     |        30         | object | View to control fans.     |
-| `cover`   | Covers   |        40         | object | View to control covers.   |
-| `switch`  | Switches |        50         | object | View to control switches. |
-| `climate` | Climates |        60         | object | View to control climates. |
-| `camera`  | Cameras  |        70         | object | View to control cameras.  |
-| `vacuum`  | Vacuums  |        80         | object | View to control vacuums.  |
-| `scene`   | Scenes   |        90         | object | View to control scenes.   |
-| `lock`    | Locks    |        100        | object | View to control locks.    |
-| `valve`   | Valves   |        110        | object | View to control valves.   |
+| `home`    | Home     |     -Infinity     | object | The strategy's Home View. |
+| `light`   | Lights   |        10         | object | View to control lights.   |
+| `fan`     | Fans     |        20         | object | View to control fans.     |
+| `cover`   | Covers   |        30         | object | View to control covers.   |
+| `switch`  | Switches |        40         | object | View to control switches. |
+| `climate` | Climates |        50         | object | View to control climates. |
+| `camera`  | Cameras  |        60         | object | View to control cameras.  |
+| `vacuum`  | Vacuums  |        70         | object | View to control vacuums.  |
+| `scene`   | Scenes   |        80         | object | View to control scenes.   |
+| `lock`    | Locks    |        90         | object | View to control locks.    |
+| `valve`   | Valves   |        100        | object | View to control valves.   |
 
 The `views` group enables you to specify the configuration of a view.
 Each configuration is identified by a view name and can have the following options:
@@ -45,8 +45,11 @@ Possible values for `order` are:
 
 !!! note
 
-    Keep in mind that the build-in views have a default order as shown in the table above.
-    
+    By default…
+
+    - The strategy pre-assigns a position to the build-in views, regardless if the view is hidden or not.
+    - The Home view is assigned the lowest possible `order` value, ensuring it appears first in the list.
+
 ## Example
 
 ```yaml
