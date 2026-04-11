@@ -49,7 +49,7 @@ Possible values for `order` are:
 
     - The strategy pre-assigns a position to the build-in views, regardless if the view is hidden or not.
     - The Home view is assigned the lowest possible `order` value, ensuring it appears first in the list.
-    
+
 ## Example
 
 ```yaml
