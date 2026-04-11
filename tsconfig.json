@@ -2,10 +2,11 @@
   "include": ["src/**/*", "webpack.config.ts", "webpack.dev.config.ts"],
   "compilerOptions": {
     // 1. Language and Environment
+    "types": ["node"],
     "target": "ES2020",
     // 2. Module System
     "module": "ES2020",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "outDir": "./dist",
     "resolveJsonModule": true,
     // 3. JavaScript and Source Maps
