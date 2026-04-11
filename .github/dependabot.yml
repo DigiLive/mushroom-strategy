@@ -6,21 +6,30 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
+      day: friday
+      time: '06:00'
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 3
     groups:
-      dependencies:
-        patterns: ['*']
+      minor-and-patch:
+        update-types:
+          - patch
+          - minor
+      major:
+        update-types:
+          - major
     labels:
       - 'dependencies'
-    pull-request-branch-name:
-      separator: '-'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'weekly'
+      day: friday
+      time: '06:00'
+      timezone: Europe/Amsterdam
+    open-pull-requests-limit: 3
     groups:
       actions:
         patterns: ['*']
     labels:
       - 'actions'
-    pull-request-branch-name:
-      separator: '-'
