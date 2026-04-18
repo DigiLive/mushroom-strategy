@@ -53,7 +53,7 @@ export const ConfigurationDefaults: StrategyDefaults = {
     },
     binary_sensor: {
       order: 20,
-      title: `${localize('sensor.binary')} ` + localize('sensor.sensors'),
+      title: localize('sensor.binary_sensors'),
       show_controls: false,
       hidden: false,
       stack_count: 2,

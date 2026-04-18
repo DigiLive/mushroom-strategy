@@ -58,7 +58,7 @@
     "selects": "Statuslijsten"
   },
   "sensor": {
-    "binary": "Binaire",
+    "binary_sensors": "Binaire Sensoren",
     "sensors": "Sensoren"
   },
   "switch": {
