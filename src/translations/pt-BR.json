@@ -58,7 +58,7 @@
     "selects": "Seleção"
   },
   "sensor": {
-    "binary": "Binário",
+    "binary_sensors": "Binário Sensores",
     "sensors": "Sensores"
   },
   "switch": {

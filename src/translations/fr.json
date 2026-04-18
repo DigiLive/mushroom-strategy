@@ -1,0 +1,83 @@
+{
+  "camera": {
+    "all_cameras": "Toutes les caméras",
+    "cameras": "Caméras"
+  },
+  "climate": {
+    "all_climates": "Tous les thermostats",
+    "climates": "Thermostats"
+  },
+  "cover": {
+    "all_covers": "Tous les volets",
+    "covers": "Volets"
+  },
+  "fan": {
+    "all_fans": "Tous les ventilateurs",
+    "fans": "Ventilateurs"
+  },
+  "generic": {
+    "all": "Tout",
+    "areas": "Pièces",
+    "busy": "Occupé(e)",
+    "good_afternoon": "Bon après-midi",
+    "good_evening": "Bonsoir",
+    "good_morning": "Bonjour",
+    "hello": "Bonjour",
+    "home": "Accueil",
+    "miscellaneous": "Divers",
+    "numbers": "Nombres",
+    "off": "Éteint(e)",
+    "on": "Allumé(e)",
+    "open": "Ouvert(e)",
+    "ordering_position": "Position de tri",
+    "unavailable": "Indisponible",
+    "unclosed": "Non fermé(e)",
+    "undisclosed": "Non divulgué",
+    "unknown": "Inconnu"
+  },
+  "input_select": {
+    "input_selects": "Sélecteurs d’options"
+  },
+  "light": {
+    "all_lights": "Toutes les lumières",
+    "lights": "Lumières"
+  },
+  "lock": {
+    "all_locks": "Tous les verrous",
+    "locked": "Verrouillé",
+    "locks": "Verrous",
+    "unlocked": "Déverrouillé"
+  },
+  "media_player": {
+    "media_players": "Lecteurs multimédias"
+  },
+  "scene": {
+    "scenes": "Scènes"
+  },
+  "select": {
+    "selects": "Sélecteurs"
+  },
+  "sensor": {
+    "binary_sensors": "Capteurs Binaires",
+    "sensors": "Capteurs"
+  },
+  "switch": {
+    "all_switches": "Tous les interrupteurs",
+    "badge_confirmation": "Attention : cette action éteindra tous les interrupteurs. Êtes-vous sûr de vouloir continuer ?",
+    "switches": "Interrupteurs"
+  },
+  "vacuum": {
+    "all_vacuums": "Tous les aspirateurs",
+    "vacuums": "Aspirateurs"
+  },
+  "valve": {
+    "all_valves": "Toutes les vannes",
+    "valves": "Vannes",
+    "open": "Ouverte",
+    "opening": "Ouverture",
+    "closed": "Fermée",
+    "closing": "Fermeture",
+    "stopped": "Arrêtée",
+    "unclosed": "Non fermée"
+  }
+}

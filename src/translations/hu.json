@@ -58,7 +58,7 @@
     "selects": "Kiválasztások"
   },
   "sensor": {
-    "binary": "Kétállapotú",
+    "binary_sensors": "Kétállapotú Szenzorok",
     "sensors": "Szenzorok"
   },
   "switch": {
