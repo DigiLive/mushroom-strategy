@@ -28,6 +28,7 @@ strategy:
         stack_count: 2
         title: "My cool lights"
         hide_diagnostic_entities: false
+        hide_unavailable_entities: true
     badges:
       weather_entity: weather.forecast_home
       climate_count: false
