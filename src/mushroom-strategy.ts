@@ -151,6 +151,8 @@ class MushroomStrategy extends HTMLTemplateElement {
         .whereDomain(domain)
         .when(domainOptions.hide_config_entities, (filter) => filter.not().whereEntityCategory('config'))
         .when(domainOptions.hide_diagnostic_entities, (filter) => filter.not().whereEntityCategory('diagnostic'))
+        // Add the logic below to filter by state
+        .when(domainOptions.hide_unavailable_entities, (filter) => filter.where((entity) => entity.state !== 'unavailable'))
         .where((entity) => !(domain === 'switch' && entity.entity_id.endsWith('_stateful_scene')))
         .toList();
 
