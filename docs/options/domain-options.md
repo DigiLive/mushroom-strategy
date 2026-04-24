@@ -30,6 +30,7 @@ Each configuration is identified by a domain name and can have the following opt
 | `hidden`                   | boolean | `false`             | Set to `true` to exclude the domain from the dashboard.                   |
 | `hide_config_entities`     | boolean | `true`              | Set to `false` to include config-entities to the dashboard.               |
 | `hide_diagnostic_entities` | boolean | `true`              | Set to `false` to include diagnostic-entities to the dashboard.           |
+| `hide_unavailable_entities` | boolean | `false`              | Set to `true` to hide unavailable entities from the dashboard.           |
 | `order`                    | number  | domain specific     | Ordering position of the domain entities in a view.                       |
 | `show_controls`            | boolean | `true`              | Whether to show controls in a view, to switch all entities of the domain. |
 | `stack_count`              | object  | `1`<br>(set by `_`) | Cards per row.[^1]                                                        |
