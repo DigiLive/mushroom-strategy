@@ -305,7 +305,7 @@ console.info(
 
 window.customStrategies = window.customStrategies || [];
 window.customStrategies.push({
-  type: "ll-strategy-mushroom-strategy",
+  type: "mushroom-strategy",
   strategyType: "dashboard",
   name: "Mushroom Strategy",
   description: `Auto-generate a dashboard with Mushroom cards (${STRATEGY_VERSION}).`,
