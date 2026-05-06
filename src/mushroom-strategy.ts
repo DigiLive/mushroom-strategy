@@ -302,3 +302,12 @@ console.info(
   'color: white; background: coral; font-weight: 700;',
   'color: coral; background: white; font-weight: 700;'
 );
+
+window.customStrategies = window.customStrategies || [];
+window.customStrategies.push({
+  type: "ll-strategy-mushroom-strategy",
+  strategyType: "dashboard",
+  name: "Mushroom Strategy",
+  description: `Auto-generate a dashboard with Mushroom cards (${STRATEGY_VERSION}).`,
+  documentationURL: "https://github.com/DigiLive/mushroom-strategy",
+});
