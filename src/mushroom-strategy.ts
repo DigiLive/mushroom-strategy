@@ -150,6 +150,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
       const entities = new RegistryFilter(areaEntities)
         .whereDomain(domain)
+        .when(domainOptions.hide_unavailable_entities, (filter) => filter.not().whereState('unavailable'))
         .where((entity) => !(domain === 'switch' && entity.entity_id.endsWith('_stateful_scene')))
         .toList();
 
