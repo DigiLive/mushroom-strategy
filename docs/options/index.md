@@ -50,7 +50,7 @@ To make the most of this, it helps to understand how the strategy prioritizes a 
 - Elements missing the `order` property (or set to `undefined`) will follow the prioritized list, sorted alphabetically
   by name.
 
-The visibility of the ordering positions can be toggled with the `show_positions` option<br>
+The visibility of the ordering positions can be toggled with the `show_positions` option.<br>
 This can be helpful when you have a long list and want to quickly identify their order values.
 
 ## Example
