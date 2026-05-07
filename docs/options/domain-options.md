@@ -25,16 +25,16 @@ Mushroom strategy supports several domains to control/view entities of.<br>
 The `domains` group enables you to specify the configuration of a domain in a view.<br>
 Each configuration is identified by a domain name and can have the following options:
 
-| Option                     | type    | Default             | Description                                                               |
-|:---------------------------|:--------|:--------------------|:--------------------------------------------------------------------------|
-| `hidden`                   | boolean | `false`             | Set to `true` to exclude the domain from the dashboard.                   |
-| `hide_config_entities`     | boolean | `true`              | Set to `false` to include config-entities to the dashboard.               |
-| `hide_diagnostic_entities` | boolean | `true`              | Set to `false` to include diagnostic-entities to the dashboard.           |
-| `hide_unavailable_entities` | boolean | `false`              | Set to `true` to hide unavailable entities from the dashboard.           |
-| `order`                    | number  | domain specific     | Ordering position of the domain entities in a view.                       |
-| `show_controls`            | boolean | `true`              | Whether to show controls in a view, to switch all entities of the domain. |
-| `stack_count`              | object  | `1`<br>(set by `_`) | Cards per row.[^1]                                                        |
-| `title`                    | string  | domain specific     | Title of the domain in a view.                                            |
+| Option                      | type    | Default             | Description                                                               |
+|:----------------------------|:--------|:--------------------|:--------------------------------------------------------------------------|
+| `hidden`                    | boolean | `false`             | Set to `true` to exclude the domain from the dashboard.                   |
+| `hide_config_entities`      | boolean | `true`              | Set to `false` to include config-entities to the dashboard.               |
+| `hide_diagnostic_entities`  | boolean | `true`              | Set to `false` to include diagnostic-entities to the dashboard.           |
+| `hide_unavailable_entities` | boolean | `false`             | Set to `true` to exclude unavailable entities from the dashboard.         |
+| `order`                     | number  | domain specific     | Ordering position of the domain entities in a view.                       |
+| `show_controls`             | boolean | `true`              | Whether to show controls in a view, to switch all entities of the domain. |
+| `stack_count`               | object  | `1`<br>(set by `_`) | Cards per row.[^1]                                                        |
+| `title`                     | string  | domain specific     | Title of the domain in a view.                                            |
 
 [^1]:
 In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
