@@ -177,7 +177,7 @@ export interface ViewInfo {
  *
  * @property {boolean} hide_config_entities - If True, all configuration entities are hidden from the dashboard.
  * @property {boolean} hide_diagnostic_entities - If True, all diagnostic entities are hidden from the dashboard.
- * @property {boolean} hide_unavailable_entities - If True, all entities with state 'unavailable' are hidden. 
+ * @property {boolean} hide_unavailable_entities - If True, all entities with state 'unavailable' are hidden.
  * @property {boolean} show_controls - False to hide controls.
  * @property {number} stack_count - Number of cards per row.
  */

@@ -85,8 +85,13 @@ abstract class AbstractView {
     const viewCards: LovelaceCardConfig[] = [];
     const moduleName = sanitizeClassName(this.domain + 'Card');
     const DomainCard = (await import(`../cards/${moduleName}`)).default;
+    const domainOptions = {
+      ...Registry.strategyOptions.domains['_'],
+      ...Registry.strategyOptions.domains[this.domain as SupportedDomains],
+    };
     const domainEntities = new RegistryFilter(Registry.entities)
       .whereDomain(this.domain)
+      .when(domainOptions.hide_unavailable_entities, (filter) => filter.not().whereState('unavailable'))
       .where((entity) => !entity.entity_id.endsWith('_stateful_scene'))
       .toList();
 
