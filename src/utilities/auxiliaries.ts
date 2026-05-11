@@ -31,7 +31,7 @@ export function deepClone<T>(obj: T): T {
   }
 
   try {
-    return JSON.parse(JSON.stringify(obj));
+    return JSON.parse(JSON.stringify(obj)) as T;
   } catch {
     return obj;
   }

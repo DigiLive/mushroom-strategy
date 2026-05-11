@@ -17,10 +17,7 @@ export type VacuumCommand = (typeof VACUUM_COMMANDS)[number];
  * @see https://github.com/piitaya/lovelace-mushroom/blob/main/docs/cards/vacuum.md
  */
 export interface VacuumCardConfig
-  extends LovelaceCardConfig,
-    EntitySharedConfig,
-    AppearanceSharedConfig,
-    ActionsSharedConfig {
+  extends LovelaceCardConfig, EntitySharedConfig, AppearanceSharedConfig, ActionsSharedConfig {
   icon_animation?: boolean;
   commands?: VacuumCommand[];
 }

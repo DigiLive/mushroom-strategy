@@ -44,7 +44,7 @@ export function stackHorizontal(
       stackedCardConfigurations.push({
         type: 'horizontal-stack',
         cards: cards.slice(i, i + columnCount),
-      } as StackCardConfig);
+      });
     }
 
     return stackedCardConfigurations;

@@ -1,3 +1,4 @@
+import { defineConfig, globalIgnores } from 'eslint/config';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
@@ -8,16 +9,12 @@ import prettierConfig from 'eslint-config-prettier';
  * Following Flat Config standards for ESLint v10.
  * Applying names to blocks for better transparency in the inspector.
  */
-export default tseslint.config(
-  {
-    name: 'global-ignores',
-    ignores: ['dist/', 'node_modules/', 'src/types/homeassistant/', 'src/types/lovelace-mushroom/'],
-  },
-  {
-    name: 'eslint-recommended',
-    ...js.configs.recommended,
-  },
-  ...tseslint.configs.recommended,
+export default defineConfig(
+  globalIgnores(['dist/', 'node_modules/', 'src/types/homeassistant/', 'src/types/lovelace-mushroom/']),
+
+  js.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
+
   {
     name: 'main-project-rules',
     files: ['**/*.{js,mjs,cjs,ts}'],
@@ -26,7 +23,7 @@ export default tseslint.config(
       sourceType: 'module',
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
       },
     },
     rules: {
@@ -51,6 +48,7 @@ export default tseslint.config(
         project: null,
       },
     },
+    extends: [tseslint.configs.disableTypeChecked],
   },
   {
     name: 'prettier-final-override',

@@ -4,7 +4,12 @@ import { Registry } from '../Registry';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
 import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import { AbstractCardConfig, CustomHeaderCardConfig, StrategyHeaderCardConfig } from '../types/strategy/strategy-cards';
+import {
+  AbstractCardConfig,
+  CardConstructor,
+  CustomHeaderCardConfig,
+  StrategyHeaderCardConfig,
+} from '../types/strategy/strategy-cards';
 import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig, ViewConstructor } from '../types/strategy/strategy-views';
 import { sanitizeClassName } from '../utilities/auxiliaries';
@@ -84,7 +89,7 @@ abstract class AbstractView {
   protected async createSections(): Promise<LovelaceCardConfig[] | LovelaceSectionRawConfig[]> {
     const viewCards: LovelaceCardConfig[] = [];
     const moduleName = sanitizeClassName(this.domain + 'Card');
-    const DomainCard = (await import(`../cards/${moduleName}`)).default;
+    const DomainCard = ((await import(`../cards/${moduleName}`)) as { default: CardConstructor }).default;
     const domainEntities = new RegistryFilter(Registry.entities)
       .whereDomain(this.domain)
       .where((entity) => !entity.entity_id.endsWith('_stateful_scene'))

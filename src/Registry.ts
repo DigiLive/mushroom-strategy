@@ -1,11 +1,10 @@
 import deepmerge from 'deepmerge';
 import { HassEntities } from 'home-assistant-js-websocket';
-import { AreaRegistryEntry } from './types/homeassistant/data/area_registry';
 import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
 import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
-import { DashboardInfo, StrategyArea, StrategyConfig, SupportedDomains } from './types/strategy/strategy-generics';
+import { DashboardInfo, StrategyConfig, SupportedDomains, StrategyArea } from './types/strategy/strategy-generics';
 import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
-import setupCustomLocalize from './utilities/localize';
+import setupCustomLocalize, { localize } from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
 
 /**
@@ -159,7 +158,21 @@ class Registry {
       .map((device) => ({ ...device, area_id: device.area_id ?? 'undisclosed' }));
 
     // Process entries of the HASS area registry.
-    Registry._areas.push(ConfigurationDefaults.areas.undisclosed);
+    Registry._areas.push({
+      aliases: [],
+      area_id: 'undisclosed',
+      created_at: 0,
+      floor_id: null,
+      hidden: false,
+      humidity_entity_id: null,
+      icon: 'mdi:floor-plan',
+      labels: [],
+      modified_at: 0,
+      name: localize('generic.undisclosed'),
+      order: Infinity,
+      picture: null,
+      temperature_entity_id: null,
+    });
 
     const areaList = new RegistryFilter(Registry._areas).isNotHidden().orderBy(['name'], 'asc').toList();
 
@@ -216,7 +229,7 @@ class Registry {
     const states = entities.map((entity) => `states['${entity.entity_id}']`);
 
     // noinspection SpellCheckingInspection
-    return `{% set entities = [${states}] %}
+    return `{% set entities = [${states.toString()}] %}
        {{ entities
           | selectattr('state','${operator}','${value}')
           | selectattr('state','ne','unavailable')
@@ -260,11 +273,10 @@ class Registry {
    */
   private static async fetchRegistry(info: DashboardInfo): Promise<void> {
     try {
-      // noinspection ES6MissingAwait False positive? https://youtrack.jetbrains.com/issue/WEB-63746
       [Registry._entities, Registry._devices, Registry._areas] = await Promise.all([
-        info.hass.callWS({ type: 'config/entity_registry/list' }) as Promise<EntityRegistryEntry[]>,
-        info.hass.callWS({ type: 'config/device_registry/list' }) as Promise<DeviceRegistryEntry[]>,
-        info.hass.callWS({ type: 'config/area_registry/list' }) as Promise<AreaRegistryEntry[]>,
+        info.hass.callWS<EntityRegistryEntry[]>({ type: 'config/entity_registry/list' }),
+        info.hass.callWS<DeviceRegistryEntry[]>({ type: 'config/device_registry/list' }),
+        info.hass.callWS<StrategyArea[]>({ type: 'config/area_registry/list' }),
       ]);
     } catch (e) {
       logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
@@ -293,7 +305,7 @@ class Registry {
           (a.title ?? '').localeCompare(b.title ?? '', undefined, { numeric: true, sensitivity: 'base' })
         );
       })
-    ) as Record<string, T>;
+    );
   }
 
   /**

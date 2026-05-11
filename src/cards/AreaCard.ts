@@ -36,7 +36,7 @@ class AreaCard extends AbstractCard {
     let customConfig = customConfiguration;
 
     configuration.primary = area.name;
-    configuration.icon = area.icon || configuration.icon;
+    configuration.icon = area.icon ?? configuration.icon;
 
     if (Registry.strategyOptions.show_positions) {
       configuration.secondary = `${localize('generic.ordering_position')}: ${area.order}`;

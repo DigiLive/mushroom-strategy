@@ -10,7 +10,6 @@ import {
   isSupportedDomain,
   isSupportedView,
   SingleDomainConfig,
-  StrategyArea,
   StrategyViewConfig,
   ViewInfo,
 } from './types/strategy/strategy-generics';
@@ -24,6 +23,8 @@ import semver from 'semver/preload';
 import { NOTIFICATIONS } from './notifications';
 import MiscellaneousCard from './cards/MiscellaneousCard';
 import { localize } from './utilities/localize';
+import { ViewConstructor } from './types/strategy/strategy-views';
+import { CardConstructor } from './types/strategy/strategy-cards';
 
 /**
  * Mushroom Dashboard Strategy.
@@ -56,7 +57,7 @@ class MushroomStrategy extends HTMLTemplateElement {
       .map(async (viewName) => {
         try {
           const moduleName = sanitizeClassName(`${viewName}View`);
-          const View = (await import(`./views/${moduleName}`)).default;
+          const View = ((await import(`./views/${moduleName}`)) as { default: ViewConstructor }).default;
           const currentView = new View(Registry.strategyOptions.views[viewName]);
 
           return await currentView.getView();
@@ -127,9 +128,9 @@ class MushroomStrategy extends HTMLTemplateElement {
    */
   static async generateView(info: ViewInfo): Promise<LovelaceViewConfig> {
     const exposedDomainNames = Registry.getExposedNames('domain');
-    const area = info.view.strategy?.options?.area ?? ({} as StrategyArea);
+    const area = info.view.strategy.options.area;
     const areaEntities = new RegistryFilter(Registry.entities).whereAreaId(area.area_id).toList();
-    const viewCards: LovelaceCardConfig[] = [...(area.extra_cards ?? [])];
+    const viewCards = Registry.strategyOptions.areas[area.area_id]?.extra_cards ?? [];
 
     // Set the target for any Header card to the current area.
     const target: HassServiceTarget = { area_id: [area.area_id] };
@@ -164,7 +165,7 @@ class MushroomStrategy extends HTMLTemplateElement {
       ).createCard();
 
       try {
-        const DomainCard = (await import(`./cards/${moduleName}`)).default;
+        const DomainCard = ((await import(`./cards/${moduleName}`)) as { default: CardConstructor }).default;
 
         if (domain === 'sensor') {
           let domainCards = entities.map((entity) => {

@@ -1,7 +1,6 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { localize } from '../utilities/localize';
-import { ActionConfig } from '../types/homeassistant/data/lovelace/config/action';
 import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
 
 /**
@@ -28,13 +27,13 @@ class GreetingCard {
     icon_color: 'orange',
     tap_action: {
       action: 'none',
-    } as ActionConfig,
+    },
     double_tap_action: {
       action: 'none',
-    } as ActionConfig,
+    },
     hold_action: {
       action: 'none',
-    } as ActionConfig,
+    },
   };
 
   /**

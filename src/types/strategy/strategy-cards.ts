@@ -3,11 +3,23 @@ import { TitleCardConfig as MushroomTitleCardConfig } from '../lovelace-mushroom
 import { ActionsSharedConfig } from '../lovelace-mushroom/shared/config/actions-config';
 import { AppearanceSharedConfig } from '../lovelace-mushroom/shared/config/appearance-config';
 import { EntitySharedConfig } from '../lovelace-mushroom/shared/config/entity-config';
+import { RegistryEntry } from './strategy-generics';
+import AbstractCard from '../../cards/AbstractCard';
 
 /**
  * Abstract Card Config.
  */
 export type AbstractCardConfig = LovelaceCardConfig & EntitySharedConfig & AppearanceSharedConfig & ActionsSharedConfig;
+
+/**
+ * Interface for card constructors used in dynamic imports.
+ *
+ * This interface defines the constructor signature for all card classes
+ * that extend AbstractCard, allowing proper typing of dynamic imports.
+ */
+export interface CardConstructor {
+  new (entity: RegistryEntry, customConfiguration?: LovelaceCardConfig): AbstractCard;
+}
 
 /**
  * Header Card Config.

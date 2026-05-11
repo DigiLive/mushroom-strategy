@@ -18,6 +18,8 @@ import HeaderCard from '../cards/HeaderCard';
 import { stackHorizontal } from '../utilities/cardStacking';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import GreetingCard from '../cards/GreetingCard';
+import { BadgeConstructor } from '../types/strategy/strategy-badges';
+import { CardConstructor } from '../types/strategy/strategy-cards';
 
 /**
  * Home View Class.
@@ -178,7 +180,7 @@ class HomeView extends AbstractView {
       const moduleName = sanitizeClassName(badgeName + 'Badge');
 
       try {
-        Badge = (await import(`../badges/${moduleName}`)).default;
+        Badge = ((await import(`../badges/${moduleName}`)) as { default: BadgeConstructor }).default;
         const currentBadge = new Badge();
 
         configurations.push(currentBadge.getConfiguration());
@@ -261,7 +263,7 @@ class HomeView extends AbstractView {
       let AreaCard;
 
       try {
-        AreaCard = (await import(`../cards/${moduleName}`)).default;
+        AreaCard = ((await import(`../cards/${moduleName}`)) as { default: CardConstructor }).default;
       } catch (e) {
         // Fallback to the default strategy card.
         AreaCard = (await import('../cards/AreaCard')).default;
