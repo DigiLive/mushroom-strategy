@@ -25,6 +25,18 @@ import { NOTIFICATIONS } from './notifications';
 import MiscellaneousCard from './cards/MiscellaneousCard';
 import { localize } from './utilities/localize';
 
+declare global {
+  interface Window {
+    customStrategies?: Array<{
+      type: string;
+      strategyType: string;
+      name: string;
+      description: string;
+      documentationURL: string;
+    }>;
+  }
+}
+
 /**
  * Mushroom Dashboard Strategy.
  *
@@ -292,6 +304,21 @@ class MushroomStrategy extends HTMLTemplateElement {
       logMessage(lvlError, 'Error while handling persistent notifications for Mushroom Strategy', e);
     }
   }
+
+  /**
+   * Returns suggestions for creating a new dashboard with this strategy.
+   *
+   * @returns An object containing the title and icon for the dashboard creation suggestion.
+   *
+   * @remarks
+   * This method is used by Home Assistant to display a suggestion when the user opts to create a new dashboard.
+   */
+  static getCreateSuggestions() {
+    return {
+      title: 'Mushroom Dashboard',
+      icon: 'mdi:mushroom',
+    };
+  }
 }
 
 customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
@@ -303,11 +330,12 @@ console.info(
   'color: coral; background: white; font-weight: 700;'
 );
 
+// Register the strategy as a custom HASS dashboard.
 window.customStrategies = window.customStrategies || [];
 window.customStrategies.push({
-  type: "mushroom-strategy",
-  strategyType: "dashboard",
-  name: "Mushroom Strategy",
-  description: `Auto-generate a dashboard with Mushroom cards (${STRATEGY_VERSION}).`,
-  documentationURL: "https://github.com/DigiLive/mushroom-strategy",
+  type: 'mushroom-strategy',
+  strategyType: 'dashboard',
+  name: `Mushroom Dashboard Strategy ${STRATEGY_VERSION}`,
+  description: `A strategy to automatically generate a dashboard using mushroom cards.`,
+  documentationURL: `https://digilive.github.io/mushroom-strategy/${STRATEGY_VERSION}/`,
 });
