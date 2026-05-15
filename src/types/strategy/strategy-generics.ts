@@ -259,6 +259,7 @@ export interface StrategyArea extends AreaRegistryEntry {
 /**
  * Strategy Area.
  *
+ * @property {LovelaceCardConfig[]} [extra_cards] List of extra cards to show in the area view.
  * @property {boolean} [hidden] True if the entity should be hidden from the dashboard.
  * @property {string} [name] If set, it overrides the name of the area.
  * @property {number} [order] Ordering position of the area in the list of available areas.
