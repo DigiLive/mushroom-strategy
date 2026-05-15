@@ -415,7 +415,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
    */
   getValuesByProperty(propertyName: keyof T): Array<T[keyof T]> {
     const entries = this.toList(); // Call toList to get the full entries
-    return entries.map((entry) => entry[propertyName]).filter((value) => value !== undefined) as Array<T[keyof T]>;
+    return entries.map((entry) => entry[propertyName]).filter((value) => value !== undefined);
   }
 
   /**

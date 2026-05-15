@@ -140,10 +140,10 @@ export function logMessage(level: DebugLevel, message: string, ...details: unkno
       break;
     case DebugLevel.Error:
       console.error(`${prefix}${caller} ${message}`, ...safeDetails);
-      throw frontEndMessage;
+      throw new Error(frontEndMessage);
     case DebugLevel.Fatal:
       console.error(`${prefix}${caller} ${message}`, ...safeDetails);
       alert?.(`${prefix} ${message}`);
-      throw frontEndMessage;
+      throw new Error(frontEndMessage);
   }
 }

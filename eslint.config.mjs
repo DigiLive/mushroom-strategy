@@ -1,6 +1,6 @@
+import { defineConfig, globalIgnores } from 'eslint/config';
 import js from '@eslint/js';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
 
@@ -9,31 +9,21 @@ import prettierConfig from 'eslint-config-prettier';
  * Following Flat Config standards for ESLint v10.
  * Applying names to blocks for better transparency in the inspector.
  */
-export default [
-  {
-    name: 'global-ignores',
-    ignores: ['dist/', 'node_modules/', 'src/types/homeassistant/', 'src/types/lovelace-mushroom/'],
-  },
-  {
-    name: 'eslint-recommended',
-    ...js.configs.recommended,
-  },
-  ...tsPlugin.configs['flat/recommended'].map((config, index) => ({
-    ...config,
-    name: `typescript-recommended-${index}`,
-  })),
+export default defineConfig(
+  globalIgnores(['dist/', 'node_modules/', 'src/types/homeassistant/', 'src/types/lovelace-mushroom/']),
+
+  js.configs.recommended,
+  tseslint.configs.recommendedTypeChecked,
+
   {
     name: 'main-project-rules',
     files: ['**/*.{js,mjs,cjs,ts}'],
-    plugins: {
-      '@typescript-eslint': tsPlugin,
-    },
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
-      parser: tsParser,
+      parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json',
+        projectService: true,
       },
     },
     rules: {
@@ -58,6 +48,7 @@ export default [
         project: null,
       },
     },
+    extends: [tseslint.configs.disableTypeChecked],
   },
   {
     name: 'prettier-final-override',
@@ -68,5 +59,5 @@ export default [
       ...prettierConfig.rules,
       'prettier/prettier': 'error',
     },
-  },
-];
+  }
+);

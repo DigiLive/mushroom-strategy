@@ -1,29 +1,23 @@
-import { StrategyDefaults } from './types/strategy/strategy-generics';
+import { StrategyConfig } from './types/strategy/strategy-generics';
 import { localize } from './utilities/localize';
 
 /**
  * Default configuration for the mushroom strategy.
  */
-export const ConfigurationDefaults: StrategyDefaults = {
+export const ConfigurationDefaults: StrategyConfig = {
   areas: {
     _: {
+      hidden: false,
       type: 'AreaCard',
     },
     undisclosed: {
       // TODO: Refactor undisclosed to other.
-      aliases: [],
       area_id: 'undisclosed',
-      created_at: 0,
-      floor_id: null,
       hidden: false,
-      humidity_entity_id: null,
       icon: 'mdi:floor-plan',
-      labels: [],
-      modified_at: 0,
       name: localize('generic.undisclosed'),
-      picture: null,
-      temperature_entity_id: null,
       order: Infinity,
+      type: 'AreaCard',
     },
   },
   card_options: {},

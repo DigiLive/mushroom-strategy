@@ -2,9 +2,9 @@
 
 import { AreaCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
 import AbstractCard from './AbstractCard';
-import { StrategyArea } from '../types/strategy/strategy-generics';
 import { Registry } from '../Registry';
 import { localize } from '../utilities/localize';
+import { StrategyArea } from '../types/strategy/strategy-generics';
 
 /**
  * HA Area Card Class

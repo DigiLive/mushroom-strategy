@@ -32,7 +32,7 @@ Each configuration is identified by a domain name and can have the following opt
 | `hide_diagnostic_entities` | boolean | `true`              | Set to `false` to include diagnostic-entities to the dashboard.           |
 | `order`                    | number  | domain specific     | Ordering position of the domain entities in a view.                       |
 | `show_controls`            | boolean | `true`              | Whether to show controls in a view, to switch all entities of the domain. |
-| `stack_count`              | object  | `1`<br>(set by `_`) | Cards per row.[^1]                                                        |
+| `stack_count`              | number  | `1`<br>(set by `_`) | Cards per row.[^1]                                                        |
 | `title`                    | string  | domain specific     | Title of the domain in a view.                                            |
 
 [^1]:

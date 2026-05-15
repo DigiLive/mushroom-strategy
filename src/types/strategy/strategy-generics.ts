@@ -8,6 +8,8 @@ import { HomeAssistant } from '../homeassistant/types';
 import { StrategyHeaderCardConfig } from './strategy-cards';
 import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
 import { LovelaceBadgeConfig } from '../homeassistant/data/lovelace/config/badge';
+import { TemplateCardConfig } from '../lovelace-mushroom/cards/template-card-config';
+import { AreaCardConfig } from '../homeassistant/panels/lovelace/cards/types';
 
 /**
  * List of supported domains.
@@ -119,7 +121,7 @@ export type Sortable = SortableWithTitle | SortableWithName;
 /**
  * An entry of a Home Assistant Registry.
  */
-export type RegistryEntry = StrategyArea | DeviceRegistryEntry | EntityRegistryEntry;
+export type RegistryEntry = AreaRegistryEntry | DeviceRegistryEntry | EntityRegistryEntry;
 
 /**
  * View Configuration of the strategy.
@@ -145,7 +147,7 @@ export interface StrategyViewConfig extends LovelaceViewConfig {
 export interface DashboardInfo {
   config: LovelaceViewRawConfig & {
     strategy: {
-      options?: StrategyConfig & { area: StrategyArea };
+      options?: StrategyConfig & { area: AreaConfig };
     };
   };
   hass: HomeAssistant;
@@ -167,7 +169,7 @@ export interface ViewInfo {
   hass: HomeAssistant;
   view: LovelaceViewRawConfig & {
     strategy: {
-      options?: StrategyConfig & { area: StrategyArea };
+      options: StrategyConfig & { area: StrategyArea };
     };
   };
 }
@@ -203,28 +205,31 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
 /**
  * Strategy Configuration.
  *
- * @property {Object.<string, StrategyArea>} areas - The configuration of areas.
+ * @property {Object} areas - The configuration of areas.
+ * @property {AllAreasConfig} areas._ - Global default settings applied to all areas
+ * @property {AreaConfig} areas.undisclosed - Configuration for the undisclosed area
+ * @property {Record<string, AreaConfig>} areas.[areaId] - Dynamic area configurations keyed by area ID
  * @property {Object.<string, CustomCardConfig>} card_options - Card options for entities.
- * @property {BadgeConfiguration} badges - The configuration of badges in the Home view.
+ * @property {BadgeConfig} badges - The configuration of badges in the Home view.
  * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
  * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
  * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
  * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
- * @property {Object} home_view - List of views to add to the dashboard.
+ * @property {Object} home_view - Configuration for the home view.
  * @property {Record<HomeViewSections, boolean>} home_view.hidden - Visibility settings for the home view sections.
  * @property {Object} home_view.stack_count - Controls the number of cards per row in different sections.
  * @property {number} home_view.stack_count._ - Default number of cards per row.
- * @property {bool} show_positions Whether to show a positional item's position.
+ * @property {boolean} show_positions - Whether to show a positional item's position.
  * @property {Record<SupportedViews, StrategyViewConfig>} views - The configurations of views.
  * @property {LovelaceCardConfig[]} quick_access_cards - List of custom-defined cards to show before the area cards.
  */
 export interface StrategyConfig {
-  areas: Record<string, Partial<StrategyArea> & AllAreasConfig> & {
+  areas: {
     _: AllAreasConfig;
-    undisclosed: StrategyArea;
-  };
+    undisclosed: AreaConfig;
+  } & Record<string, AreaConfig>;
   card_options: { [S: string]: CustomCardConfig };
-  badges: BadgeConfiguration;
+  badges: BadgeConfig;
   debug: boolean;
   domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
   extra_cards: LovelaceCardConfig[];
@@ -239,42 +244,44 @@ export interface StrategyConfig {
 }
 
 /**
- * Represents the default configuration for a strategy.
+ * Strategy Area.
  *
- * @property {AllAreasConfig} areas._ Global default settings applied to all areas.
- * @property {StrategyArea} areas.undisclosed Forced configuration for the undisclosed area.
+ * Adds additional properties to the HASS Area Registry Entry.
+ *
+ * @property {boolean} hidden True if the area should be hidden from the dashboard.
+ * @property {number} order Ordering position of the area in the list of available areas.
  */
-export type StrategyDefaults = Omit<StrategyConfig, 'areas'> & {
-  areas: {
-    _: AllAreasConfig;
-    undisclosed: StrategyArea;
-  };
-};
+export interface StrategyArea extends AreaRegistryEntry {
+  hidden: boolean;
+  order: number;
+}
 
 /**
  * Strategy Area.
  *
+ * @property {LovelaceCardConfig[]} [extra_cards] List of extra cards to show in the area view.
  * @property {boolean} [hidden] True if the entity should be hidden from the dashboard.
- * @property {object[]} [extra_cards] An array of card configurations.
- *                                    The configured cards are added to the dashboard.
+ * @property {string} [name] If set, it overrides the name of the area.
  * @property {number} [order] Ordering position of the area in the list of available areas.
- * @property {string} [type] The type of area card.
+ * @property {string} type The type of area card.
  */
-export interface StrategyArea extends AreaRegistryEntry {
+type AreaConfig = (TemplateCardConfig | AreaCardConfig) & {
   extra_cards?: LovelaceCardConfig[];
   hidden?: boolean;
+  name?: string;
   order?: number;
-  type?: string;
-}
+  type: string;
+};
 
 /**
  * Configuration for all areas.
  *
- * @property {string} [type] - The type of area card.
+ * @property {boolean} hidden - True if all areas should be hidden.
+ * @property {string} type - The type of area card to apply to all areas.
  */
 export interface AllAreasConfig {
-  type?: string;
-  hidden?: boolean;
+  hidden: boolean;
+  type: string;
 }
 
 /**
@@ -282,17 +289,17 @@ export interface AllAreasConfig {
  *
  * @property {boolean} climate_count - Badge to display the number of climates which are not off.
  * @property {boolean} cover_count - Badge to display the number of unclosed covers.
- * @property {LovelaceBadgeConfig[] | []} extra_badges - List of extra badges.
+ * @property {LovelaceBadgeConfig[]} extra_badges - List of extra badges.
  * @property {boolean} fan_count - Badge to display the number of fans on.
  * @property {boolean} light_count - Badge to display the number of lights on.
  * @property {boolean} switch_count - Badge to display the number of switches on.
  * @property {'auto' | `weather.${string}`} weather_entity - Entity id for the weather badges to use.
  *                                                           Accepts `weather.` ids or `auto` only.
  */
-export interface BadgeConfiguration {
+export interface BadgeConfig {
   climate_count: boolean;
   cover_count: boolean;
-  extra_badges: LovelaceBadgeConfig[] | [];
+  extra_badges: LovelaceBadgeConfig[];
   fan_count: boolean;
   light_count: boolean;
   switch_count: boolean;
