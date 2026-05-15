@@ -25,18 +25,6 @@ import { NOTIFICATIONS } from './notifications';
 import MiscellaneousCard from './cards/MiscellaneousCard';
 import { localize } from './utilities/localize';
 
-declare global {
-  interface Window {
-    customStrategies?: Array<{
-      type: string;
-      strategyType: string;
-      name: string;
-      description: string;
-      documentationURL: string;
-    }>;
-  }
-}
-
 /**
  * Mushroom Dashboard Strategy.
  *
@@ -321,14 +309,15 @@ class MushroomStrategy extends HTMLTemplateElement {
   }
 }
 
-customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
-
 const STRATEGY_VERSION = 'v3.1.0';
+
 console.info(
   '%c Mushroom Strategy %c '.concat(STRATEGY_VERSION, ' '),
   'color: white; background: coral; font-weight: 700;',
   'color: coral; background: white; font-weight: 700;'
 );
+
+customElements.define('ll-strategy-mushroom-strategy', MushroomStrategy);
 
 // Register the strategy as a custom HASS dashboard.
 window.customStrategies = window.customStrategies || [];
