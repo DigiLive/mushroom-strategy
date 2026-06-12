@@ -1,7 +1,7 @@
 import { Registry } from '../Registry';
 import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
 import { AbstractCardConfig } from '../types/strategy/strategy-cards';
-import { RegistryEntry } from '../types/strategy/strategy-generics';
+import { isEntityRegistryEntry, isSupportedDomain, RegistryEntry } from '../types/strategy/strategy-generics';
 import { logMessage, lvlFatal } from '../utilities/debug';
 
 /**
@@ -49,6 +49,25 @@ abstract class AbstractCard {
    * The configuration should be set by any of the child classes so the card correctly reflects an entity.
    */
   getCard(): AbstractCardConfig {
+    // Set the card visibility based on the entity's availability.
+    if (isEntityRegistryEntry(this.entity)) {
+      const entityDomain = this.entity.entity_id.split('.', 1)[0] ?? '';
+      const domain = isSupportedDomain(entityDomain) ? entityDomain : 'default';
+      const domainOptions = {
+        ...Registry.strategyOptions.domains['_'],
+        ...Registry.strategyOptions.domains[domain],
+      };
+
+      if (domainOptions.hide_unavailable_entities) {
+        this.configuration.visibility = [
+          {
+            condition: 'state',
+            state_not: 'unavailable',
+          },
+        ];
+      }
+    }
+
     return {
       ...this.configuration,
       entity: 'entity_id' in this.entity ? this.entity.entity_id : undefined,
