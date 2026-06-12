@@ -150,8 +150,6 @@ class MushroomStrategy extends HTMLTemplateElement {
 
       const entities = new RegistryFilter(areaEntities)
         .whereDomain(domain)
-        .when(domainOptions.hide_config_entities, (filter) => filter.not().whereEntityCategory('config'))
-        .when(domainOptions.hide_diagnostic_entities, (filter) => filter.not().whereEntityCategory('diagnostic'))
         .where((entity) => !(domain === 'switch' && entity.entity_id.endsWith('_stateful_scene')))
         .toList();
 
