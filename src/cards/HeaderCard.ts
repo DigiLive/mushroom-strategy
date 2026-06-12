@@ -68,8 +68,8 @@ class HeaderCard {
             layout: 'vertical',
             icon_color: 'red',
             tap_action: {
-              action: 'call-service',
-              service: this.configuration.offService,
+              action: 'perform-action',
+              perform_action: this.configuration.offService,
               target: this.target,
               data: {},
             },
@@ -80,8 +80,8 @@ class HeaderCard {
             layout: 'vertical',
             icon_color: 'amber',
             tap_action: {
-              action: 'call-service',
-              service: this.configuration.onService,
+              action: 'perform-action',
+              perform_action: this.configuration.onService,
               target: this.target,
               data: {},
             },
