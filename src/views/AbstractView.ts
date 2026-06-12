@@ -101,17 +101,10 @@ abstract class AbstractView {
 
       let areaCards: AbstractCardConfig[] = [];
 
-      // Set the target of the Header card to the current area.
-      let target: HassServiceTarget = {
-        area_id: [area.area_id],
+      // Set the target of the Header card to entities.
+      const target = {
+        entity_id: areaEntities.map((entity) => entity.entity_id),
       };
-
-      // Set the target of the Header card to entities without an area.
-      if (area.area_id === 'undisclosed') {
-        target = {
-          entity_id: areaEntities.map((entity) => entity.entity_id),
-        };
-      }
 
       // Create a card configuration for each entity in the current area.
       areaCards.push(
