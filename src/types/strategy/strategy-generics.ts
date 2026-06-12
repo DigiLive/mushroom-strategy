@@ -196,12 +196,10 @@ export interface AllDomainsConfig {
  *
  * @property {boolean} hidden - If True, all entities of the domain are hidden from the dashboard.
  * @property {number} order - Ordering position of the domains in a view.
- * @property {number} [stack_count] - Number of cards per row.
  */
-export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
+export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig>, Partial<AllDomainsConfig> {
   hidden: boolean;
   order: number;
-  stack_count?: number;
 }
 
 /**
