@@ -2,7 +2,13 @@ import deepmerge from 'deepmerge';
 import { HassEntities } from 'home-assistant-js-websocket';
 import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
 import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
-import { DashboardInfo, StrategyConfig, SupportedDomains, StrategyArea } from './types/strategy/strategy-generics';
+import {
+  DashboardInfo,
+  StrategyConfig,
+  SupportedDomains,
+  StrategyArea,
+  isSupportedDomain,
+} from './types/strategy/strategy-generics';
 import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize, { localize } from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
@@ -138,6 +144,22 @@ class Registry {
     Registry._entities = new RegistryFilter(Registry.entities)
       .isNotHidden()
       .whereDisabledBy(null)
+      .where((entity) => {
+        // Filter out config and diagnostic entities if the domain has hide_config_entities or hide_diagnostic_entities enabled.
+        const entityDomain = entity.entity_id.split('.', 1)[0];
+        const domain = isSupportedDomain(entityDomain) ? entityDomain : 'default';
+
+        const domainOptions = {
+          ...Registry.strategyOptions.domains['_'],
+          ...Registry.strategyOptions.domains[domain],
+        };
+
+        if (domainOptions.hide_config_entities && entity.entity_category === 'config') {
+          return false;
+        }
+
+        return !(domainOptions.hide_diagnostic_entities && entity.entity_category === 'diagnostic');
+      })
       .toList()
       .map((entity) => ({ ...entity, area_id: entity.area_id ?? 'undisclosed' }));
 
