@@ -316,6 +316,16 @@ export interface CustomCardConfig extends LovelaceCardConfig {
 }
 
 /**
+ * Determines whether a registry entry is an Entity Registry entry.
+ *
+ * @param entry The registry entry to check.
+ * @returns True if the entry is an EntityRegistryEntry, otherwise false.
+ */
+export function isEntityRegistryEntry(entry: RegistryEntry): entry is EntityRegistryEntry {
+  return 'entity_id' in entry;
+}
+
+/**
  * Checks if the given object is of a sortable type.
  *
  * Sortable types are objects that have an `order`, `title` or `name` property.
