@@ -147,3 +147,39 @@ export function logMessage(level: DebugLevel, message: string, ...details: unkno
       throw new Error(frontEndMessage);
   }
 }
+
+/**
+ * Recursively scans an object and all nested objects/arrays, logging their frozen, sealed, and extensible states.
+ *
+ * Useful for debugging objects that may have been frozen or sealed by third-party libraries or frameworks.
+ *
+ * Circular references are automatically detected and skipped to prevent infinite recursion.
+ *
+ * @param {unknown} obj - The object to inspect.
+ * @param {string} [path='root'] - Current object path used in log output.
+ * @param {WeakSet<object>} [seen=new WeakSet()] - Tracks previously visited objects to prevent infinite recursion
+ *                                                 caused by circular references.
+ * @returns {void}
+ */
+export function scanFreeze(obj: unknown, path: string = 'root', seen: WeakSet<object> = new WeakSet()): void {
+  if (!obj || typeof obj !== 'object') {
+    return;
+  }
+
+  if (seen.has(obj)) {
+    return;
+  }
+
+  seen.add(obj);
+
+  console.log(
+    `${path} (${obj.constructor?.name ?? 'Object'})`,
+    `frozen=${Object.isFrozen(obj)}`,
+    `sealed=${Object.isSealed(obj)}`,
+    `extensible=${Object.isExtensible(obj)}`
+  );
+
+  for (const key of Object.keys(obj)) {
+    scanFreeze((obj as Record<string, unknown>)[key], `${path}.${key}`, seen);
+  }
+}
