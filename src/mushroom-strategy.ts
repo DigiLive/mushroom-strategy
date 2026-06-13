@@ -130,7 +130,7 @@ class MushroomStrategy extends HTMLTemplateElement {
     const exposedDomainNames = Registry.getExposedNames('domain');
     const area = info.view.strategy.options.area;
     const areaEntities = new RegistryFilter(Registry.entities).whereAreaId(area.area_id).toList();
-    const viewCards = Registry.strategyOptions.areas[area.area_id]?.extra_cards ?? [];
+    const viewCards = [...(area.extra_cards ?? [])];
 
     // Set the target for any Header card to the current area.
     const target: HassServiceTarget = { area_id: [area.area_id] };
