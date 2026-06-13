@@ -1,11 +1,11 @@
 name: Feature Request
 description: Suggest a new feature or improvement for the project.
-labels: ['enhancement']
+labels: ['enhancement', 'triage']
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to suggest a new feature!  
+        Thank you for taking the time to suggest a new feature!
         Please provide as much detail as possible so we can understand your idea and its potential impact.
 
   - type: input

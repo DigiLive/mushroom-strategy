@@ -1,11 +1,11 @@
 name: Bug Report
 description: File a bug report to help us improve the project.
-labels: ['bug']
+labels: ['bug', 'triage']
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to report a bug!  
+        Thank you for taking the time to report a bug!
         Please fill out the requested information to help us understand and reproduce the issue.
 
   - type: input
@@ -33,12 +33,12 @@ body:
       label: Versions
       description: Please provide the versions you use of the items below
       placeholder: |
-        - Mushroom Dashboard: 
-        - Lovelace Mushroom: 
+        - Mushroom Dashboard:
+        - Lovelace Mushroom:
         - Home Assistant:
       value: |
-        - Mushroom Dashboard: 
-        - Lovelace Mushroom: 
+        - Mushroom Dashboard:
+        - Lovelace Mushroom:
         - Home Assistant:
     validations:
       required: true
