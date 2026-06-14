@@ -251,10 +251,7 @@ export interface StrategyConfig {
  * @property {boolean} hidden True if the area should be hidden from the dashboard.
  * @property {number} order Ordering position of the area in the list of available areas.
  */
-export interface StrategyArea extends AreaRegistryEntry {
-  hidden: boolean;
-  order: number;
-}
+export type StrategyArea = AreaRegistryEntry & Partial<AreaConfig>;
 
 /**
  * Strategy Area.
