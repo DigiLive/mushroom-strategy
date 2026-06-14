@@ -1,0 +1,16 @@
+a[target="_blank"]::after {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z"/></svg>');
+  background-repeat: no-repeat;
+  background-size: cover;
+  content: "";
+  display: inline-block;
+  height: 0.8em;
+  margin-left: 0.3em;
+  opacity: 0.7;
+  vertical-align: middle;
+  width: 0.8em;
+}
+
+[data-md-color-scheme="slate"] a[target="_blank"]::after {
+  filter: invert(100%);
+}
