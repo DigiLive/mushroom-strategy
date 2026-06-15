@@ -208,7 +208,7 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
  * The default domain contains entities whose domain is not explicitly supported by the strategy.
  * Use `hidden_domains` to exclude specific unsupported domains from being displayed.
  *
- * @property {string[]} [hidden_domains] List of unsupported domains to hide.
+ * @property {string[]} hidden_domains List of unsupported domains to hide.
  */
 export interface DefaultDomainConfig extends SingleDomainConfig {
   hidden_domains: string[];
