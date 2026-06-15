@@ -154,6 +154,10 @@ class Registry {
           ...Registry.strategyOptions.domains[domain],
         };
 
+        if (Registry.strategyOptions.domains.default.hidden_domains.includes(entityDomain)) {
+          return false;
+        }
+
         if (domainOptions.hide_config_entities && entity.entity_category === 'config') {
           return false;
         }

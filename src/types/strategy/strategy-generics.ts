@@ -203,6 +203,18 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
 }
 
 /**
+ * Configuration for the default domain.
+ *
+ * The default domain contains entities whose domain is not explicitly supported by the strategy.
+ * Use `hidden_domains` to exclude specific unsupported domains from being displayed.
+ *
+ * @property {string[]} [hidden_domains] List of unsupported domains to hide.
+ */
+export interface DefaultDomainConfig extends SingleDomainConfig {
+  hidden_domains: string[];
+}
+
+/**
  * Strategy Configuration.
  *
  * @property {Object} areas - The configuration of areas.
@@ -212,7 +224,7 @@ export interface SingleDomainConfig extends Partial<StrategyHeaderCardConfig> {
  * @property {Object.<string, CustomCardConfig>} card_options - Card options for entities.
  * @property {BadgeConfig} badges - The configuration of badges in the Home view.
  * @property {boolean} debug - If True, the strategy outputs more verbose debug information in the console.
- * @property {Object.<string, AllDomainsConfig | SingleDomainConfig>} domains - List of domains.
+ * @property {Object} domains - List of domain configurations.
  * @property {LovelaceCardConfig[]} extra_cards - List of cards to show below room cards.
  * @property {StrategyViewConfig[]} extra_views - List of custom-defined views to add to the dashboard.
  * @property {Object} home_view - Configuration for the home view.
@@ -231,7 +243,13 @@ export interface StrategyConfig {
   card_options: { [S: string]: CustomCardConfig };
   badges: BadgeConfig;
   debug: boolean;
-  domains: { [K in SupportedDomains]: K extends '_' ? AllDomainsConfig : SingleDomainConfig };
+  domains: {
+    [K in SupportedDomains]: K extends '_'
+      ? AllDomainsConfig
+      : K extends 'default'
+        ? DefaultDomainConfig
+        : SingleDomainConfig;
+  };
   extra_cards: LovelaceCardConfig[];
   extra_views: StrategyViewConfig[];
   home_view: {

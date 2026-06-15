@@ -160,6 +160,7 @@ export const ConfigurationDefaults: StrategyConfig = {
       title: localize('generic.miscellaneous'),
       show_controls: false,
       hidden: false,
+      hidden_domains: [],
     },
   },
   extra_cards: [],
