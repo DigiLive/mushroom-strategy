@@ -93,9 +93,10 @@
 
 ??? question "How to reload the dashboard after installing a new version manually?"
 
-    Standard cache clears like CTRL+F5 often fail in Home Assistant due to its reliance on Service Workers.
+    A reboot or standard cache clears like CTRL+F5 often fail in Home Assistant due to its reliance on Service Workers.
 
     To ensure a clean reload, open the Developer Tools (F12 for most browsers), enable 'Disable cache' in the Network
-    tab, and refresh the page twice to update all resources.
+    tab, and refresh the page at least twice to update all resources.
 
-    **Don't forget to re-enable the cache again when you're finished.**
+    The cache setting is constrained to the window/tab where the Developer Tools are open.
+    It does not affect other tabs or windows, and it does not affect your browser once you close the Developer Tools.

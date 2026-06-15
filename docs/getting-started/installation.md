@@ -43,7 +43,7 @@ If you require testing a custom build for debug purposes, follow these steps:
 !!! note
 
     Refresh the cache of the client you use to access Home Assistant.
-    See the [FAQ](../faq.md) for instructions on desktop browers.
+    See the [FAQ](../faq.md) for instructions on desktop browsers.
 
 ## 🔄 Updating
 
