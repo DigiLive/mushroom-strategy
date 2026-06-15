@@ -49,7 +49,7 @@ This domain has an additional option to hide domain-specific entities from the '
 
 | Option           | type  | Default | Description                                                             |
 |:-----------------|:------|:--------|:------------------------------------------------------------------------|
-| `hidden_domains` | array | []      | A list of domains to hide in the Miscellaneoud sectiob of an Area view. |
+| `hidden_domains` | array | []      | A list of domains to hide in the Miscellaneous sectiob of an Area view. |
 
 Example to hide Automations and Scripts from the 'Miscellaneous' section of an Area view:
 
