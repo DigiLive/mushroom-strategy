@@ -57,8 +57,8 @@
   "scripts": {
     "ts:format": "prettier --write \"**/*.ts\"",
     "json:format": "prettier --write \"**/*.json\"",
-    "md:lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\"",
-    "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" --fix",
+    "md:lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\"  \"#venv\"",
+    "md:lint:fix": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" \"#venv\" --fix",
     "docs:serve": "mkdocs serve",
     "docs:serve-versioned": "mike serve",
     "docs:list": "mike list",
