@@ -1303,6 +1303,12 @@ Each configuration is identified by a domain name and can have the following opt
 <td style="text-align: left;">Set to <code>false</code> to include diagnostic-entities to the dashboard.</td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>hide_unavailable_entities</code></td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;"><code>false</code></td>
+<td style="text-align: left;">Set to <code>true</code> to hide unavailable entities from the dashboard.</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>order</code></td>
 <td style="text-align: left;">number</td>
 <td style="text-align: left;">domain specific</td>
@@ -1404,6 +1410,8 @@ Each configuration is identified by a domain name and can have the following opt
 <span class="w">        </span><span class="nt">show_controls</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">hide_diagnostic_entities</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">      </span><span class="nt">fan</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">hide_unavailable_entities</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c1"># All other domains</span>
 <span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
