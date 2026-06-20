@@ -734,6 +734,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#default-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default domain
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#sorting-domains" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1307,7 +1318,7 @@ Each configuration is identified by a domain name and can have the following opt
 <td style="text-align: left;"><code>stack_count</code></td>
 <td style="text-align: left;">number</td>
 <td style="text-align: left;"><code>1</code><br>(set by <code>_</code>)</td>
-<td style="text-align: left;">Cards per row.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+<td style="text-align: left;">Cards per row.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>title</code></td>
@@ -1320,10 +1331,42 @@ Each configuration is identified by a domain name and can have the following opt
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul>
-<li>Domain <code>default</code> represents any other domain than supported by this strategy.</li>
-<li>The <code>show_controls</code> option will default to false for domains that can't be controlled.</li>
+<li>In the different domain views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
+  The number of cards per row can be configured with option <code>stack_count</code>.</li>
+<li>The <code>show_controls</code> option will fall back to <code>false</code> for domains that can't be controlled.</li>
 </ul>
 </div>
+<h2 id="default-domain">Default domain<a class="headerlink" href="#default-domain" title="Permanent link">#</a></h2>
+<p>The <code>default</code> domain represents all other domains than supported by this strategy.</p>
+<p>This domain has an additional option to hide domain-specific entities from the 'Miscellaneous' section of an Area view.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>hidden_domains</code></td>
+<td style="text-align: left;">array</td>
+<td style="text-align: left;">[]</td>
+<td style="text-align: left;">A list of domains to hide in the Miscellaneous sectiob of an Area view.</td>
+</tr>
+</tbody>
+</table>
+<p>Example to hide Automations and Scripts from the 'Miscellaneous' section of an Area view:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">strategy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">custom:mushroom-strategy</span>
+<span class="w">  </span><span class="nt">options</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">domains</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c1"># All other domains</span>
+<span class="w">        </span><span class="nt">hidden_domains</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">automation</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">script</span>
+</code></pre></div>
 <h2 id="sorting-domains">Sorting Domains<a class="headerlink" href="#sorting-domains" title="Permanent link">#</a></h2>
 <p>The <code>order</code> property gives you control over how domains are arranged in a view.</p>
 <p>To make the most of this, it helps to understand how the strategy prioritizes these elements, as explained in chapter
@@ -1364,15 +1407,6 @@ Each configuration is identified by a domain name and can have the following opt
 <span class="w">      </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="c1"># All other domains</span>
 <span class="w">        </span><span class="nt">hidden</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
-The number of cards per row can be configured with this option.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
 
 
 
