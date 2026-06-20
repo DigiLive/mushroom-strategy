@@ -32,17 +32,37 @@ Each configuration is identified by a domain name and can have the following opt
 | `hide_diagnostic_entities` | boolean | `true`              | Set to `false` to include diagnostic-entities to the dashboard.           |
 | `order`                    | number  | domain specific     | Ordering position of the domain entities in a view.                       |
 | `show_controls`            | boolean | `true`              | Whether to show controls in a view, to switch all entities of the domain. |
-| `stack_count`              | number  | `1`<br>(set by `_`) | Cards per row.[^1]                                                        |
+| `stack_count`              | number  | `1`<br>(set by `_`) | Cards per row.                                                            |
 | `title`                    | string  | domain specific     | Title of the domain in a view.                                            |
-
-[^1]:
-In the different views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
-The number of cards per row can be configured with this option.
 
 !!! note
 
-    * Domain `default` represents any other domain than supported by this strategy.
-    * The `show_controls` option will default to false for domains that can't be controlled.
+    - In the different domain views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
+      The number of cards per row can be configured with option `stack_count`.
+    - The `show_controls` option will fall back to `false` for domains that can't be controlled.
+
+## Default domain
+
+The `default` domain represents all other domains than supported by this strategy.
+
+This domain has an additional option to hide domain-specific entities from the 'Miscellaneous' section of an Area view.
+
+| Option           | type  | Default | Description                                                             |
+|:-----------------|:------|:--------|:------------------------------------------------------------------------|
+| `hidden_domains` | array | []      | A list of domains to hide in the Miscellaneous sectiob of an Area view. |
+
+Example to hide Automations and Scripts from the 'Miscellaneous' section of an Area view:
+
+```yaml
+strategy:
+  type: custom:mushroom-strategy
+  options:
+    domains:
+      default: # All other domains
+        hidden_domains:
+          - automation
+          - script
+```
 
 ## Sorting Domains
 

@@ -23,6 +23,10 @@ strategy:
       _:
         hide_config_entities: true
         stack_count: 1
+      default:
+        hidden_domains:
+          - automation
+          - script
       light:
         order: 10
         stack_count: 2
