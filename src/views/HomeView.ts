@@ -107,16 +107,37 @@ class HomeView extends AbstractView {
 
       const sectionConfigurations = [
         ['Persons', [personCards], MEDIA_QUERY.SMALL, !!personCards],
-        ['Quick Access Wide', Registry.strategyOptions.quick_access_cards, MEDIA_QUERY.LARGE, true],
+        [
+          'Quick Access Wide',
+          stackHorizontal(
+            Registry.strategyOptions.quick_access_cards,
+            Registry.strategyOptions.home_view.stack_count['_']
+          ),
+          MEDIA_QUERY.LARGE,
+          true,
+        ],
         [
           'Persons and Areas',
           [personCards, areaCards].filter(Boolean),
           MEDIA_QUERY.LARGE,
           !!(personCards ?? areaCards),
         ],
-        ['Quick Access Narrow', Registry.strategyOptions.quick_access_cards, MEDIA_QUERY.SMALL, true],
+        [
+          'Quick Access Narrow',
+          stackHorizontal(
+            Registry.strategyOptions.quick_access_cards,
+            Registry.strategyOptions.home_view.stack_count['_']
+          ),
+          MEDIA_QUERY.SMALL,
+          true,
+        ],
         ['Areas', [areaCards], MEDIA_QUERY.SMALL, !!areaCards],
-        ['Extra', Registry.strategyOptions.extra_cards, undefined, true],
+        [
+          'Extra',
+          stackHorizontal(Registry.strategyOptions.extra_cards, Registry.strategyOptions.home_view.stack_count['_']),
+          undefined,
+          true,
+        ],
       ] as const;
 
       sectionConfigurations.forEach(([title, cards, mediaQuery, condition]) => {
