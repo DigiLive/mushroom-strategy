@@ -6,6 +6,7 @@ import { EntityCategory, EntityRegistryEntry } from '../types/homeassistant/data
 import { RegistryEntry, StrategyConfig } from '../types/strategy/strategy-generics';
 import { logMessage, lvlWarn } from './debug';
 import { compareValues, getSortPriority } from './auxiliaries';
+import { HassEntities } from 'home-assistant-js-websocket';
 
 /**
  * A class for filtering and sorting arrays of Home Assistant's registry entries.
@@ -298,6 +299,7 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
    * @param {EntityCategory | null} entityCategory The desired entity_category (e.g., 'config', 'diagnostic', or null).
    */
   whereEntityCategory(entityCategory?: EntityCategory | null): this {
+    // TODO: Should this match the `this.filters.push(this.checkInversion(predicate));` pattern instead?
     const invert = this.invertNext;
     this.invertNext = false;
 
@@ -306,7 +308,30 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
 
       return invert ? category !== entityCategory : category === entityCategory;
     };
+
     this.filters.push(predicate);
+
+    return this;
+  }
+
+  /**
+   * Filters entries strictly by their state.
+   *
+   * @param {HassEntities[string]['state']} state The desired state (e.g., 'unavailable', 'unknown').
+   */
+  whereState(state: HassEntities[string]['state']): this {
+    const predicate = (entry: T) => {
+      if (!('entity_id' in entry)) {
+        return false;
+      }
+
+      const entityState = Registry.hassStates[entry.entity_id]?.state;
+
+      return entityState === state;
+    };
+
+    this.filters.push(this.checkInversion(predicate));
+
     return this;
   }
 
