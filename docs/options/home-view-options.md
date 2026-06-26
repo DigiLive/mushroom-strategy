@@ -140,6 +140,10 @@ strategy:
 
 ## Quick Access Cards
 
+| Name                 | type  | default | Description                         |
+|:---------------------|:------|:--------|:------------------------------------|
+| `quick_access_cards` | array | `[]`    | List of quick access cards to show. |
+
 The `quick_access_cards` group enables you to specify the configuration of additional cards in the view.
 These cards will be shown between the greeting card and area cards.
 
@@ -174,6 +178,10 @@ strategy:
 ---
 
 ## Extra Cards
+
+| Name          | type  | default | Description                  |
+|:--------------|:------|:--------|:-----------------------------|
+| `extra_cards` | array | `[]`    | List of extra cards to show. |
 
 The `extra_cards` group enables you to specify the configuration of additional cards in the view.
 These cards will be shown below the areas.
