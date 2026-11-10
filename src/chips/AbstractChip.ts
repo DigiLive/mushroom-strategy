@@ -48,6 +48,11 @@ abstract class AbstractChip {
    */
   setTapActionTarget(target: HassServiceTarget) {
     if ("tap_action" in this.config && isCallServiceActionConfig(this.config.tap_action)) {
+      if (Array.isArray(target.entity_id) && target.entity_id.length === 0) {
+        this.config.tap_action = {action: "none"};
+        return;
+      }
+
       this.config.tap_action.target = target;
 
       return;

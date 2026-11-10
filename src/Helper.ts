@@ -269,23 +269,18 @@ class Helper {
    * @static
    */
   static getCountTemplate(domain: string, operator: string, value: string): string {
-    // noinspection JSMismatchedCollectionQueryUpdate (False positive per 17-04-2023)
-    /**
-     * Array of entity state-entries, filtered by domain.
-     *
-     * Each element contains a template-string which is used to access home assistant's state machine (state object) in
-     * a template.
-     * E.g. "states['light.kitchen']"
-     *
-     * The array excludes hidden and disabled entities.
-     *
-     * @type {string[]}
-     */
-    const entities: EntityRegistryEntry[] = [];
+    return this.getCountEntityTemplate(this.getMainViewEntities(domain), operator, value);
+  }
 
+  /**
+   * Get the domain entities counted and controlled by the Home view's chip.
+   */
+  static getMainViewEntities(domain: string): EntityRegistryEntry[] {
     if (!this.isInitialized()) {
       console.warn("Helper class should be initialized before calling this method!");
     }
+
+    const entities: EntityRegistryEntry[] = [];
 
     // Get the ID of the devices which are linked to the given area.
     for (const area of this.#areas) {
@@ -301,11 +296,17 @@ class Helper {
           area: area,
           domain: domain,
           areaDeviceIds: areaDeviceIds,
-        }).forEach(entity => entities.push(entity))
+        }).filter(entity => this.isMainViewEntity(entity, domain))
+        .forEach(entity => entities.push(entity))
 
     }
 
-    return this.getCountEntityTemplate(entities, operator, value);
+    return entities;
+  }
+
+  static isMainViewEntity(entity: EntityRegistryEntry, domain: string): boolean {
+    const prefix = domain ? this.getLabelPrefix(domain) : "";
+    return !prefix || !entity.labels.some(label => label.startsWith(prefix));
   }
 
   static getCountEntityTemplate(entities: EntityRegistryEntry[], operator: string, value: string): string {

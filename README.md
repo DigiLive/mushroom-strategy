@@ -24,6 +24,10 @@ It generates cards for your Home Assistants entities and areas, divided over sev
 Besides a Home view from where you can enter a subview of your areas, a separate view for lights, fans and other domains
 are generated for easy access to your entities.
 
+The numeric chips on the Home view count entities in the domain's main view. Entities assigned
+to a separate view by an `ms_<domain>_...` label are excluded, including from chip tap actions
+that turn devices off.
+
 ### Features
 
 - 🛠 Automatically create dashboard with three lines of yaml.

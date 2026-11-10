@@ -137,9 +137,6 @@ class HomeView extends AbstractView {
 
     // TODO: Get domains from config.
     const exposedChips = ["light", "fan", "cover", "switch", "climate"];
-    // Create a list of area-ids, used for switching all devices via chips
-    const areaIds = Helper.areas.map(area => area.area_id ?? "");
-
     let chipModule;
 
     // Weather chip.
@@ -166,7 +163,7 @@ class HomeView extends AbstractView {
           chipModule = await import((`../chips/${className}`));
           const chip = new chipModule[className]();
 
-          chip.setTapActionTarget({area_id: areaIds});
+          chip.setTapActionTarget(Helper.toTargetEntities(Helper.getMainViewEntities(chipType)));
           chips.push(chip.getChip());
         } catch (e) {
           Helper.logError(`An error occurred while creating the ${chipType} chip!`, e);

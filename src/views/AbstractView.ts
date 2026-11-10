@@ -152,7 +152,7 @@ abstract class AbstractView {
       ...this.defaultConfig,
       ...Helper.strategyOptions.views[this.domain ?? this.defaultConfig.title?.toLowerCase()],
       id: this.defaultConfig.id, // prevent to override by strategyOptions
-      cards: await this.createViewCards(entity => !this.prefix || !entity.labels.some(label => label.startsWith(this.prefix))),
+      cards: await this.createViewCards(entity => Helper.isMainViewEntity(entity, this.domain)),
     });
 
 
