@@ -27,7 +27,7 @@
     "url": "https://github.com/DigiLive/mushroom-strategy"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.18.0"
   },
   "dependencies": {
     "deepmerge": "^4"
@@ -37,7 +37,7 @@
     "@types/node": "^26.6.6",
     "@types/semver": "^7.8.0",
     "typescript-eslint": "^8.72.1",
-    "bumpp": "^11.1.0",
+    "bumpp": "^12.3.0",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.7",
