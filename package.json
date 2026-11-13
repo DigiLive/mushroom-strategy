@@ -27,7 +27,7 @@
     "url": "https://github.com/DigiLive/mushroom-strategy"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.18.0"
   },
   "dependencies": {
     "deepmerge": "^4"
