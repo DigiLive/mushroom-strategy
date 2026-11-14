@@ -59,16 +59,19 @@ abstract class AbstractCard {
       };
 
       // Show only the entity name (without the device name) unless the card already defines its own name.
-      // When the entity has no name of its own, the default name (device name) is kept.
+      // The entity's own name is the name set by the user, or else the name provided by the integration
+      // (`original_name`). When the entity has neither, the default name (device name) is kept.
       // Mushroom cards understand a name object, mini-graph-card only takes a plain string.
       // Other card types (stacks, picture-entity, area...) are left untouched.
-      if (domainOptions.entity_names_only && this.configuration.name === undefined && this.entity.name) {
+      const entityName = this.entity.name || this.entity.original_name;
+
+      if (domainOptions.entity_names_only && this.configuration.name === undefined && entityName) {
         const cardType = String(this.configuration.type ?? '');
 
         if (cardType.startsWith('custom:mushroom-')) {
           this.configuration.name = { type: 'entity' };
         } else if (cardType === 'custom:mini-graph-card') {
-          this.configuration.name = this.entity.name;
+          this.configuration.name = entityName;
         }
       }
 
