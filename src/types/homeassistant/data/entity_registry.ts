@@ -53,6 +53,7 @@ export interface EntityRegistryDisplayEntry {
  * @property {EntityCategory | null} entity_category - The category of the entity.
  * @property {boolean} has_entity_name - Indicates if the entity has a name.
  * @property {string} [original_name] - The original name of the entity.
+ * @property {string | null} [original_name_unprefixed] - The original name without the device name, when available.
  * @property {string} unique_id - The unique identifier for the entity.
  * @property {string} [translation_key] - The translation key for the entity.
  * @property {EntityRegistryOptions | null} options - Additional options for the entity.
@@ -74,6 +75,7 @@ export interface EntityRegistryEntry {
   entity_category: EntityCategory | null;
   has_entity_name: boolean;
   original_name?: string;
+  original_name_unprefixed?: string | null;
   unique_id: string;
   translation_key?: string;
   options: EntityRegistryOptions | null;

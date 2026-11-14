@@ -343,6 +343,15 @@ export interface HomeAssistant {
    * @param {string} attribute - The attribute to format.
    */
   formatEntityAttributeName(stateObj: HassEntity, attribute: string): string;
+
+  /**
+   * Formats the name of an entity from parts of its registry context (available as of Home Assistant 2026.4).
+   *
+   * @param {HassEntity} stateObj - The state object of the entity.
+   * @param {{ type: string }[]} name - The parts of the name, e.g. `[{ type: 'device' }, { type: 'entity' }]`.
+   * @param {{ separator?: string }} [options] - Optional formatting options.
+   */
+  formatEntityName?(stateObj: HassEntity, name: { type: string }[], options?: { separator?: string }): string;
 }
 
 /**

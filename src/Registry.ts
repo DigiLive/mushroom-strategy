@@ -2,6 +2,7 @@ import deepmerge from 'deepmerge';
 import { HassEntities } from 'home-assistant-js-websocket';
 import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
 import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
+import { HomeAssistant } from './types/homeassistant/types';
 import {
   DashboardInfo,
   StrategyConfig,
@@ -50,6 +51,9 @@ class Registry {
   static get hassStates(): HassEntities {
     return Registry._hassStates;
   }
+
+  /** The Home Assistant object, used to format entity names. */
+  private static _hass: HomeAssistant;
 
   /** Indicates whether this module is initialized. */
   private static _initialized: boolean = false;
@@ -120,6 +124,7 @@ class Registry {
 
     // Import the Hass States and strategy options.
     Registry._hassStates = info.hass.states;
+    Registry._hass = info.hass;
     const { ConfigurationDefaults } = await import('./configurationDefaults');
 
     try {
@@ -167,10 +172,10 @@ class Registry {
       .toList()
       .map((entity) => ({ ...entity, area_id: entity.area_id ?? 'undisclosed' }));
 
-    // Sort entities by display name.
+    // Sort entities by the name shown on their cards.
     Registry._entities = Registry._entities.sort((a, b) => {
-      const displayNameA = Registry.getDisplayName(a);
-      const displayNameB = Registry.getDisplayName(b);
+      const displayNameA = Registry.getSortName(a);
+      const displayNameB = Registry.getSortName(b);
 
       return displayNameA.localeCompare(displayNameB, undefined, { numeric: true, sensitivity: 'base' });
     });
@@ -333,6 +338,40 @@ class Registry {
       })
     );
   }
+
+  /**
+   * Gets the name used to sort an entity, which should match the name its card shows.
+   *
+   * 1. The name formatted by Home Assistant (as of 2026.4): the entity name only when the domain option
+   *    `entity_names_only` is enabled, otherwise device name and entity name.
+   * 2. The `friendly_name` attribute of the entity's state.
+   * 3. The name resolved from the registries, see {@link Registry.getDisplayName}.
+   *
+   * @param {EntityRegistryEntry} entity - The entity registry entry to get the sort name for.
+   * @returns {string} The name to sort by.
+   */
+  private static getSortName = (entity: EntityRegistryEntry): string => {
+    const stateObj = Registry._hassStates?.[entity.entity_id];
+
+    if (stateObj && typeof Registry._hass?.formatEntityName === 'function') {
+      const entityDomain = entity.entity_id.split('.', 1)[0] ?? '';
+      const domain = isSupportedDomain(entityDomain) ? entityDomain : 'default';
+      const domainOptions = {
+        ...Registry.strategyOptions.domains['_'],
+        ...Registry.strategyOptions.domains[domain],
+      };
+      const nameParts = domainOptions.entity_names_only
+        ? [{ type: 'entity' }]
+        : [{ type: 'device' }, { type: 'entity' }];
+      const name = Registry._hass.formatEntityName(stateObj, nameParts);
+
+      if (name) {
+        return name;
+      }
+    }
+
+    return stateObj?.attributes?.friendly_name || Registry.getDisplayName(entity);
+  };
 
   /**
    * Resolves the most appropriate display name for an entity based on a hierarchical lookup.
