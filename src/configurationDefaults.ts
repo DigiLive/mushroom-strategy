@@ -37,6 +37,7 @@ export const ConfigurationDefaults: StrategyConfig = {
       hide_config_entities: true,
       hide_diagnostic_entities: true,
       hide_unavailable_entities: false,
+      entity_names_only: false,
       show_controls: true,
       stack_count: 1,
     },

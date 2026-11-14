@@ -180,6 +180,7 @@ export interface ViewInfo {
  * @property {boolean} hide_config_entities - If True, all configuration entities are hidden from the dashboard.
  * @property {boolean} hide_diagnostic_entities - If True, all diagnostic entities are hidden from the dashboard.
  * @property {boolean} hide_unavailable_entities - If True, all entities with state 'unavailable' are hidden.
+ * @property {boolean} entity_names_only - If True, cards show only the entity name, without the device name (HA 2026.11+).
  * @property {boolean} show_controls - False to hide controls.
  * @property {number} stack_count - Number of cards per row.
  */
@@ -187,6 +188,7 @@ export interface AllDomainsConfig {
   hide_config_entities: boolean;
   hide_diagnostic_entities: boolean;
   hide_unavailable_entities: boolean;
+  entity_names_only: boolean;
   show_controls: boolean;
   stack_count: number;
 }

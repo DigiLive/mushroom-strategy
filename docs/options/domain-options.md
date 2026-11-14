@@ -31,6 +31,7 @@ Each configuration is identified by a domain name and can have the following opt
 | `hide_config_entities`      | boolean | `true`              | Set to `false` to include config-entities to the dashboard.               |
 | `hide_diagnostic_entities`  | boolean | `true`              | Set to `false` to include diagnostic-entities to the dashboard.           |
 | `hide_unavailable_entities` | boolean | `false`             | Set to `true` to hide unavailable entities from the dashboard.            |
+| `entity_names_only`         | boolean | `false`             | Set to `true` to show only the entity name, without the device name.      |
 | `order`                     | number  | domain specific     | Ordering position of the domain entities in a view.                       |
 | `show_controls`             | boolean | `true`              | Whether to show controls in a view, to switch all entities of the domain. |
 | `stack_count`               | number  | `1`<br>(set by `_`) | Cards per row.                                                            |
@@ -41,6 +42,9 @@ Each configuration is identified by a domain name and can have the following opt
     - In the different domain views, the cards belonging to a specific domain will be horizontally stacked into a row.<br>
       The number of cards per row can be configured with option `stack_count`.
     - The `show_controls` option will fall back to `false` for domains that can't be controlled.
+    - The `entity_names_only` option applies to the Mushroom cards and the mini-graph-card.<br>
+      Entities without a name of their own keep their default name, and a `name` set in the card configuration always
+      takes precedence.
 
 ## Default domain
 
