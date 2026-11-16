@@ -16,6 +16,7 @@ import { FloorRegistryEntry } from './data/floor_registry';
 import { CoreFrontendUserData } from './data/frontend';
 import { FrontendLocaleData, getHassTranslations } from './data/translations';
 import { Themes } from './data/ws-themes';
+import { EntityNameItem, EntityNameOptions } from './common/entity/entity_name_config';
 
 /**
  * Represents the credentials for a user in Home Assistant.
@@ -235,7 +236,7 @@ export interface HomeAssistant {
     serviceData?: ServiceCallRequest['serviceData'],
     target?: ServiceCallRequest['target'],
     notifyOnError?: boolean,
-    returnResponse?: boolean,
+    returnResponse?: boolean
   ): Promise<ServiceCallResponse>;
 
   /**
@@ -252,7 +253,7 @@ export interface HomeAssistant {
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     path: string,
     parameters?: Record<string, any>,
-    headers?: Record<string, string>,
+    headers?: Record<string, string>
   ): Promise<T>;
 
   /**
@@ -269,7 +270,7 @@ export interface HomeAssistant {
     path: string,
     parameters?: Record<string, any>,
     headers?: Record<string, string>,
-    signal?: AbortSignal,
+    signal?: AbortSignal
   ): Promise<Response>;
 
   /**
@@ -308,7 +309,7 @@ export interface HomeAssistant {
   loadBackendTranslation(
     category: Parameters<typeof getHassTranslations>[2],
     integrations?: Parameters<typeof getHassTranslations>[3],
-    configFlow?: Parameters<typeof getHassTranslations>[4],
+    configFlow?: Parameters<typeof getHassTranslations>[4]
   ): Promise<LocalizeFunc>;
 
   /**
@@ -318,6 +319,12 @@ export interface HomeAssistant {
    * @returns {Promise<LocalizeFunc | undefined>} The localization function or undefined.
    */
   loadFragmentTranslation(fragment: string): Promise<LocalizeFunc | undefined>;
+
+  formatEntityName(
+    stateObj: HassEntity,
+    name?: string | EntityNameItem | EntityNameItem[],
+    options?: EntityNameOptions
+  ): string;
 
   /**
    * Formats the state of an entity.

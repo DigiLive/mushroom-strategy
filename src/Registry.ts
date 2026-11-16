@@ -9,9 +9,10 @@ import {
   StrategyArea,
   isSupportedDomain,
 } from './types/strategy/strategy-generics';
-import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
+import { logMessage, lvlDebug, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize, { localize } from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
+import { HomeAssistant } from './types/homeassistant/types';
 
 /**
  * Registry Class
@@ -30,6 +31,9 @@ class Registry {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
+  /** The main Home Assistant object */
+  private static _hass: HomeAssistant;
+
   /** Entries of Home Assistant's device registry. */
   private static _devices: DeviceRegistryEntry[];
 
@@ -43,12 +47,9 @@ class Registry {
     return Registry._devices;
   }
 
-  /** Entries of Home Assistant's state registry */
-  private static _hassStates: HassEntities;
-
   /** Home Assistant's State registry. */
   static get hassStates(): HassEntities {
-    return Registry._hassStates;
+    return Registry._hass.states;
   }
 
   /** Indicates whether this module is initialized. */
@@ -116,10 +117,10 @@ class Registry {
    * @returns {Promise<void>} A promise that resolves when initialization is complete.
    */
   static async initialize(info: DashboardInfo): Promise<void> {
-    setupCustomLocalize(info.hass);
+    Registry._hass = info.hass;
+    setupCustomLocalize(this._hass);
 
-    // Import the Hass States and strategy options.
-    Registry._hassStates = info.hass.states;
+    // Import the strategy options.
     const { ConfigurationDefaults } = await import('./configurationDefaults');
 
     try {
@@ -300,9 +301,9 @@ class Registry {
   private static async fetchRegistry(info: DashboardInfo): Promise<void> {
     try {
       [Registry._entities, Registry._devices, Registry._areas] = await Promise.all([
-        info.hass.callWS<EntityRegistryEntry[]>({ type: 'config/entity_registry/list' }),
-        info.hass.callWS<DeviceRegistryEntry[]>({ type: 'config/device_registry/list' }),
-        info.hass.callWS<StrategyArea[]>({ type: 'config/area_registry/list' }),
+        this._hass.callWS<EntityRegistryEntry[]>({ type: 'config/entity_registry/list' }),
+        this._hass.callWS<DeviceRegistryEntry[]>({ type: 'config/device_registry/list' }),
+        this._hass.callWS<StrategyArea[]>({ type: 'config/area_registry/list' }),
       ]);
     } catch (e) {
       logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
@@ -337,39 +338,29 @@ class Registry {
   /**
    * Resolves the most appropriate display name for an entity based on a hierarchical lookup.
    *
-   * The priority order is as follows:
+   * If `formatEntityName` is available in (Home Assistant 2026.4+), it will be used to format the entity name.
+   * Otherwise, it falls back to the following priority order:
    * 1. User-defined name in the entity registry.
-   * 2. Device-linked name (combining device name and original entity name if applicable).
-   * 3. Original name provided by the integration.
-   * 4. A formatted version of the entity ID slug as a final fallback.
+   * 2. The entity's friendly name from its state attributes.
+   * 3. An empty string if neither is available.
    *
    * @param {EntityRegistryEntry} entity - The entity registry entry to process.
    * @returns {string} The resolved display name.
    */
   private static getDisplayName = (entity: EntityRegistryEntry): string => {
-    // 1. User defined name in registry (Manual Override)
-    if (entity.name) {
-      return entity.name;
-    }
+    const stateObj = Registry.hassStates[entity.entity_id];
 
-    // 2. Device Name Logic (When linked via has_entity_name)
-    if (entity.has_entity_name && entity.device_id) {
-      const device = Registry.devices.find((d) => d.id === entity.device_id);
-      const deviceName = device?.name_by_user ?? device?.name;
+    if (!('formatEntityName' in Registry._hass)) {
+      logMessage(lvlDebug, 'formatEntityName is not available in the Home Assistant instance.');
 
-      if (deviceName) {
-        return entity.original_name ? `${deviceName} ${entity.original_name}` : deviceName;
+      if (typeof entity.name === 'string') {
+        return entity.name;
       }
+
+      return stateObj.attributes.friendly_name || '';
     }
 
-    // 3. Integration defined name (When NOT linked or Device lookup failed)
-    if (entity.original_name) {
-      return entity.original_name;
-    }
-
-    // 4. Ultimate Fallback: The Entity ID Slug
-    const slug = entity.entity_id.split('.')[1] || entity.entity_id;
-    return slug.replace(/_/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase());
+    return Registry._hass.formatEntityName(stateObj);
   };
 }
 
