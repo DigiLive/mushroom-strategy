@@ -24,9 +24,9 @@ class ClimateCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {ClimateCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<ClimateCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: ClimateCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<ClimateCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...ClimateCard.getDefaultConfig(), ...customConfiguration };

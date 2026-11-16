@@ -22,9 +22,9 @@ class LockCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {LockCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<LockCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: LockCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<LockCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...LockCard.getDefaultConfig(), ...customConfiguration };

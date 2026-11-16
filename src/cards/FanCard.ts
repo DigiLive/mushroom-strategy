@@ -25,9 +25,9 @@ class FanCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {FanCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<FanCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: FanCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<FanCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...FanCard.getDefaultConfig(), ...customConfiguration };

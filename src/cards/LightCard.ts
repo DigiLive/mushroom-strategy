@@ -37,9 +37,9 @@ class LightCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {LightCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<LightCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: LightCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<LightCardConfig>) {
     super(entity);
 
     const configuration = LightCard.getDefaultConfig();

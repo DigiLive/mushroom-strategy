@@ -32,9 +32,9 @@ class SceneCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {EntityCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<EntityCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: EntityCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<EntityCardConfig>) {
     const sceneName = entity.entity_id.split('.').pop();
     const statefulScene = Registry.entities.find((entity) => entity.entity_id === `switch.${sceneName}_stateful_scene`);
 

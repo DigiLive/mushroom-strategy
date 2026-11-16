@@ -22,9 +22,9 @@ class NumberCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {NumberCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<NumberCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: NumberCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<NumberCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...NumberCard.getDefaultConfig(), ...customConfiguration };

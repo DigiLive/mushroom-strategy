@@ -25,9 +25,9 @@ class MediaPlayerCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {MediaPlayerCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<MediaPlayerCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: MediaPlayerCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<MediaPlayerCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...MediaPlayerCard.getDefaultConfig(), ...customConfiguration };

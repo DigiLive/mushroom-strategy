@@ -25,9 +25,9 @@ class CoverCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {CoverCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<CoverCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: CoverCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<CoverCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...CoverCard.getDefaultConfig(), ...customConfiguration };

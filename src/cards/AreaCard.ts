@@ -26,9 +26,9 @@ class AreaCard extends AbstractCard {
    * Class constructor.
    *
    * @param {StrategyArea} area The HASS area to create a card configuration for.
-   * @param {TemplateCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<TemplateCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(area: StrategyArea, customConfiguration?: TemplateCardConfig) {
+  constructor(area: StrategyArea, customConfiguration?: Partial<TemplateCardConfig>) {
     super(area);
 
     const configuration = AreaCard.getDefaultConfig();

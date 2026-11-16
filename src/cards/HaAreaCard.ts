@@ -24,9 +24,9 @@ class AreaCard extends AbstractCard {
    * Class constructor.
    *
    * @param {StrategyArea} area The HASS entity to create a card configuration for.
-   * @param {AreaCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<AreaCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(area: StrategyArea, customConfiguration?: AreaCardConfig) {
+  constructor(area: StrategyArea, customConfiguration?: Partial<AreaCardConfig>) {
     super(area);
 
     // Initialize the default configuration.

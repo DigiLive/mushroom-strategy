@@ -39,9 +39,9 @@ class GreetingCard {
   /**
    * Class constructor.
    *
-   * @param {TemplateCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<TemplateCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(customConfiguration?: TemplateCardConfig) {
+  constructor(customConfiguration?: Partial<TemplateCardConfig>) {
     this.configuration = { ...this.configuration, ...customConfiguration };
   }
 

@@ -27,9 +27,9 @@ class ValveCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {VacuumCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<TemplateCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: TemplateCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<TemplateCardConfig>) {
     super(entity);
 
     // Initialize the default configuration.
@@ -38,7 +38,7 @@ class ValveCard extends AbstractCard {
     configuration.entity = entity.entity_id;
     configuration.icon = entity.icon ?? configuration.icon;
     configuration.primary = entity.name ?? entity.original_name ?? '?';
-    configuration.secondary = `{% 
+    configuration.secondary = `{%
                                  set mapping = {
                                    'open': '${localize('valve.open')}',
                                    'opening': '${localize('valve.opening')}',

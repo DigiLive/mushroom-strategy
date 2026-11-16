@@ -25,9 +25,9 @@ class CameraCard extends AbstractCard {
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {PictureEntityCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<PictureEntityCardConfig>} [customConfiguration] Custom card configuration.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: PictureEntityCardConfig) {
+  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<PictureEntityCardConfig>) {
     super(entity);
 
     this.configuration = { ...this.configuration, ...CameraCard.getDefaultConfig(), ...customConfiguration };

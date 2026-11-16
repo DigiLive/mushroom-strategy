@@ -30,12 +30,12 @@ class HeaderCard {
    * Class constructor.
    *
    * @param {HassServiceTarget} target The target which is optionally controlled by the card.
-   * @param {CustomHeaderCardConfig} [customConfiguration] Custom card configuration.
+   * @param {Partial<CustomHeaderCardConfig>} [customConfiguration] Custom card configuration.
    *
    * @remarks
    * The target object can contain one or multiple ids of different entry types.
    */
-  constructor(target: HassServiceTarget, customConfiguration?: CustomHeaderCardConfig) {
+  constructor(target: HassServiceTarget, customConfiguration?: Partial<CustomHeaderCardConfig>) {
     this.target = target;
     this.configuration = { ...HeaderCard.getDefaultConfig(), ...customConfiguration };
   }
