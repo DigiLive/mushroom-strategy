@@ -34,9 +34,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@digilive/lovelace-mushroom-types": "github:DigiLive/lovelace-mushroom-types#v5.3.0",
+    "@digilive/home-assistant-frontend-types": "github:DigiLive/home-assistant-frontend-types#20261028.8",
     "@types/node": "^26.6.6",
     "@types/semver": "^7.8.0",
-    "typescript-eslint": "^8.72.1",
     "bumpp": "^12.3.0",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
@@ -51,6 +53,7 @@
     "ts-loader": "^9.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
     "webpack": "^5.112.2",
     "webpack-cli": "^7.3.1"
   },
