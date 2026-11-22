@@ -10,5 +10,23 @@
   "singleQuote": true,
   "tabWidth": 2,
   "trailingComma": "es5",
-  "useTabs": false
+  "useTabs": false,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^node:",
+    "<BUILTIN_MODULES>",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^(\\.\\./)+types(/|$)|^\\./types(/|$)",
+    "",
+    "^(\\.\\./)+(utilities|translations)(/|$)|^\\./(utilities|translations)(/|$)",
+    "",
+    "^(\\.\\./)+(views|cards|badges)(/|$)|^\\./(views|cards|badges)(/|$)",
+    "",
+    "^[.][.]",
+    "",
+    "^[.]"
+  ],
+  "importOrderTypeScriptVersion": "6.0.0"
 }
