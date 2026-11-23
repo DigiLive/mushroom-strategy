@@ -1,7 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { LockCardConfig } from '../types/lovelace-mushroom/cards/lock-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { LockCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -9,25 +12,23 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the lock domain.
  */
-class LockCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): LockCardConfig {
-    return {
-      type: 'custom:mushroom-lock-card',
-      icon: undefined,
-    };
-  }
-
+class LockCard extends AbstractCard<LockCardConfig> {
   /**
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {Partial<LockCardConfig>} [customConfiguration] Custom card configuration.
+   * @param {CustomCardConfig<LockCardConfig>} [customConfiguration] Custom card configuration overrides.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<LockCardConfig>) {
-    super(entity);
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<LockCardConfig>) {
+    super(entity, customConfiguration);
+  }
 
-    this.configuration = { ...this.configuration, ...LockCard.getDefaultConfig(), ...customConfiguration };
+  /** Returns the default configuration object for the card. */
+  protected getDefaultConfig(): Partial<LockCardConfig> {
+    return {
+      type: 'custom:mushroom-lock-card',
+      icon: undefined,
+    };
   }
 }
 

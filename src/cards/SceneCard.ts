@@ -1,11 +1,15 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { EntityCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
+
 import { Registry } from '../Registry';
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+
 import AbstractCard from './AbstractCard';
 import SwitchCard from './SwitchCard';
-import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
 
 /**
  * Scene Card Class
@@ -15,48 +19,66 @@ import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
  * Supports Stateful scenes from https://github.com/hugobloem/stateful_scenes.
  * If the stateful scene entity is available, it will be used instead of the original scene entity.
  */
-class SceneCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      tap_action: {
-        action: 'perform-action',
-        perform_action: 'scene.turn_on',
-        target: {},
-      },
-    };
-  }
+class SceneCard extends AbstractCard<EntityCardConfig> {
+  /** The original scene entity registry entry. */
+  protected readonly sceneEntity: EntityRegistryEntry;
+
+  /** Whether a stateful scene switch was found for this scene. */
+  protected readonly isStatefulScene: boolean;
 
   /**
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {Partial<EntityCardConfig>} [customConfiguration] Custom card configuration.
+   * @param {CustomCardConfig<EntityCardConfig>} [customConfiguration] Custom card configuration overrides.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<EntityCardConfig>) {
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<EntityCardConfig>) {
     const sceneName = entity.entity_id.split('.').pop();
-    const statefulScene = Registry.entities.find((entity) => entity.entity_id === `switch.${sceneName}_stateful_scene`);
+    const statefulScene = Registry.entities.find((entry) => entry.entity_id === `switch.${sceneName}_stateful_scene`);
 
-    super(statefulScene ?? entity);
+    super(statefulScene ?? entity, customConfiguration);
 
-    // Stateful scene support.
-    if (statefulScene) {
-      this.configuration = new SwitchCard(statefulScene).getCard();
+    this.sceneEntity = entity;
+    this.isStatefulScene = Boolean(statefulScene);
 
-      return;
+    if (this.isStatefulScene && statefulScene) {
+      const { hidden: _hidden, ...customCardConfig } = customConfiguration ?? {};
+      this.configuration = {
+        ...new SwitchCard(statefulScene).getCard(),
+        ...customCardConfig,
+      } as Partial<EntityCardConfig>; // FIXME: Remove type assertion once @digilive/lovelace-mushroom-types updates EntityCardConfig['name'] to match home-assistant-frontend-types.
+    }
+  }
+
+  /** Returns the default configuration object for the card. */
+  protected getDefaultConfig(): Partial<EntityCardConfig> {
+    if (this.isStatefulScene) {
+      return {};
     }
 
-    // Initialize the default configuration.
-    const configuration = SceneCard.getDefaultConfig();
+    const entity = this.sceneEntity ?? (this.entity as EntityRegistryEntry);
+    const defaultConfig: Partial<EntityCardConfig> = {
+      type: 'custom:mushroom-entity-card',
+      icon: Registry.hassStates[entity.entity_id]?.attributes.icon,
+      tap_action: {
+        action: 'call-service',
+        perform_action: 'scene.turn_on',
+        target: {
+          entity_id: entity.entity_id,
+        },
+      },
+    };
 
-    if (isCallServiceActionConfig(configuration.tap_action)) {
-      configuration.tap_action.target = { entity_id: entity.entity_id };
+    if (isCallServiceActionConfig(defaultConfig.tap_action)) {
+      defaultConfig.tap_action = {
+        ...defaultConfig.tap_action,
+        target: {
+          entity_id: entity.entity_id,
+        },
+      };
     }
 
-    configuration.icon = Registry.hassStates[entity.entity_id]?.attributes.icon ?? configuration.icon;
-
-    this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
+    return defaultConfig;
   }
 }
 

@@ -1,54 +1,51 @@
+// noinspection JSUnusedGlobalSymbols Class is dynamically imported.
+
+import { LovelaceCardConfig, StackCardConfig } from '@digilive/home-assistant-frontend-types';
 import { HassServiceTarget } from 'home-assistant-js-websocket';
-import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
-import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
+
 import { CustomHeaderCardConfig, StrategyHeaderCardConfig } from '../types/strategy/strategy-cards';
 
 /**
- * Header Card class.
+ * Header Card Class
  *
  * Used to create a card configuration for a Header Card.
  * The card can be used to describe a group of cards and optionally to control multiple entities.
  */
 class HeaderCard {
   /** The target to control the entities of. */
-  private readonly target: HassServiceTarget;
-  /** The current configuration of the card after instantiating this class. */
-  private readonly configuration: StrategyHeaderCardConfig;
+  protected readonly target: HassServiceTarget;
 
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): StrategyHeaderCardConfig {
-    return {
-      type: 'custom:mushroom-title-card',
-      iconOn: 'mdi:power-on',
-      iconOff: 'mdi:power-off',
-      onService: 'none',
-      offService: 'none',
-    };
-  }
+  /** The card configuration. */
+  protected configuration: StrategyHeaderCardConfig;
 
   /**
    * Class constructor.
    *
    * @param {HassServiceTarget} target The target which is optionally controlled by the card.
-   * @param {Partial<CustomHeaderCardConfig>} [customConfiguration] Custom card configuration.
+   * @param {CustomHeaderCardConfig} [customConfiguration] Custom card configuration overrides.
    *
    * @remarks
    * The target object can contain one or multiple ids of different entry types.
    */
-  constructor(target: HassServiceTarget, customConfiguration?: Partial<CustomHeaderCardConfig>) {
+  public constructor(target: HassServiceTarget, customConfiguration?: CustomHeaderCardConfig) {
     this.target = target;
-    this.configuration = { ...HeaderCard.getDefaultConfig(), ...customConfiguration };
+
+    const { hidden: _hidden, ...customCardConfig } = customConfiguration ?? {};
+
+    this.configuration = {
+      ...this.getDefaultConfig(),
+      ...customCardConfig,
+    } as StrategyHeaderCardConfig;
   }
 
   /**
-   * Create a Header card configuration.
+   * Get the card configuration.
    *
    * @remarks
-   * The card is represented by a horizontal stack of cards.
-   * One title card and optionally two template cards to control entities.
+   * The card is represented by a horizontal stack of cards: one title card and optionally
+   * two template cards to control entities.
    */
-  createCard(): StackCardConfig {
-    // Create a title card.
+  public getCard(): StackCardConfig {
     const cards: LovelaceCardConfig[] = [
       {
         type: 'custom:mushroom-title-card',
@@ -57,7 +54,6 @@ class HeaderCard {
       },
     ];
 
-    // Add controls to the card.
     if (this.configuration.show_controls) {
       cards.push({
         type: 'horizontal-stack',
@@ -92,7 +88,18 @@ class HeaderCard {
 
     return {
       type: 'horizontal-stack',
-      cards: cards,
+      cards,
+    };
+  }
+
+  /** Returns the default configuration object for the card. */
+  protected getDefaultConfig(): Partial<StrategyHeaderCardConfig> {
+    return {
+      type: 'custom:mushroom-title-card',
+      iconOn: 'mdi:power-on',
+      iconOff: 'mdi:power-off',
+      onService: 'none',
+      offService: 'none',
     };
   }
 }

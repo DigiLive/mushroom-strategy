@@ -1,7 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { MediaPlayerCardConfig } from '../types/lovelace-mushroom/cards/media-player-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { MediaPlayerCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -9,9 +12,19 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the media_player domain.
  */
-class MediaPlayerCard extends AbstractCard {
+class MediaPlayerCard extends AbstractCard<MediaPlayerCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<MediaPlayerCardConfig>} [customConfiguration] Custom card configuration overrides.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<MediaPlayerCardConfig>) {
+    super(entity, customConfiguration);
+  }
+
   /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): MediaPlayerCardConfig {
+  protected getDefaultConfig(): Partial<MediaPlayerCardConfig> {
     return {
       type: 'custom:mushroom-media-player-card',
       use_media_info: true,
@@ -19,18 +32,6 @@ class MediaPlayerCard extends AbstractCard {
       show_volume_level: true,
       volume_controls: ['volume_mute', 'volume_set', 'volume_buttons'],
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {Partial<MediaPlayerCardConfig>} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<MediaPlayerCardConfig>) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...MediaPlayerCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

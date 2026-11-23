@@ -1,7 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { NumberCardConfig } from '../types/lovelace-mushroom/cards/number-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { NumberCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -9,25 +12,23 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the number domain.
  */
-class NumberCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): NumberCardConfig {
-    return {
-      type: 'custom:mushroom-number-card',
-      icon: undefined,
-    };
-  }
-
+class NumberCard extends AbstractCard<NumberCardConfig> {
   /**
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {Partial<NumberCardConfig>} [customConfiguration] Custom card configuration.
+   * @param {CustomCardConfig<NumberCardConfig>} [customConfiguration] Custom card configuration overrides.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: Partial<NumberCardConfig>) {
-    super(entity);
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<NumberCardConfig>) {
+    super(entity, customConfiguration);
+  }
 
-    this.configuration = { ...this.configuration, ...NumberCard.getDefaultConfig(), ...customConfiguration };
+  /** Returns the default configuration object for the card. */
+  protected getDefaultConfig(): Partial<NumberCardConfig> {
+    return {
+      type: 'custom:mushroom-number-card',
+      icon: undefined,
+    };
   }
 }
 
