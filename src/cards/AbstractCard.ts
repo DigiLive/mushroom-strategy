@@ -71,24 +71,6 @@ export default abstract class AbstractCard<TConfig extends StrategyCardConfig = 
         ...Registry.strategyOptions.domains[domain],
       };
 
-      // Show only the entity name (without the device name) unless the card already defines its own name.
-      // The entity's own name is the name set by the user, or else the name provided by the integration
-      // (`original_name_unprefixed` when available, otherwise `original_name`).
-      // When the entity has none of these, the default name (device name) is kept.
-      // Mushroom cards understand a name object, mini-graph-card only takes a plain string.
-      // Other card types (stacks, picture-entity, area...) are left untouched.
-      const entityName = this.entity.name || this.entity.original_name_unprefixed || this.entity.original_name;
-
-      if (domainOptions.entity_names_only && this.configuration.name === undefined && entityName) {
-        const cardType = String(this.configuration.type ?? '');
-
-        if (cardType.startsWith('custom:mushroom-')) {
-          this.configuration.name = { type: 'entity' };
-        } else if (cardType === 'custom:mini-graph-card') {
-          this.configuration.name = entityName;
-        }
-      }
-
       if (domainOptions.hide_unavailable_entities) {
         this.configuration.visibility = [
           {
