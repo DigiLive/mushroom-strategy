@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols False positive.
 
-import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
-import { EntityBadgeConfig } from '../types/homeassistant/panels/lovelace/badges/types';
+import { EntityBadgeConfig, LovelaceBadgeConfig } from '@digilive/home-assistant-frontend-types';
+
 import AbstractBadge from './AbstractBadge';
 
 /**
@@ -9,24 +9,28 @@ import AbstractBadge from './AbstractBadge';
  *
  * Used to create a badge configuration to indicate the current weather.
  */
-class WeatherBadge extends AbstractBadge {
+class WeatherBadge extends AbstractBadge<EntityBadgeConfig> {
+  /** ID of a weather entity. */
+  private readonly entityId: string;
+
   /**
-   * Class Constructor.
+   * Class constructor.
    *
-   * @param {string} entityId Id of a weather entity.
-   * @param {LovelaceBadgeConfig} [customConfiguration] Custom badge configuration.
+   * @param {string} entityId ID of a weather entity.
+   * @param {LovelaceBadgeConfig} [customConfiguration] Custom badge configuration overrides.
    */
-  constructor(entityId: string, customConfiguration?: LovelaceBadgeConfig) {
+  public constructor(entityId: string, customConfiguration?: LovelaceBadgeConfig) {
     super();
 
-    this.configuration = { ...this.configuration, ...WeatherBadge.getDefaultConfig(entityId), ...customConfiguration };
+    this.entityId = entityId;
+    this.setConfiguration(customConfiguration as Partial<EntityBadgeConfig>);
   }
 
   /** Returns the default configuration object for the badge. */
-  static getDefaultConfig(entityId: string): EntityBadgeConfig {
+  protected getDefaultConfig(): Partial<EntityBadgeConfig> {
     return {
       type: 'entity',
-      entity: entityId,
+      entity: this.entityId,
       state_content: ['state', 'temperature'],
     };
   }
