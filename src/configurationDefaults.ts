@@ -1,4 +1,5 @@
 import { StrategyConfig } from './types/strategy/strategy-generics';
+
 import { localize } from './utilities/localize';
 
 /**
