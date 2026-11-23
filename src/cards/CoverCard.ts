@@ -1,7 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { CoverCardConfig } from '../types/lovelace-mushroom/cards/cover-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { CoverCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -9,9 +12,19 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the cover domain.
  */
-class CoverCard extends AbstractCard {
+class CoverCard extends AbstractCard<CoverCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<CoverCardConfig>} [customConfiguration] Custom card configuration.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<CoverCardConfig>) {
+    super(entity, customConfiguration);
+  }
+
   /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): CoverCardConfig {
+  protected getDefaultConfig(): Partial<CoverCardConfig> {
     return {
       type: 'custom:mushroom-cover-card',
       icon: undefined,
@@ -19,18 +32,6 @@ class CoverCard extends AbstractCard {
       show_position_control: true,
       show_tilt_position_control: true,
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {CoverCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: CoverCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...CoverCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

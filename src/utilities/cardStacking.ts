@@ -1,7 +1,6 @@
-import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
-import { StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-
 // noinspection GrazieInspection
+import { LovelaceCardConfig, StackCardConfig } from '@digilive/home-assistant-frontend-types';
+
 /**
  * Stacks an array of Lovelace card configurations into horizontal stacks based on their type.
  *
@@ -53,7 +52,7 @@ export function stackHorizontal(
   // Array to hold the processed cards
   const processedConfigurations: LovelaceCardConfig[] = [];
 
-  for (let i = 0; i < cardConfigurations.length; ) {
+  for (let i = 0; i < cardConfigurations.length;) {
     const currentCard = cardConfigurations[i];
     const currentType = currentCard.type;
 

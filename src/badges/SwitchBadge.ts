@@ -1,30 +1,33 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
-import RegistryFilter from '../utilities/RegistryFilter';
-import AbstractBadge from './AbstractBadge';
-import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
+import { LovelaceBadgeConfig } from '@digilive/home-assistant-frontend-types';
+
 import { localize } from '../utilities/localize';
+import RegistryFilter from '../utilities/RegistryFilter';
+
+import { Registry } from '../Registry';
+
+import AbstractBadge from './AbstractBadge';
 
 /**
  * Switch Badge class.
  *
  * Used to create a badge configuration to indicate how many switches are on and to switch them all off.
  */
-class SwitchBadge extends AbstractBadge {
+class SwitchBadge extends AbstractBadge<LovelaceBadgeConfig> {
   /**
-   * Class Constructor.
+   * Class constructor.
    *
-   * @param {LovelaceBadgeConfig} [customConfiguration] Custom badge configuration.
+   * @param {Partial<LovelaceBadgeConfig>} [customConfiguration] Custom badge configuration overrides.
    */
-  constructor(customConfiguration?: LovelaceBadgeConfig) {
+  public constructor(customConfiguration?: Partial<LovelaceBadgeConfig>) {
     super();
 
-    this.configuration = { ...this.configuration, ...SwitchBadge.getDefaultConfig(), ...customConfiguration };
+    this.setConfiguration(customConfiguration);
   }
 
   /** Returns the default configuration object for the badge. */
-  static getDefaultConfig(): LovelaceBadgeConfig {
+  protected getDefaultConfig(): Partial<LovelaceBadgeConfig> {
     return {
       type: 'custom:mushroom-template-badge',
       icon: 'mdi:dip-switch',

@@ -1,21 +1,42 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
+
 import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
+
+import AbstractDomainView from './AbstractDomainView';
 
 /**
  * Scene View Class.
  *
- * sed to create a view configuration for entities of the scene domain.
+ * Used to create a view configuration for entities of the scene domain.
  */
-class SceneView extends AbstractView {
+class SceneView extends AbstractDomainView {
   /** The domain of the entities that the view is representing. */
-  static readonly domain = 'scene' as const;
+  public static readonly domain: SupportedDomains = 'scene' as const;
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
+  /**
+   * Class constructor.
+   *
+   * @param {Partial<ViewConfig>} [customConfiguration] Custom view configuration overrides.
+   */
+  public constructor(customConfiguration?: Partial<ViewConfig>) {
+    super(SceneView.domain, customConfiguration, SceneView.getViewHeaderCardConfig());
+  }
+
+  /**
+   * Returns the default configuration of the view's Header card.
+   */
+  private static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+    return {};
+  }
+
+  /**
+   * Returns the default configuration object for the view.
+   */
+  protected getDefaultConfig(): Partial<ViewConfig> {
     return {
       title: localize('scene.scenes'),
       path: 'scenes',
@@ -25,22 +46,6 @@ class SceneView extends AbstractView {
         show_controls: false,
       },
     };
-  }
-
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
-    return {};
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(SceneView.getDefaultConfig(), customConfiguration, SceneView.getViewHeaderCardConfig());
   }
 }
 

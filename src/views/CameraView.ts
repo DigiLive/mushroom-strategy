@@ -1,36 +1,37 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
 import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
 import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
+
 import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
+
+import { Registry } from '../Registry';
+
+import AbstractDomainView from './AbstractDomainView';
 
 /**
  * Camera View Class.
  *
  * Used to create a view configuration for entities of the camera domain.
  */
-class CameraView extends AbstractView {
+class CameraView extends AbstractDomainView {
   /** The domain of the entities that the view is representing. */
-  static readonly domain: SupportedDomains = 'camera' as const;
+  public static readonly domain: SupportedDomains = 'camera' as const;
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('camera.cameras'),
-      path: 'cameras',
-      icon: 'mdi:cctv',
-      subview: false,
-      headerCardConfiguration: {
-        show_controls: false,
-      },
-    };
+  /**
+   * Class constructor.
+   *
+   * @param {Partial<ViewConfig>} [customConfiguration] Custom view configuration overrides.
+   */
+  public constructor(customConfiguration?: Partial<ViewConfig>) {
+    super(CameraView.domain, customConfiguration, CameraView.getViewHeaderCardConfig());
   }
 
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  /**
+   * Returns the default configuration of the view's Header card.
+   */
+  private static getViewHeaderCardConfig(): CustomHeaderCardConfig {
     return {
       title: localize('camera.all_cameras'),
       subtitle:
@@ -40,14 +41,18 @@ class CameraView extends AbstractView {
   }
 
   /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * Returns the default configuration object for the view.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(CameraView.getDefaultConfig(), customConfiguration, CameraView.getViewHeaderCardConfig());
+  protected getDefaultConfig(): Partial<ViewConfig> {
+    return {
+      title: localize('camera.cameras'),
+      path: 'cameras',
+      icon: 'mdi:cctv',
+      subview: false,
+      headerCardConfiguration: {
+        show_controls: false,
+      },
+    };
   }
 }
 

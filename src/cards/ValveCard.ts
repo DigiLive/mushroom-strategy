@@ -1,8 +1,12 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { TemplateCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import { localize } from '../utilities/localize';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -10,47 +14,42 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the valve domain.
  */
-class ValveCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): TemplateCardConfig {
-    return {
-      type: 'custom:mushroom-template-card',
-      icon: 'mdi:valve',
-      icon_color: 'blue',
-      double_tap_action: {
-        action: 'toggle',
-      },
-    };
-  }
-
+class ValveCard extends AbstractCard<TemplateCardConfig> {
   /**
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {VacuumCardConfig} [customConfiguration] Custom card configuration.
+   * @param {CustomCardConfig<TemplateCardConfig>} [customConfiguration] Custom card configuration overrides.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: TemplateCardConfig) {
-    super(entity);
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<TemplateCardConfig>) {
+    super(entity, customConfiguration);
+  }
 
-    // Initialize the default configuration.
-    const configuration = ValveCard.getDefaultConfig();
+  /** Returns the default configuration object for the card. */
+  protected getDefaultConfig(): Partial<TemplateCardConfig> {
+    const registryEntry = this.entity as EntityRegistryEntry;
 
-    configuration.entity = entity.entity_id;
-    configuration.icon = entity.icon ?? configuration.icon;
-    configuration.primary = entity.name ?? entity.original_name ?? '?';
-    configuration.secondary = `{% 
-                                 set mapping = {
-                                   'open': '${localize('valve.open')}',
-                                   'opening': '${localize('valve.opening')}',
-                                   'closed': '${localize('valve.closed')}',
-                                   'closing': '${localize('valve.closing')}',
-                                   'stopped': '${localize('valve.stopped')}',
-                                   'unavailable': '${localize('generic.unavailable')}'
-                                 }
-                               %}
-                               {{ mapping.get(states('${entity.entity_id}'), '${localize('generic.unknown')}') }}`;
-
-    this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
+    return {
+      type: 'custom:mushroom-template-card',
+      entity: registryEntry.entity_id,
+      icon: registryEntry.icon ?? 'mdi:valve',
+      icon_color: 'blue',
+      primary: registryEntry.name ?? registryEntry.original_name ?? '?',
+      secondary: `{%
+                    set mapping = {
+                      'open': '${localize('valve.open')}',
+                      'opening': '${localize('valve.opening')}',
+                      'closed': '${localize('valve.closed')}',
+                      'closing': '${localize('valve.closing')}',
+                      'stopped': '${localize('valve.stopped')}',
+                      'unavailable': '${localize('generic.unavailable')}'
+                    }
+                  %}
+                  {{ mapping.get(states('${registryEntry.entity_id}'), '${localize('generic.unknown')}') }}`,
+      double_tap_action: {
+        action: 'toggle',
+      },
+    };
   }
 }
 

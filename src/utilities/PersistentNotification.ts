@@ -1,4 +1,5 @@
-import { HomeAssistant } from '../types/homeassistant/types';
+import { HomeAssistant } from '@digilive/home-assistant-frontend-types';
+
 import { logMessage, lvlDebug, lvlError, lvlInfo } from './debug';
 
 /**

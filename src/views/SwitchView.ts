@@ -1,22 +1,49 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
 import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
+
 import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
+
+import { Registry } from '../Registry';
+
+import AbstractDomainView from './AbstractDomainView';
 
 /**
  * Switch View Class.
  *
  * Used to create a view configuration for entities of the switch domain.
  */
-class SwitchView extends AbstractView {
+class SwitchView extends AbstractDomainView {
   /** The domain of the entities that the view is representing. */
-  static readonly domain = 'switch' as const;
+  public static readonly domain: SupportedDomains = 'switch' as const;
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
+  /**
+   * Class constructor.
+   *
+   * @param {Partial<ViewConfig>} [customConfiguration] Custom view configuration overrides.
+   */
+  public constructor(customConfiguration?: Partial<ViewConfig>) {
+    super(SwitchView.domain, customConfiguration, SwitchView.getViewHeaderCardConfig());
+  }
+
+  /**
+   * Returns the default configuration of the view's Header card.
+   */
+  private static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+    return {
+      title: localize('switch.all_switches'),
+      subtitle:
+        `${Registry.getCountTemplate(SwitchView.domain, 'eq', 'on')} ${localize('switch.switches')} ` +
+        localize('generic.on'),
+    };
+  }
+
+  /**
+   * Returns the default configuration object for the view.
+   */
+  protected getDefaultConfig(): Partial<ViewConfig> {
     return {
       title: localize('switch.switches'),
       path: 'switches',
@@ -29,27 +56,6 @@ class SwitchView extends AbstractView {
         offService: 'switch.turn_off',
       },
     };
-  }
-
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
-    return {
-      title: localize('switch.all_switches'),
-      subtitle:
-        `${Registry.getCountTemplate(SwitchView.domain, 'eq', 'on')} ${localize('switch.switches')} ` +
-        localize('generic.on'),
-    };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
-   */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(SwitchView.getDefaultConfig(), customConfiguration, SwitchView.getViewHeaderCardConfig());
   }
 }
 

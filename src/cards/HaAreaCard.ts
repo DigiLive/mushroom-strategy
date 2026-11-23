@@ -1,50 +1,46 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { AreaCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import AbstractCard from './AbstractCard';
-import { Registry } from '../Registry';
-import { localize } from '../utilities/localize';
+import { AreaCardConfig } from '@digilive/home-assistant-frontend-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
 import { StrategyArea } from '../types/strategy/strategy-generics';
+
+import { localize } from '../utilities/localize';
+
+import { Registry } from '../Registry';
+
+import AbstractCard from './AbstractCard';
 
 /**
  * HA Area Card Class
  *
  * Used to create card configuration for an entry of the HASS area registry.
  */
-class AreaCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): AreaCardConfig {
-    return {
-      type: 'area',
-      area: '',
-    };
-  }
-
+class AreaCard extends AbstractCard<AreaCardConfig> {
   /**
    * Class constructor.
    *
-   * @param {StrategyArea} area The HASS entity to create a card configuration for.
-   * @param {AreaCardConfig} [customConfiguration] Custom card configuration.
+   * @param {StrategyArea} area The HASS area entry to create a card configuration for.
+   * @param {CustomCardConfig<AreaCardConfig>} [customConfiguration] Custom card configuration overrides.
    */
-  constructor(area: StrategyArea, customConfiguration?: AreaCardConfig) {
-    super(area);
+  public constructor(area: StrategyArea, customConfiguration?: CustomCardConfig<AreaCardConfig>) {
+    super(area, customConfiguration);
+  }
 
-    // Initialize the default configuration.
-    const configuration = AreaCard.getDefaultConfig();
-
-    configuration.area = area.area_id;
-    configuration.navigation_path = configuration.area;
+  /** Returns the default configuration object for the card. */
+  protected getDefaultConfig(): Partial<AreaCardConfig> {
+    const areaEntry = this.entity as StrategyArea;
+    const config: Partial<AreaCardConfig> = {
+      type: 'area',
+      area: areaEntry.area_id,
+      navigation_path: areaEntry.area_id,
+    };
 
     if (Registry.strategyOptions.show_positions) {
-      configuration.name = `${area.name} - ${localize('generic.ordering_position')}: ${area.order}`;
+      config.name = `${areaEntry.name} - ${localize('generic.ordering_position')}: ${areaEntry.order}`;
     }
 
-    this.configuration = {
-      ...this.configuration,
-      ...configuration,
-      ...customConfiguration,
-      type: configuration.type, // Enforce the card type.
-    };
+    return config;
   }
 }
 

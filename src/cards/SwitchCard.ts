@@ -1,7 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { EntityCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -9,9 +12,19 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the switch domain.
  */
-class SwitchCard extends AbstractCard {
+class SwitchCard extends AbstractCard<EntityCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<EntityCardConfig>} [customConfiguration] Custom card configuration overrides.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<EntityCardConfig>) {
+    super(entity, customConfiguration);
+  }
+
   /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
+  protected getDefaultConfig(): Partial<EntityCardConfig> {
     return {
       type: 'custom:mushroom-entity-card',
       icon: undefined,
@@ -19,18 +32,6 @@ class SwitchCard extends AbstractCard {
         action: 'toggle',
       },
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {EntityCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: EntityCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...SwitchCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

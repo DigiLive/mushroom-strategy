@@ -1,7 +1,10 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { ClimateCardConfig } from '../types/lovelace-mushroom/cards/climate-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { ClimateCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -9,27 +12,25 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the climate domain.
  */
-class ClimateCard extends AbstractCard {
+class ClimateCard extends AbstractCard<ClimateCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<ClimateCardConfig>} [customConfiguration] Custom card configuration.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<ClimateCardConfig>) {
+    super(entity, customConfiguration);
+  }
+
   /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): ClimateCardConfig {
+  protected getDefaultConfig(): Partial<ClimateCardConfig> {
     return {
       type: 'custom:mushroom-climate-card',
       icon: undefined,
       hvac_modes: ['off', 'cool', 'heat', 'fan_only'],
       show_temperature_control: true,
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {ClimateCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: ClimateCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...ClimateCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

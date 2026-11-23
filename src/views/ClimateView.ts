@@ -1,36 +1,37 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
 import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
 import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
+
 import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
+
+import { Registry } from '../Registry';
+
+import AbstractDomainView from './AbstractDomainView';
 
 /**
  * Climate View Class.
  *
  * Used to create a view configuration for entities of the climate domain.
  */
-class ClimateView extends AbstractView {
-  /**The domain of the entities that the view is representing. */
-  static readonly domain: SupportedDomains = 'climate' as const;
+class ClimateView extends AbstractDomainView {
+  /** The domain of the entities that the view is representing. */
+  public static readonly domain: SupportedDomains = 'climate' as const;
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
-    return {
-      title: localize('climate.climates'),
-      path: 'climates',
-      icon: 'mdi:thermostat',
-      subview: false,
-      headerCardConfiguration: {
-        show_controls: false,
-      },
-    };
+  /**
+   * Class constructor.
+   *
+   * @param {Partial<ViewConfig>} [customConfiguration] Custom view configuration overrides.
+   */
+  public constructor(customConfiguration?: Partial<ViewConfig>) {
+    super(ClimateView.domain, customConfiguration, ClimateView.getViewHeaderCardConfig());
   }
 
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+  /**
+   * Returns the default configuration of the view's Header card.
+   */
+  private static getViewHeaderCardConfig(): CustomHeaderCardConfig {
     return {
       title: localize('climate.all_climates'),
       subtitle:
@@ -40,18 +41,18 @@ class ClimateView extends AbstractView {
   }
 
   /**
-   * Class constructor.
-   *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * Returns the default configuration object for the view.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(
-      ClimateView.getDefaultConfig(),
-      customConfiguration,
-      ClimateView.getViewHeaderCardConfig()
-    );
+  protected getDefaultConfig(): Partial<ViewConfig> {
+    return {
+      title: localize('climate.climates'),
+      path: 'climates',
+      icon: 'mdi:thermostat',
+      subview: false,
+      headerCardConfiguration: {
+        show_controls: false,
+      },
+    };
   }
 }
 

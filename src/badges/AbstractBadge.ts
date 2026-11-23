@@ -1,37 +1,41 @@
-import { Registry } from '../Registry';
+import { LovelaceBadgeConfig } from '@digilive/home-assistant-frontend-types';
+
 import { logMessage, lvlFatal } from '../utilities/debug';
-import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
 
-abstract class AbstractBadge {
-  /**
-   * Abstract Badge class.
-   *
-   * To create a badge configuration, this class should be extended by a child class.
-   * Child classes should override the default configuration so the badge correctly reflects the entity.
-   *
-   * @remarks
-   * Before using this class, the Registry module must be initialized by calling {@link Registry.initialize}.
-   */
+import { Registry } from '../Registry';
 
+/**
+ * Abstract Badge class.
+ *
+ * To create a badge configuration, this class should be extended by a child class.
+ * Child classes should provide their default configuration so the badge correctly reflects the entity.
+ *
+ * @remarks
+ * Before using this class, the Registry module must be initialized by calling {@link Registry.initialize}.
+ */
+abstract class AbstractBadge<TConfig extends LovelaceBadgeConfig = LovelaceBadgeConfig> {
   /**
    * Configuration of the badge.
    *
-   * Child classes should override this property to reflect their own badge type and options.
+   * Child classes provide their own defaults via {@link getDefaultConfig} and can adjust
+   * this configuration as needed.
    */
-  protected configuration: LovelaceBadgeConfig = {
-    type: 'template',
-  };
+  protected configuration: Partial<TConfig>;
 
   /**
-   * Class Constructor.
+   * Class constructor.
    *
    * @remarks
-   * Before using this class, the Registry module must be initialized by calling {@link Registry.initialize}.
+   * Before this class can be used, the Registry module must be initialized by calling {@link Registry.initialize}.
    */
   protected constructor() {
     if (!Registry.initialized) {
       logMessage(lvlFatal, 'Registry is not initialized!');
     }
+
+    this.configuration = {
+      type: 'template',
+    } as Partial<TConfig>;
   }
 
   /**
@@ -39,9 +43,30 @@ abstract class AbstractBadge {
    *
    * The configuration should be set by any of the child classes so the badge correctly reflects an entity.
    */
-  getConfiguration(): LovelaceBadgeConfig {
-    return this.configuration;
+  public getConfiguration(): TConfig {
+    return this.configuration as TConfig;
   }
+
+  /**
+   * Builds and stores the badge configuration by merging base defaults, child defaults, and custom overrides.
+   *
+   * @template TConfig Badge configuration type.
+   * @param {Partial<TConfig>} [customConfiguration] Custom badge configuration overrides.
+   */
+  protected setConfiguration(customConfiguration?: Partial<TConfig>): void {
+    const baseDefaultConfig = {
+      type: 'template',
+    } as Partial<TConfig>;
+
+    this.configuration = {
+      ...baseDefaultConfig,
+      ...this.getDefaultConfig(),
+      ...customConfiguration,
+    };
+  }
+
+  /** Returns the default configuration object for the badge. */
+  protected abstract getDefaultConfig(): Partial<TConfig>;
 }
 
 export default AbstractBadge;

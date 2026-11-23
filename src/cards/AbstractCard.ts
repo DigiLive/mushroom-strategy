@@ -1,55 +1,68 @@
-import { Registry } from '../Registry';
-import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
-import { AbstractCardConfig } from '../types/strategy/strategy-cards';
+import { CustomCardConfig, StrategyCardConfig } from '../types/strategy/strategy-cards';
 import { isEntityRegistryEntry, isSupportedDomain, RegistryEntry } from '../types/strategy/strategy-generics';
+
 import { logMessage, lvlFatal } from '../utilities/debug';
+
+import { Registry } from '../Registry';
 
 /**
  * Abstract Card Class
  *
  * To create a card configuration, this class should be extended by a child class.
- * Child classes should override the default configuration so the card correctly reflects the entity.
+ * Child classes should provide their default configuration so the card correctly reflects the entity.
  *
  * @remarks
  * Before using this class, the Registry module must be initialized by calling {@link Registry.initialize}.
  */
-abstract class AbstractCard {
+export default abstract class AbstractCard<TConfig extends StrategyCardConfig = StrategyCardConfig> {
   /** The registry entry this card represents. */
-  readonly entity: RegistryEntry;
+  protected readonly entity: RegistryEntry;
 
   /**
    * The card configuration for this entity.
    *
-   * Child classes should override this property to reflect their own card type and options.
+   * Child classes provide their own defaults via {@link getDefaultConfig} and can adjust
+   * this configuration as needed.
    */
-  protected configuration: LovelaceCardConfig = {
-    type: 'custom:mushroom-entity-card',
-    icon: 'mdi:help-circle',
-  };
+  protected configuration: Partial<TConfig>;
 
   /**
    * Class constructor.
    *
+   * @template TConfig The type of the card configuration.
    * @param {RegistryEntry} entity The registry entry to create a card configuration for.
+   * @param {CustomCardConfig<TConfig>} [customConfiguration] Custom card configuration overrides.
    *
    * @remarks
    * Before this class can be used, the Registry module must be initialized by calling {@link Registry.initialize}.
    */
-  protected constructor(entity: RegistryEntry) {
+  protected constructor(entity: RegistryEntry, customConfiguration?: CustomCardConfig<TConfig>) {
     if (!Registry.initialized) {
       logMessage(lvlFatal, 'Registry is not initialized!');
     }
 
     this.entity = entity;
+
+    const baseDefaultConfig = {
+      type: 'custom:mushroom-entity-card',
+      icon: 'mdi:help-circle',
+    } as Partial<TConfig>;
+
+    const { hidden: _hidden, ...customCardConfig } = customConfiguration ?? {};
+
+    this.configuration = {
+      ...baseDefaultConfig,
+      ...this.getDefaultConfig(),
+      ...customCardConfig,
+    };
   }
 
   /**
    * Get a card configuration.
    *
-   * The configuration should be set by any of the child classes so the card correctly reflects an entity.
+   * Applies domain visibility rules and binds the card to its entity registry entry.
    */
-  getCard(): AbstractCardConfig {
-    // Set the card visibility based on the entity's availability.
+  public getCard(): TConfig {
     if (isEntityRegistryEntry(this.entity)) {
       const entityDomain = this.entity.entity_id.split('.', 1)[0] ?? '';
       const domain = isSupportedDomain(entityDomain) ? entityDomain : 'default';
@@ -82,15 +95,18 @@ abstract class AbstractCard {
             condition: 'state',
             state_not: 'unavailable',
           },
-        ];
+        ] as TConfig['visibility'];
       }
+
+      return {
+        ...this.configuration,
+        entity: this.entity.entity_id,
+      } as TConfig;
     }
 
-    return {
-      ...this.configuration,
-      entity: 'entity_id' in this.entity ? this.entity.entity_id : undefined,
-    };
+    return this.configuration as TConfig;
   }
-}
 
-export default AbstractCard;
+  /** Returns the default configuration object for the card. */
+  protected abstract getDefaultConfig(): Partial<TConfig>;
+}

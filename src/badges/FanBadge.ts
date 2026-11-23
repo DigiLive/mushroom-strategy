@@ -1,29 +1,32 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
+import { LovelaceBadgeConfig } from '@digilive/home-assistant-frontend-types';
+
 import RegistryFilter from '../utilities/RegistryFilter';
+
+import { Registry } from '../Registry';
+
 import AbstractBadge from './AbstractBadge';
-import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
 
 /**
  * Fan Badge class.
  *
  * Used to create a badge to indicate how many fans are on and to switch them all off.
  */
-class FanBadge extends AbstractBadge {
+class FanBadge extends AbstractBadge<LovelaceBadgeConfig> {
   /**
-   * Class Constructor.
+   * Class constructor.
    *
-   * @param {LovelaceBadgeConfig} [customConfiguration] Custom badge configuration.
+   * @param {Partial<LovelaceBadgeConfig>} [customConfiguration] Custom badge configuration overrides.
    */
-  constructor(customConfiguration?: LovelaceBadgeConfig) {
+  public constructor(customConfiguration?: Partial<LovelaceBadgeConfig>) {
     super();
 
-    this.configuration = { ...this.configuration, ...FanBadge.getDefaultConfig(), ...customConfiguration };
+    this.setConfiguration(customConfiguration);
   }
 
   /** Returns the default configuration object for the badge. */
-  static getDefaultConfig(): LovelaceBadgeConfig {
+  protected getDefaultConfig(): Partial<LovelaceBadgeConfig> {
     return {
       type: 'custom:mushroom-template-badge',
       icon: 'mdi:fan',
