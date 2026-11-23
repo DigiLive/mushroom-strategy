@@ -1,12 +1,14 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { Registry } from '../Registry';
-import { DeviceRegistryEntry } from '../types/homeassistant/data/device_registry';
-import { EntityCategory, EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { RegistryEntry, StrategyConfig } from '../types/strategy/strategy-generics';
-import { logMessage, lvlWarn } from './debug';
-import { compareValues, getSortPriority } from './auxiliaries';
+import { DeviceRegistryEntry, EntityCategory, EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
 import { HassEntities } from 'home-assistant-js-websocket';
+
+import { RegistryEntry, StrategyConfig } from '../types/strategy/strategy-generics';
+
+import { Registry } from '../Registry';
+
+import { compareValues, getSortPriority } from './auxiliaries';
+import { logMessage, lvlWarn } from './debug';
 
 /**
  * A class for filtering and sorting arrays of Home Assistant's registry entries.
@@ -279,14 +281,13 @@ class RegistryFilter<T extends RegistryEntry, K extends keyof T = keyof T> {
       }
 
       const id = entry[this.entryIdentifier] as keyof StrategyConfig['card_options'];
-      const options =
-        this.entryIdentifier === 'area_id'
-          ? { ...Registry.strategyOptions.areas['_'], ...Registry.strategyOptions.areas[id] }
-          : Registry.strategyOptions.card_options?.[id];
+      const typeConfiguration =
+        this.entryIdentifier === 'area_id' ? Registry.strategyOptions.areas : Registry.strategyOptions.card_options;
+      const configuration = { ...typeConfiguration['_'], ...typeConfiguration[id] };
 
-      const isHiddenByConfig = options?.hidden === true;
+      const isHiddenByConfiguration = 'hidden' in configuration && configuration.hidden === true;
 
-      return !isHiddenByProperty && !isHiddenByConfig;
+      return !isHiddenByProperty && !isHiddenByConfiguration;
     };
 
     this.filters.push(this.checkInversion(predicate));

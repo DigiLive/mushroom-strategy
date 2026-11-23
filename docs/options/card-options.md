@@ -13,6 +13,12 @@ Depending on the type of card, you can also specify options belonging to that ty
 
 Providing a device id will enable you to hide all the entities associated with that device.
 
+!!! tip
+
+    You can use Home Assistant's flexible `name` configuration (plain text, single name objects, or composed lists) in
+    `card_options` for any card that supports it.  
+    See the [Home Assistant Card Naming documentation](https://home-assistant.io) for syntax and examples.
+
 ## Example
 
 ```yaml
