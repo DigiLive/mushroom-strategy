@@ -19,6 +19,11 @@ Providing a device id will enable you to hide all the entities associated with t
     `card_options` for any card that supports it.  
     See the [Home Assistant Card Naming documentation](https://home-assistant.io) for syntax and examples.
 
+## Setting options for all cards
+
+Use `_` as the identifier to set options for all cards.<br>
+More specific identifiers always take precedence.
+
 ## Example
 
 ```yaml
@@ -29,6 +34,10 @@ strategy:
       fan.master_bedroom_fan:
         type: custom:mushroom-fan-card
         icon: mdi:fan
+      sensor.temperature:
+          name:
+            - type: area
+            - type: entity
       remote.harmony_hub_wk:
         hidden: true
       077ba0492c9bb3b3134f1f3a626a: # this is a device id

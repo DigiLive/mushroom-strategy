@@ -87,7 +87,8 @@ Possible values for `order` are:
 
 ## Setting options for all domains
 
-Use `_` as the identifier to set options for all domains.
+Use `_` as the identifier to set options for all domains.<br>
+More specific identifiers always take precedence.
 
 ## Example
 
