@@ -31,6 +31,9 @@ strategy:
   type: custom:mushroom-strategy
   options:
     card_options:
+      _:
+        name:
+          - type: entity
       fan.master_bedroom_fan:
         type: custom:mushroom-fan-card
         icon: mdi:fan
