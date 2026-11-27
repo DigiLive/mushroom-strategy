@@ -12,11 +12,11 @@ import { Registry } from '../Registry';
 import AbstractCard from './AbstractCard';
 
 /**
- * HA Area Card Class
+ * Home Assistant Area Card Class
  *
  * Used to create card configuration for an entry of the HASS area registry.
  */
-class AreaCard extends AbstractCard<AreaCardConfig> {
+class HaAreaCard extends AbstractCard<AreaCardConfig> {
   /**
    * Class constructor.
    *
@@ -27,7 +27,20 @@ class AreaCard extends AbstractCard<AreaCardConfig> {
     super(area, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
+  /**
+   * Prevent custom configurations from overriding the fixed `area` card type.
+   *
+   * @returns {boolean} Always `false`.
+   */
+  protected override allowTypeOverride(): boolean {
+    return false;
+  }
+
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<AreaCardConfig>} The default area card configuration.
+   */
   protected getDefaultConfig(): Partial<AreaCardConfig> {
     const areaEntry = this.entity as StrategyArea;
     const config: Partial<AreaCardConfig> = {
@@ -44,4 +57,4 @@ class AreaCard extends AbstractCard<AreaCardConfig> {
   }
 }
 
-export default AreaCard;
+export default HaAreaCard;

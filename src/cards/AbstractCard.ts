@@ -1,9 +1,17 @@
 import { CustomCardConfig, StrategyCardConfig } from '../types/strategy/strategy-cards';
 import { isEntityRegistryEntry, isSupportedDomain, RegistryEntry } from '../types/strategy/strategy-generics';
 
+
+
 import { logMessage, lvlFatal } from '../utilities/debug';
 
+
+
 import { Registry } from '../Registry';
+
+
+
+
 
 /**
  * Abstract Card Class
@@ -55,6 +63,10 @@ export default abstract class AbstractCard<TConfig extends StrategyCardConfig = 
       ...this.getDefaultConfig(),
       ...customCardConfig,
     };
+
+    if (!this.allowTypeOverride()) {
+      this.configuration.type = this.getDefaultConfig().type ?? baseDefaultConfig.type;
+    }
   }
 
   /**
@@ -87,6 +99,15 @@ export default abstract class AbstractCard<TConfig extends StrategyCardConfig = 
     }
 
     return this.configuration as TConfig;
+  }
+
+  /**
+   * Determine whether custom configurations may override the card `type`.
+   *
+   * @returns {boolean} `true` if `type` may be overridden; `false` if the default `type` must be kept.
+   */
+  protected allowTypeOverride(): boolean {
+    return true;
   }
 
   /** Returns the default configuration object for the card. */

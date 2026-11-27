@@ -36,15 +36,23 @@ class AreaCard extends AbstractCard<TemplateCardConfig> {
     if (this.configuration.tap_action && 'navigation_path' in this.configuration.tap_action) {
       this.configuration.tap_action.navigation_path = area.area_id;
     }
-
-    // Don't override the card type if set differently in the strategy options.
-    if (this.configuration.type !== undefined) {
-      this.configuration.type = this.getDefaultConfig().type ?? this.configuration.type;
-    }
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<TemplateCardConfig> {
+  /**
+   * Prevent custom configurations from overriding the fixed `custom:mushroom-template-card` type.
+   *
+   * @returns {boolean} Always `false`.
+   */
+  protected override allowTypeOverride(): boolean {
+    return false;
+  }
+
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<TemplateCardConfig>} The default mushroom template card configuration.
+   */
+  protected override getDefaultConfig(): Partial<TemplateCardConfig> {
     return {
       type: 'custom:mushroom-template-card',
       primary: undefined,
