@@ -280,8 +280,7 @@ class HomeView extends AbstractView {
     const cardConfigurations: (TemplateCardConfig | AreaCardConfig)[] = [];
 
     for (const area of Registry.areas) {
-      const moduleName =
-        Registry.strategyOptions.areas[area.area_id]?.type ?? Registry.strategyOptions.areas['_']?.type ?? 'default';
+      const moduleName = Registry.strategyOptions.areas[area.area_id]?.type ?? Registry.strategyOptions.areas['_'].type;
 
       let AreaCard;
 
