@@ -9,7 +9,7 @@ export const ConfigurationDefaults: StrategyConfig = {
   areas: {
     _: {
       hidden: false,
-      type: 'AreaCard',
+      type: 'default',
     },
     undisclosed: {
       // TODO: Refactor undisclosed to other.
