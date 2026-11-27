@@ -1,7 +1,9 @@
-import { LovelaceViewConfig } from '../homeassistant/data/lovelace/config/view';
+import { LovelaceViewConfig } from '@digilive/home-assistant-frontend-types';
+
+import AbstractView from '../../views/AbstractView';
+
 import { CustomHeaderCardConfig } from './strategy-cards';
 import { SupportedDomains } from './strategy-generics';
-import AbstractView from '../../views/AbstractView';
 
 /**
  * Options for the extended View class.

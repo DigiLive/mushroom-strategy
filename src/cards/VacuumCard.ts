@@ -1,17 +1,43 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { VACUUM_COMMANDS, VacuumCardConfig } from '../types/lovelace-mushroom/cards/vacuum-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { VacuumCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig, VacuumCommand } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
+
+const VACUUM_COMMANDS = [
+  'on_off',
+  'start_pause',
+  'stop',
+  'locate',
+  'clean_spot',
+  'return_home',
+] as const satisfies readonly VacuumCommand[];
 
 /**
  * Vacuum Card Class
  *
  * Used to create a card configuration to control an entity of the vacuum domain.
  */
-class VacuumCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): VacuumCardConfig {
+class VacuumCard extends AbstractCard<VacuumCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<VacuumCardConfig>} [customConfiguration] Custom card configuration overrides.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<VacuumCardConfig>) {
+    super(entity, customConfiguration);
+  }
+
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<VacuumCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<VacuumCardConfig> {
     return {
       type: 'custom:mushroom-vacuum-card',
       icon: undefined,
@@ -21,18 +47,6 @@ class VacuumCard extends AbstractCard {
         action: 'more-info',
       },
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {VacuumCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: VacuumCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...VacuumCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

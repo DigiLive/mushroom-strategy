@@ -1,8 +1,8 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import tseslint from 'typescript-eslint';
 
 /**
  * ESLint configuration file.
@@ -32,6 +32,8 @@ export default defineConfig(
         'warn',
         {
           argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
         },
       ],
       'no-console': 'off',

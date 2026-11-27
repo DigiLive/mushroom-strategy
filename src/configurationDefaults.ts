@@ -1,4 +1,5 @@
 import { StrategyConfig } from './types/strategy/strategy-generics';
+
 import { localize } from './utilities/localize';
 
 /**
@@ -8,7 +9,7 @@ export const ConfigurationDefaults: StrategyConfig = {
   areas: {
     _: {
       hidden: false,
-      type: 'AreaCard',
+      type: 'default',
     },
     undisclosed: {
       // TODO: Refactor undisclosed to other.

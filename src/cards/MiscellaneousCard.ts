@@ -1,5 +1,8 @@
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { EntityCardConfig } from '../types/lovelace-mushroom/cards/entity-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { EntityCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -7,25 +10,27 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of any domain.
  */
-class MiscellaneousCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): EntityCardConfig {
-    return {
-      type: 'custom:mushroom-entity-card',
-      icon: undefined,
-    };
-  }
-
+class MiscellaneousCard extends AbstractCard<EntityCardConfig> {
   /**
    * Class constructor.
    *
    * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {EntityCardConfig} [customConfiguration] Custom card configuration.
+   * @param {CustomCardConfig<EntityCardConfig>} [customConfiguration] Custom card configuration overrides.
    */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: EntityCardConfig) {
-    super(entity);
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<EntityCardConfig>) {
+    super(entity, customConfiguration);
+  }
 
-    this.configuration = { ...this.configuration, ...MiscellaneousCard.getDefaultConfig(), ...customConfiguration };
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<EntityCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<EntityCardConfig> {
+    return {
+      type: 'custom:mushroom-entity-card',
+      icon: undefined,
+    };
   }
 }
 

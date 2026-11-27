@@ -1,15 +1,22 @@
+import {
+  DeviceRegistryEntry,
+  EntityNameItem,
+  EntityRegistryEntry,
+  HomeAssistant,
+} from '@digilive/home-assistant-frontend-types';
 import deepmerge from 'deepmerge';
-import { HassEntities } from 'home-assistant-js-websocket';
-import { DeviceRegistryEntry } from './types/homeassistant/data/device_registry';
-import { EntityRegistryEntry } from './types/homeassistant/data/entity_registry';
+import { HassEntityStates } from 'home-assistant-js-websocket';
+
+import { CustomCardConfig } from './types/strategy/strategy-cards';
 import {
   DashboardInfo,
+  isSupportedDomain,
+  StrategyArea,
   StrategyConfig,
   SupportedDomains,
-  StrategyArea,
-  isSupportedDomain,
 } from './types/strategy/strategy-generics';
-import { logMessage, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
+
+import { logMessage, lvlDebug, lvlFatal, lvlOff, lvlWarn, setDebugLevel } from './utilities/debug';
 import setupCustomLocalize, { localize } from './utilities/localize';
 import RegistryFilter from './utilities/RegistryFilter';
 
@@ -19,6 +26,9 @@ import RegistryFilter from './utilities/RegistryFilter';
  * Contains the entries of Home Assistant's registries and Strategy configuration.
  */
 class Registry {
+  /** The main Home Assistant object */
+  private static _hass: HomeAssistant;
+
   /**
    * Class constructor.
    *
@@ -43,12 +53,9 @@ class Registry {
     return Registry._devices;
   }
 
-  /** Entries of Home Assistant's state registry */
-  private static _hassStates: HassEntities;
-
   /** Home Assistant's State registry. */
-  static get hassStates(): HassEntities {
-    return Registry._hassStates;
+  static get hassStates(): HassEntityStates {
+    return Registry._hass.states;
   }
 
   /** Indicates whether this module is initialized. */
@@ -116,10 +123,10 @@ class Registry {
    * @returns {Promise<void>} A promise that resolves when initialization is complete.
    */
   static async initialize(info: DashboardInfo): Promise<void> {
-    setupCustomLocalize(info.hass);
+    Registry._hass = info.hass;
+    setupCustomLocalize(this._hass);
 
-    // Import the Hass States and strategy options.
-    Registry._hassStates = info.hass.states;
+    // Import the strategy options.
     const { ConfigurationDefaults } = await import('./configurationDefaults');
 
     try {
@@ -132,7 +139,7 @@ class Registry {
     setDebugLevel(Registry.strategyOptions.debug ? lvlFatal : lvlOff);
 
     // Import the registries of Home Assistant.
-    await this.fetchRegistry(info);
+    await this.fetchRegistry();
 
     // Process the extra views from the strategy options.
     Registry._strategyOptions.extra_views = Registry._strategyOptions.extra_views.map((view) => ({
@@ -168,12 +175,13 @@ class Registry {
       .map((entity) => ({ ...entity, area_id: entity.area_id ?? 'undisclosed' }));
 
     // Sort entities by display name.
-    Registry._entities = Registry._entities.sort((a, b) => {
-      const displayNameA = Registry.getDisplayName(a);
-      const displayNameB = Registry.getDisplayName(b);
-
-      return displayNameA.localeCompare(displayNameB, undefined, { numeric: true, sensitivity: 'base' });
-    });
+    Registry._entities = Registry._entities
+      .map((entity) => ({
+        entity,
+        displayName: Registry.getDisplayName(entity, Registry.getCardOptions(entity).name),
+      }))
+      .sort((a, b) => a.displayName.localeCompare(b.displayName, undefined, { numeric: true, sensitivity: 'base' }))
+      .map((item) => item.entity);
 
     // Process entries of the HASS device registry.
     Registry._devices = new RegistryFilter(Registry.devices)
@@ -287,22 +295,77 @@ class Registry {
   }
 
   /**
+   * Resolves the most appropriate display name for an entity based on a hierarchical lookup.
+   *
+   * If `formatEntityName` is available in the Home Assistant instance, it will be used to format the entity name.
+   * Otherwise, it falls back to the following priority order:
+   * 1. Explicit card-level name override in `card_options`.
+   * 2. User-defined name in the entity registry (`entity.name`).
+   * 3. The entity's friendly name from its state attributes.
+   * 4. The entity's original name from the entity registry (`entity.original_name`).
+   * 5. The entity identifier (`entity.entity_id`) as a last resort.
+   *
+   * @param {EntityRegistryEntry} entity The entity registry entry to process.
+   * @param {EntityNameItem | EntityNameItem[]} [name] An optional name item or array of name items to use for formatting.
+   * @returns {string} The resolved display name.
+   */
+  static getDisplayName = (entity: EntityRegistryEntry, name?: string | EntityNameItem | EntityNameItem[]): string => {
+    const resolvedName = name ?? Registry.getCardOptions(entity).name;
+
+    if (typeof resolvedName === 'string') {
+      return resolvedName;
+    }
+
+    const stateObj = Registry.hassStates[entity.entity_id];
+
+    if (typeof Registry._hass.formatEntityName !== 'function') {
+      logMessage(lvlDebug, 'formatEntityName is not available in the Home Assistant instance.');
+
+      if (typeof entity.name === 'string') {
+        return entity.name;
+      }
+
+      return stateObj?.attributes?.friendly_name || entity.original_name || entity.entity_id;
+    }
+
+    if (!stateObj) {
+      logMessage(lvlDebug, 'State object for entity_id ' + entity.entity_id + ' is not available.');
+
+      return (typeof entity.name === 'string' ? entity.name : null) || entity.original_name || entity.entity_id;
+    }
+
+    return Registry._hass.formatEntityName(stateObj, resolvedName);
+  };
+
+  /**
+   * Get the merged card options for an entity in priority order (global -> device -> entity).
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to resolve options for.
+   * @returns {CustomCardConfig} The merged card options.
+   */
+  static getCardOptions(entity: EntityRegistryEntry): CustomCardConfig {
+    return {
+      ...Registry.strategyOptions.card_options['_'],
+      ...(entity.device_id ? Registry.strategyOptions.card_options[entity.device_id] : {}),
+      ...Registry.strategyOptions.card_options[entity.entity_id],
+    };
+  }
+
+  /**
    * Fetch the registries from Home Assistant.
    *
    * This method requests the entity, device, and area registries from the Home Assistant WebSocket API and populates
    * the internal registry variables.
    *
-   * @param {DashboardInfo} info Strategy information object containing the Home Assistant instance.
-   *
    * @throws {Error} If the Home Assistant WebSocket API call fails.
    * @returns {Promise<void>} A promise that resolves when all registries have been fetched and stored.
    */
-  private static async fetchRegistry(info: DashboardInfo): Promise<void> {
+  private static async fetchRegistry(): Promise<void> {
     try {
       [Registry._entities, Registry._devices, Registry._areas] = await Promise.all([
-        info.hass.callWS<EntityRegistryEntry[]>({ type: 'config/entity_registry/list' }),
-        info.hass.callWS<DeviceRegistryEntry[]>({ type: 'config/device_registry/list' }),
-        info.hass.callWS<StrategyArea[]>({ type: 'config/area_registry/list' }),
+        this._hass.callWS<EntityRegistryEntry[]>({ type: 'config/entity_registry/list' }),
+        this._hass.callWS<DeviceRegistryEntry[]>({ type: 'config/device_registry/list' }),
+        this._hass.callWS<StrategyArea[]>({ type: 'config/area_registry/list' }),
       ]);
     } catch (e) {
       logMessage(lvlFatal, 'Error importing Home Assistant registries!', e);
@@ -333,44 +396,6 @@ class Registry {
       })
     );
   }
-
-  /**
-   * Resolves the most appropriate display name for an entity based on a hierarchical lookup.
-   *
-   * The priority order is as follows:
-   * 1. User-defined name in the entity registry.
-   * 2. Device-linked name (combining device name and original entity name if applicable).
-   * 3. Original name provided by the integration.
-   * 4. A formatted version of the entity ID slug as a final fallback.
-   *
-   * @param {EntityRegistryEntry} entity - The entity registry entry to process.
-   * @returns {string} The resolved display name.
-   */
-  private static getDisplayName = (entity: EntityRegistryEntry): string => {
-    // 1. User defined name in registry (Manual Override)
-    if (entity.name) {
-      return entity.name;
-    }
-
-    // 2. Device Name Logic (When linked via has_entity_name)
-    if (entity.has_entity_name && entity.device_id) {
-      const device = Registry.devices.find((d) => d.id === entity.device_id);
-      const deviceName = device?.name_by_user ?? device?.name;
-
-      if (deviceName) {
-        return entity.original_name ? `${deviceName} ${entity.original_name}` : deviceName;
-      }
-    }
-
-    // 3. Integration defined name (When NOT linked or Device lookup failed)
-    if (entity.original_name) {
-      return entity.original_name;
-    }
-
-    // 4. Ultimate Fallback: The Entity ID Slug
-    const slug = entity.entity_id.split('.')[1] || entity.entity_id;
-    return slug.replace(/_/g, ' ').replace(/\b\w/g, (char: string) => char.toUpperCase());
-  };
 }
 
 export { Registry };

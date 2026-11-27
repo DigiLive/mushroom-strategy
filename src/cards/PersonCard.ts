@@ -1,5 +1,8 @@
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { PersonCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -7,9 +10,23 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the person domain.
  */
-class PersonCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): PersonCardConfig {
+class PersonCard extends AbstractCard<PersonCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<PersonCardConfig>} [customConfiguration] Custom card configuration overrides.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<PersonCardConfig>) {
+    super(entity, customConfiguration);
+  }
+
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<PersonCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<PersonCardConfig> {
     return {
       type: 'custom:mushroom-person-card',
       layout: 'vertical',
@@ -17,18 +34,6 @@ class PersonCard extends AbstractCard {
       secondary_info: 'none',
       icon_type: 'entity-picture',
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {PersonCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: PersonCardConfig) {
-    super(entity);
-
-    this.configuration = { ...this.configuration, ...PersonCard.getDefaultConfig(), ...customConfiguration };
   }
 }
 

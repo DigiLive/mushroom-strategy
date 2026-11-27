@@ -1,10 +1,13 @@
+import {
+  HomeAssistant,
+  LovelaceCardConfig,
+  LovelaceConfig,
+  LovelaceViewConfig,
+} from '@digilive/home-assistant-frontend-types';
 import { HassServiceTarget } from 'home-assistant-js-websocket';
-import HeaderCard from './cards/HeaderCard';
-import SensorCard from './cards/SensorCard';
-import { Registry } from './Registry';
-import { LovelaceCardConfig } from './types/homeassistant/data/lovelace/config/card';
-import { LovelaceConfig } from './types/homeassistant/data/lovelace/config/types';
-import { LovelaceViewConfig } from './types/homeassistant/data/lovelace/config/view';
+import semver from 'semver/preload';
+
+import { CardConstructor } from './types/strategy/strategy-cards';
 import {
   DashboardInfo,
   isSupportedDomain,
@@ -13,18 +16,21 @@ import {
   StrategyViewConfig,
   ViewInfo,
 } from './types/strategy/strategy-generics';
-import { sanitizeClassName } from './utilities/auxiliaries';
-import { logMessage, lvlError } from './utilities/debug';
-import RegistryFilter from './utilities/RegistryFilter';
-import { stackHorizontal } from './utilities/cardStacking';
-import { PersistentNotification } from './utilities/PersistentNotification';
-import { HomeAssistant } from './types/homeassistant/types';
-import semver from 'semver/preload';
-import { NOTIFICATIONS } from './notifications';
-import MiscellaneousCard from './cards/MiscellaneousCard';
-import { localize } from './utilities/localize';
 import { ViewConstructor } from './types/strategy/strategy-views';
-import { CardConstructor } from './types/strategy/strategy-cards';
+
+import { sanitizeClassName } from './utilities/auxiliaries';
+import { stackHorizontal } from './utilities/cardStacking';
+import { logMessage, lvlError } from './utilities/debug';
+import { localize } from './utilities/localize';
+import { PersistentNotification } from './utilities/PersistentNotification';
+import RegistryFilter from './utilities/RegistryFilter';
+
+import HeaderCard from './cards/HeaderCard';
+import MiscellaneousCard from './cards/MiscellaneousCard';
+import SensorCard from './cards/SensorCard';
+
+import { NOTIFICATIONS } from './notifications';
+import { Registry } from './Registry';
 
 /**
  * Mushroom Dashboard Strategy.
@@ -160,51 +166,46 @@ class MushroomStrategy extends HTMLTemplateElement {
       const headerCard = new HeaderCard(
         { entity_id: entities.map((entity) => entity.entity_id) },
         domainOptions
-      ).createCard();
+      ).getCard();
 
       try {
         const DomainCard = ((await import(`./cards/${moduleName}`)) as { default: CardConstructor }).default;
 
         if (domain === 'sensor') {
-          let domainCards = entities.map((entity) => {
+          const domainCards = entities.map((entity) => {
             const isMeasurement = Registry.hassStates[entity.entity_id]?.attributes.unit_of_measurement;
-            const options = {
-              ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
-              ...Registry.strategyOptions.card_options?.[entity.entity_id],
+            const cardOptions = {
+              ...Registry.getCardOptions(entity),
               entities: [entity.entity_id],
             };
 
             return isMeasurement
-              ? new SensorCard(entity, options).getCard()
-              : new MiscellaneousCard(entity, options).getCard();
+              ? new SensorCard(entity, cardOptions).getCard()
+              : new MiscellaneousCard(entity, cardOptions).getCard();
           });
 
           if (domainCards.length) {
-            domainCards = stackHorizontal(
+            const stackedCards = stackHorizontal(
               domainCards,
               Registry.strategyOptions.domains[domain].stack_count ?? Registry.strategyOptions.domains['_'].stack_count
             );
 
-            return { type: 'vertical-stack', cards: [headerCard, ...domainCards] };
+            return { type: 'vertical-stack', cards: [headerCard, ...stackedCards] };
           }
 
           return null;
         }
 
-        let domainCards = entities.map((entity) => {
-          const cardOptions = {
-            ...(entity.device_id && Registry.strategyOptions.card_options?.[entity.device_id]),
-            ...Registry.strategyOptions.card_options?.[entity.entity_id],
-          };
-          return new DomainCard(entity, cardOptions).getCard();
+        const domainCards = entities.map((entity) => {
+          return new DomainCard(entity, Registry.getCardOptions(entity)).getCard();
         });
 
-        domainCards = stackHorizontal(
+        const stackedCards = stackHorizontal(
           domainCards,
           Registry.strategyOptions.domains[domain].stack_count ?? Registry.strategyOptions.domains['_'].stack_count
         );
 
-        return domainCards.length ? { type: 'vertical-stack', cards: [headerCard, ...domainCards] } : null;
+        return domainCards.length ? { type: 'vertical-stack', cards: [headerCard, ...stackedCards] } : null;
       } catch (e) {
         logMessage(lvlError, `Error creating card configurations for domain ${domain}`, e);
         return null;
@@ -225,17 +226,17 @@ class MushroomStrategy extends HTMLTemplateElement {
       if (miscellaneousEntities.length) {
         try {
           const MiscellaneousCard = (await import('./cards/MiscellaneousCard')).default;
-          let miscellaneousCards = miscellaneousEntities.map((entity) =>
-            new MiscellaneousCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard()
+          const miscellaneousCards = miscellaneousEntities.map((entity) =>
+            new MiscellaneousCard(entity, Registry.getCardOptions(entity)).getCard()
           );
 
           const headerCard = new HeaderCard(target, {
             ...Registry.strategyOptions.domains['_'],
             ...Registry.strategyOptions.domains['default'],
-          }).createCard();
+          }).getCard();
 
           if (miscellaneousCards.length) {
-            miscellaneousCards = stackHorizontal(
+            const stackedCards = stackHorizontal(
               miscellaneousCards,
               Registry.strategyOptions.domains['default'].stack_count ??
                 Registry.strategyOptions.domains['_'].stack_count
@@ -243,7 +244,7 @@ class MushroomStrategy extends HTMLTemplateElement {
 
             viewCards.push({
               type: 'vertical-stack',
-              cards: [headerCard, ...miscellaneousCards],
+              cards: [headerCard, ...stackedCards],
             });
           }
         } catch (e) {

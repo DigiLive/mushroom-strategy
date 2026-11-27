@@ -1,25 +1,32 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
-import { AreaCardConfig, StackCardConfig } from '../types/homeassistant/panels/lovelace/cards/types';
-import { PersonCardConfig } from '../types/lovelace-mushroom/cards/person-card-config';
-import { TemplateCardConfig } from '../types/lovelace-mushroom/cards/template-card-config';
-import { isSupportedBadge } from '../types/strategy/strategy-generics';
-import { ViewConfig } from '../types/strategy/strategy-views';
-import { sanitizeClassName } from '../utilities/auxiliaries';
-import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
-import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
-import registryFilter from '../utilities/RegistryFilter';
-import { LovelaceViewConfig } from '../types/homeassistant/data/lovelace/config/view';
-import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
-import { LovelaceSectionRawConfig } from '../types/homeassistant/data/lovelace/config/section';
-import HeaderCard from '../cards/HeaderCard';
-import { stackHorizontal } from '../utilities/cardStacking';
-import { LovelaceCardConfig } from '../types/homeassistant/data/lovelace/config/card';
-import GreetingCard from '../cards/GreetingCard';
+import {
+  AreaCardConfig,
+  LovelaceBadgeConfig,
+  LovelaceCardConfig,
+  LovelaceSectionRawConfig,
+  LovelaceViewConfig,
+  StackCardConfig,
+} from '@digilive/home-assistant-frontend-types';
+import { PersonCardConfig, TemplateCardConfig } from '@digilive/lovelace-mushroom-types';
+
 import { BadgeConstructor } from '../types/strategy/strategy-badges';
 import { CardConstructor } from '../types/strategy/strategy-cards';
+import { isSupportedBadge } from '../types/strategy/strategy-generics';
+import { ViewConfig } from '../types/strategy/strategy-views';
+
+import { sanitizeClassName } from '../utilities/auxiliaries';
+import { stackHorizontal } from '../utilities/cardStacking';
+import { logMessage, lvlError, lvlInfo } from '../utilities/debug';
+import { localize } from '../utilities/localize';
+import registryFilter from '../utilities/RegistryFilter';
+
+import GreetingCard from '../cards/GreetingCard';
+import HeaderCard from '../cards/HeaderCard';
+
+import { Registry } from '../Registry';
+
+import AbstractView from './AbstractView';
 
 /**
  * Home View Class.
@@ -27,23 +34,31 @@ import { CardConstructor } from '../types/strategy/strategy-cards';
  * Used to create a Home view.
  */
 class HomeView extends AbstractView {
-  /** The domain of the entities that the view is representing. */
-  static readonly domain = 'home' as const;
-
   /**
    * Class constructor.
    *
-   * @param {ViewConfig} [customConfiguration] Custom view configuration.
+   * @param {Partial<ViewConfig>} [customConfiguration] Custom view configuration overrides.
    */
-  constructor(customConfiguration?: ViewConfig) {
-    super();
+  public constructor(customConfiguration?: Partial<ViewConfig>) {
+    super(customConfiguration);
+  }
 
-    this.baseConfiguration = { ...this.baseConfiguration, ...HomeView.getDefaultConfig(), ...customConfiguration };
+  /**
+   * Get a view configuration.
+   *
+   * The configuration includes the card configurations which are created by createSections().
+   */
+  public async getView(): Promise<LovelaceViewConfig> {
+    return {
+      ...this.configuration,
+      badges: await this.createBadgeSection(),
+      sections: await this.createSections(),
+    };
   }
 
   /** Returns the default configuration object for the view. */
   // TODO: Move type and max_columns to the abstract class.
-  static getDefaultConfig(): ViewConfig {
+  protected getDefaultConfig(): Partial<ViewConfig> {
     return {
       type: 'sections',
       max_columns: 3,
@@ -59,24 +74,11 @@ class HomeView extends AbstractView {
   }
 
   /**
-   * Get a view configuration.
-   *
-   * The configuration includes the card configurations which are created by createSections().
-   */
-  async getView(): Promise<LovelaceViewConfig> {
-    return {
-      ...this.baseConfiguration,
-      badges: await this.createBadgeSection(),
-      sections: await this.createSections(),
-    };
-  }
-
-  /**
    * Create the configuration of the cards to include in the view.
    *
    * @override
    */
-  async createSections(): Promise<LovelaceSectionRawConfig[]> {
+  protected async createSections(): Promise<LovelaceSectionRawConfig[]> {
     const MEDIA_QUERY = {
       SMALL: '(max-width: 1343px)',
       LARGE: '(min-width: 1344px)',
@@ -271,15 +273,14 @@ class HomeView extends AbstractView {
     const titleHidden = Registry.strategyOptions.home_view.hidden.areas_title;
 
     if (titleHidden) {
-      logMessage(lvlInfo, 'Greeting titleHidden is hidden.');
+      logMessage(lvlInfo, 'Areas title is hidden.');
     }
 
-    const titleCard = titleHidden ? undefined : new HeaderCard({}, { title: localize('generic.areas') }).createCard();
+    const titleCard = titleHidden ? undefined : new HeaderCard({}, { title: localize('generic.areas') }).getCard();
     const cardConfigurations: (TemplateCardConfig | AreaCardConfig)[] = [];
 
     for (const area of Registry.areas) {
-      const moduleName =
-        Registry.strategyOptions.areas[area.area_id]?.type ?? Registry.strategyOptions.areas['_']?.type ?? 'default';
+      const moduleName = Registry.strategyOptions.areas[area.area_id]?.type ?? Registry.strategyOptions.areas['_'].type;
 
       let AreaCard;
 

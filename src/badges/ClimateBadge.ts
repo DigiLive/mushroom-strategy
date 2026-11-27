@@ -1,28 +1,30 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import AbstractBadge from './AbstractBadge';
+import { LovelaceBadgeConfig } from '@digilive/home-assistant-frontend-types';
+
 import { Registry } from '../Registry';
-import { LovelaceBadgeConfig } from '../types/homeassistant/data/lovelace/config/badge';
+
+import AbstractBadge from './AbstractBadge';
 
 /**
  * Climate Badge class.
  *
  * Used to create a badge configuration to indicate how many climates are operating.
  */
-class ClimateBadge extends AbstractBadge {
+class ClimateBadge extends AbstractBadge<LovelaceBadgeConfig> {
   /**
-   * Class Constructor.
+   * Class constructor.
    *
-   * @param {LovelaceBadgeConfig} [customConfiguration] Custom badge configuration.
+   * @param {Partial<LovelaceBadgeConfig>} [customConfiguration] Custom badge configuration overrides.
    */
-  constructor(customConfiguration?: LovelaceBadgeConfig) {
+  public constructor(customConfiguration?: Partial<LovelaceBadgeConfig>) {
     super();
 
-    this.configuration = { ...this.configuration, ...ClimateBadge.getDefaultConfig(), ...customConfiguration };
+    this.setConfiguration(customConfiguration);
   }
 
   /** Returns the default configuration object for the badge. */
-  static getDefaultConfig(): LovelaceBadgeConfig {
+  protected getDefaultConfig(): Partial<LovelaceBadgeConfig> {
     return {
       type: 'custom:mushroom-template-badge',
       icon: 'mdi:thermostat',

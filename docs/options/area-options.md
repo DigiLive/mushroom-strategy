@@ -95,6 +95,7 @@ To exclude this area from the dashboard and views, set its property `hidden` to 
 ## Setting options for all areas
 
 Use `_` as an identifier to set the options for all areas.<br>
+More specific identifiers always take precedence.
 The following example sets the type of all area-cards to the one of Home Assistant:
 
 ### Example

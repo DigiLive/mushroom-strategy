@@ -70,8 +70,6 @@ Hidden/Disabled entities are excluded from this count.
   all switches._
 - Holding a badge will navigate to the corresponding view.
 
-[^1]: For some badges, the tap action is disabled.
-
 The `badges` group enables you to specify its configuration of badges.
 
 | Name             | type    | default | Description                                 |
@@ -144,10 +142,8 @@ strategy:
 |:---------------------|:------|:--------|:------------------------------------|
 | `quick_access_cards` | array | `[]`    | List of quick access cards to show. |
 
-The `quick_access_cards` group enables you to specify the configuration of additional cards in the view.
-These cards will be shown between the greeting card and area cards.
-
-Each card can have the options as described at [Card Options](card-options.md).
+The `quick_access_cards` group enables you to specify the configuration of additional cards in the view.[^2]<br>
+These cards will appear at the top or in front of other cards.
 
 !!! tip
 
@@ -170,6 +166,9 @@ strategy:
         cards:
           - type: custom:mushroom-lock-card
             entity: lock.front_door
+            name:
+              - type: area
+              - type: entity
           - type: custom:mushroom-entity-card
             entity: sensor.front_door_lock_battery
             name: Battery
@@ -183,10 +182,8 @@ strategy:
 |:--------------|:------|:--------|:-----------------------------|
 | `extra_cards` | array | `[]`    | List of extra cards to show. |
 
-The `extra_cards` group enables you to specify the configuration of additional cards in the view.
-These cards will be shown below the areas.
-
-Each card can have the options as described at [Card Options](card-options.md).
+The `extra_cards` group enables you to specify the configuration of additional cards in the view.[^2]<br>
+These cards will appear at the bottom or in back of other cards.
 
 !!! tip
     You can build your view in a temporary dashboard and copy the `views` group from the YAML of that dashboard into
@@ -209,6 +206,9 @@ strategy:
 ```
 
 <!-- references -->
+
+[^1]: For some badges, the tap action is disabled.
+[^2]: [Card Options](card-options.md) do **not** apply to quick access and extra cards.
 
 [MushroomBadgeDocUrl]: https://github.com/piitaya/lovelace-mushroom/blob/main/docs/badges/template.md
 [HassBadgeDocUrl]: https://www.home-assistant.io/dashboards/badges/

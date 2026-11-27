@@ -1,8 +1,11 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { EntityRegistryEntry } from '../types/homeassistant/data/entity_registry';
-import { LightCardConfig } from '../types/lovelace-mushroom/cards/light-card-config';
+import { EntityRegistryEntry } from '@digilive/home-assistant-frontend-types';
+import { LightCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig } from '../types/strategy/strategy-cards';
 import { isCallServiceActionConfig } from '../types/strategy/strategy-generics';
+
 import AbstractCard from './AbstractCard';
 
 /**
@@ -10,9 +13,33 @@ import AbstractCard from './AbstractCard';
  *
  * Used to create a card configuration to control an entity of the light domain.
  */
-class LightCard extends AbstractCard {
-  /** Returns the default configuration object for the card. */
-  static getDefaultConfig(): LightCardConfig {
+class LightCard extends AbstractCard<LightCardConfig> {
+  /**
+   * Class constructor.
+   *
+   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
+   * @param {CustomCardConfig<LightCardConfig>} [customConfiguration] Custom card configuration overrides.
+   */
+  public constructor(entity: EntityRegistryEntry, customConfiguration?: CustomCardConfig<LightCardConfig>) {
+    super(entity, customConfiguration);
+
+    if (isCallServiceActionConfig(this.configuration.double_tap_action)) {
+      this.configuration.double_tap_action = {
+        ...this.configuration.double_tap_action,
+        target: {
+          ...this.configuration.double_tap_action.target,
+          entity_id: entity.entity_id,
+        },
+      };
+    }
+  }
+
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<LightCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<LightCardConfig> {
     return {
       type: 'custom:mushroom-light-card',
       icon: undefined,
@@ -31,24 +58,6 @@ class LightCard extends AbstractCard {
         },
       },
     };
-  }
-
-  /**
-   * Class constructor.
-   *
-   * @param {EntityRegistryEntry} entity The HASS entity to create a card configuration for.
-   * @param {LightCardConfig} [customConfiguration] Custom card configuration.
-   */
-  constructor(entity: EntityRegistryEntry, customConfiguration?: LightCardConfig) {
-    super(entity);
-
-    const configuration = LightCard.getDefaultConfig();
-
-    if (isCallServiceActionConfig(configuration.double_tap_action)) {
-      configuration.double_tap_action.target = { entity_id: entity.entity_id };
-    }
-
-    this.configuration = { ...this.configuration, ...configuration, ...customConfiguration };
   }
 }
 

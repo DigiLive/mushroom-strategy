@@ -1,15 +1,21 @@
-import { DeviceRegistryEntry } from '../homeassistant/data/device_registry';
-import { EntityRegistryEntry } from '../homeassistant/data/entity_registry';
-import { ActionConfig, CallServiceActionConfig } from '../homeassistant/data/lovelace/config/action';
-import { LovelaceCardConfig } from '../homeassistant/data/lovelace/config/card';
-import { LovelaceConfig } from '../homeassistant/data/lovelace/config/types';
-import { LovelaceViewConfig, LovelaceViewRawConfig } from '../homeassistant/data/lovelace/config/view';
-import { HomeAssistant } from '../homeassistant/types';
-import { StrategyHeaderCardConfig } from './strategy-cards';
-import { AreaRegistryEntry } from '../homeassistant/data/area_registry';
-import { LovelaceBadgeConfig } from '../homeassistant/data/lovelace/config/badge';
-import { TemplateCardConfig } from '../lovelace-mushroom/cards/template-card-config';
-import { AreaCardConfig } from '../homeassistant/panels/lovelace/cards/types';
+import {
+  ActionConfig,
+  AreaCardConfig,
+  AreaRegistryEntry,
+  CallServiceActionConfig,
+  DeviceRegistryEntry,
+  EntityRegistryEntry,
+  HomeAssistant,
+  LovelaceBadgeConfig,
+  LovelaceCardConfig,
+  LovelaceCardFeatureConfig,
+  LovelaceConfig,
+  LovelaceViewConfig,
+  LovelaceViewRawConfig,
+} from '@digilive/home-assistant-frontend-types';
+import { TemplateCardConfig } from '@digilive/lovelace-mushroom-types';
+
+import { CustomCardConfig, StrategyHeaderCardConfig } from './strategy-cards';
 
 /**
  * List of supported domains.
@@ -240,7 +246,9 @@ export interface StrategyConfig {
     _: AllAreasConfig;
     undisclosed: AreaConfig;
   } & Record<string, AreaConfig>;
-  card_options: { [S: string]: CustomCardConfig };
+  card_options: {
+    [key: string]: CustomCardConfig;
+  };
   badges: BadgeConfig;
   debug: boolean;
   domains: {
@@ -264,23 +272,26 @@ export interface StrategyConfig {
 /**
  * Strategy Area.
  *
- * Adds additional properties to the HASS Area Registry Entry.
- *
- * @property {boolean} hidden True if the area should be hidden from the dashboard.
- * @property {number} order Ordering position of the area in the list of available areas.
+ * The HASS Area Registry Entry with additional configuration options.
  */
-export type StrategyArea = AreaRegistryEntry & Partial<AreaConfig>;
+export type StrategyArea = AreaRegistryEntry &
+  Partial<AreaConfig> & {
+    icon?: string | null;
+  };
 
 /**
- * Strategy Area.
+ * Strategy Area Configuration.
  *
  * @property {LovelaceCardConfig[]} [extra_cards] List of extra cards to show in the area view.
+ * @property {LovelaceCardFeatureConfig[]} [features] Card features normalized to home-assistant-frontend-types.
  * @property {boolean} [hidden] True if the entity should be hidden from the dashboard.
  * @property {string} [name] If set, it overrides the name of the area.
  * @property {number} [order] Ordering position of the area in the list of available areas.
  * @property {string} type The type of area card.
  */
 type AreaConfig = (TemplateCardConfig | AreaCardConfig) & {
+  // FIXME: @digilive/lovelace-mushroom-types bundles a conflicting LovelaceCardFeatureConfig definition compared to home-assistant-frontend-types, causing union/intersection mismatches on `features`.
+  features?: LovelaceCardFeatureConfig[];
   extra_cards?: LovelaceCardConfig[];
   hidden?: boolean;
   name?: string;
@@ -322,15 +333,6 @@ export interface BadgeConfig {
 }
 
 /**
- * Custom Card Configuration for an entity.
- *
- * @property {boolean} hidden - If True, the card is hidden from the dashboard.
- */
-export interface CustomCardConfig extends LovelaceCardConfig {
-  hidden?: boolean;
-}
-
-/**
  * Determines whether a registry entry is an Entity Registry entry.
  *
  * @param entry The registry entry to check.
@@ -366,7 +368,6 @@ export function isCallServiceActionConfig(object?: ActionConfig): object is Call
 
 /**
  * Type guard to check if a given identifier exists in a list of supported identifiers.
- *
  *
  * @param id The identifier to check
  * @param supportedList The list of valid identifiers

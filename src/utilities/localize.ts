@@ -1,11 +1,13 @@
+import { HomeAssistant } from '@digilive/home-assistant-frontend-types';
+
 import * as de from '../translations/de.json';
 import * as en from '../translations/en.json';
 import * as es from '../translations/es.json';
-import * as hu from '../translations/hu.json';
 import * as fr from '../translations/fr.json';
+import * as hu from '../translations/hu.json';
 import * as nl from '../translations/nl.json';
 import * as pt_br from '../translations/pt-BR.json';
-import { HomeAssistant } from '../types/homeassistant/types';
+
 import { logMessage, lvlWarn } from './debug';
 
 /** Registry of currently supported languages */

@@ -1,10 +1,14 @@
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
-import { Registry } from '../Registry';
 import { CustomHeaderCardConfig } from '../types/strategy/strategy-cards';
+import { SupportedDomains } from '../types/strategy/strategy-generics';
 import { ViewConfig } from '../types/strategy/strategy-views';
+
 import { localize } from '../utilities/localize';
-import AbstractView from './AbstractView';
+
+import { Registry } from '../Registry';
+
+import AbstractDomainView from './AbstractDomainView';
 
 /**
  * Light View Class.
@@ -12,14 +16,37 @@ import AbstractView from './AbstractView';
  * Used to create a view for entities of the light domain.
  *
  * @class LightView
- * @extends AbstractView
+ * @extends AbstractDomainView
  */
-class LightView extends AbstractView {
+class LightView extends AbstractDomainView {
   /** The domain of the entities that the view is representing. */
-  static readonly domain = 'light' as const;
+  public static readonly domain: SupportedDomains = 'light' as const;
 
-  /** Returns the default configuration object for the view. */
-  static getDefaultConfig(): ViewConfig {
+  /**
+   * Class constructor.
+   *
+   * @param {Partial<ViewConfig>} [customConfiguration] Custom view configuration overrides.
+   */
+  public constructor(customConfiguration?: Partial<ViewConfig>) {
+    super(LightView.domain, customConfiguration, LightView.getViewHeaderCardConfig());
+  }
+
+  /**
+   * Returns the default configuration of the view's Header card.
+   */
+  private static getViewHeaderCardConfig(): CustomHeaderCardConfig {
+    return {
+      title: localize('light.all_lights'),
+      subtitle:
+        `${Registry.getCountTemplate(LightView.domain, 'eq', 'on')} ${localize('light.lights')} ` +
+        localize('generic.on'),
+    };
+  }
+
+  /**
+   * Returns the default configuration object for the view.
+   */
+  protected getDefaultConfig(): Partial<ViewConfig> {
     return {
       title: localize('light.lights'),
       path: 'lights',
@@ -32,22 +59,6 @@ class LightView extends AbstractView {
         offService: 'light.turn_off',
       },
     };
-  }
-
-  /** Returns the default configuration of the view's Header card. */
-  static getViewHeaderCardConfig(): CustomHeaderCardConfig {
-    return {
-      title: localize('light.all_lights'),
-      subtitle:
-        `${Registry.getCountTemplate(LightView.domain, 'eq', 'on')} ${localize('light.lights')} ` +
-        localize('generic.on'),
-    };
-  }
-
-  constructor(customConfiguration?: ViewConfig) {
-    super();
-
-    this.initializeViewConfig(LightView.getDefaultConfig(), customConfiguration, LightView.getViewHeaderCardConfig());
   }
 }
 
