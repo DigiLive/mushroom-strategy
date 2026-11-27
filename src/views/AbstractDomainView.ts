@@ -102,9 +102,7 @@ export default abstract class AbstractDomainView<
       };
 
       areaCards.push(
-        ...areaEntities.map((entity) =>
-          new DomainCard(entity, Registry.strategyOptions.card_options?.[entity.entity_id]).getCard()
-        )
+        ...areaEntities.map((entity) => new DomainCard(entity, Registry.getCardOptions(entity)).getCard())
       );
 
       if (areaCards.length) {
