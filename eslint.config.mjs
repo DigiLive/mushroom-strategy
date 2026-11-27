@@ -4,10 +4,6 @@ import prettierPlugin from 'eslint-plugin-prettier';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
-
-
-
-
 /**
  * ESLint configuration file.
  * Following Flat Config standards for ESLint v10.

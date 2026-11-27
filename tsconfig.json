@@ -18,6 +18,7 @@
     // 5. Type Checking and Strictness
     "strict": true,
     "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
