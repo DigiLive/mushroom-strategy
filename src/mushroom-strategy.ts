@@ -227,7 +227,7 @@ class MushroomStrategy extends HTMLTemplateElement {
         try {
           const MiscellaneousCard = (await import('./cards/MiscellaneousCard')).default;
           const miscellaneousCards = miscellaneousEntities.map((entity) =>
-            new MiscellaneousCard(entity, Registry.strategyOptions.card_options[entity.entity_id]).getCard()
+            new MiscellaneousCard(entity, Registry.getCardOptions(entity)).getCard()
           );
 
           const headerCard = new HeaderCard(target, {
