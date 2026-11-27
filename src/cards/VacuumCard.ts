@@ -32,8 +32,12 @@ class VacuumCard extends AbstractCard<VacuumCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<VacuumCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<VacuumCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<VacuumCardConfig> {
     return {
       type: 'custom:mushroom-vacuum-card',
       icon: undefined,

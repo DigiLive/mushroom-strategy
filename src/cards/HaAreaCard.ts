@@ -1,15 +1,25 @@
+;
 // noinspection JSUnusedGlobalSymbols Class is dynamically imported.
 
 import { AreaCardConfig } from '@digilive/home-assistant-frontend-types';
 
+
+
 import { CustomCardConfig } from '../types/strategy/strategy-cards';
 import { StrategyArea } from '../types/strategy/strategy-generics';
 
+
+
 import { localize } from '../utilities/localize';
+
+
 
 import { Registry } from '../Registry';
 
+
+
 import AbstractCard from './AbstractCard';
+
 
 /**
  * Home Assistant Area Card Class
@@ -41,7 +51,7 @@ class HaAreaCard extends AbstractCard<AreaCardConfig> {
    *
    * @returns {Partial<AreaCardConfig>} The default area card configuration.
    */
-  protected getDefaultConfig(): Partial<AreaCardConfig> {
+  protected override getDefaultConfig(): Partial<AreaCardConfig> {
     const areaEntry = this.entity as StrategyArea;
     const config: Partial<AreaCardConfig> = {
       type: 'area',

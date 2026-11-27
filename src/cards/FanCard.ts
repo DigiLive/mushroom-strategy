@@ -23,8 +23,12 @@ class FanCard extends AbstractCard<FanCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<FanCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<FanCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<FanCardConfig> {
     return {
       type: 'custom:mushroom-fan-card',
       icon: undefined,

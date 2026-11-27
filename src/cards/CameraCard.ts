@@ -22,8 +22,12 @@ class CameraCard extends AbstractCard<PictureEntityCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<PictureEntityCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<PictureEntityCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<PictureEntityCardConfig> {
     return {
       type: 'picture-entity',
       show_name: false,

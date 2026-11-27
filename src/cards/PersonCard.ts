@@ -21,8 +21,12 @@ class PersonCard extends AbstractCard<PersonCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<PersonCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<PersonCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<PersonCardConfig> {
     return {
       type: 'custom:mushroom-person-card',
       layout: 'vertical',

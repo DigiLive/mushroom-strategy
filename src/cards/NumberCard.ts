@@ -23,8 +23,12 @@ class NumberCard extends AbstractCard<NumberCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<NumberCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<NumberCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<NumberCardConfig> {
     return {
       type: 'custom:mushroom-number-card',
       icon: undefined,

@@ -23,8 +23,12 @@ class LockCard extends AbstractCard<LockCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<LockCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<LockCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<LockCardConfig> {
     return {
       type: 'custom:mushroom-lock-card',
       icon: undefined,

@@ -34,8 +34,12 @@ class LightCard extends AbstractCard<LightCardConfig> {
     }
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<LightCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<LightCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<LightCardConfig> {
     return {
       type: 'custom:mushroom-light-card',
       icon: undefined,

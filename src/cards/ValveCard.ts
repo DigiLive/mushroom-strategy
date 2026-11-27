@@ -25,8 +25,12 @@ class ValveCard extends AbstractCard<TemplateCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<TemplateCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<TemplateCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<TemplateCardConfig> {
     const registryEntry = this.entity as EntityRegistryEntry;
 
     return {

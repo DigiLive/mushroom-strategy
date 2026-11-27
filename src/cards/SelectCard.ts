@@ -23,8 +23,12 @@ class SelectCard extends AbstractCard<SelectCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<SelectCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<SelectCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<SelectCardConfig> {
     return {
       type: 'custom:mushroom-select-card',
       icon: undefined,

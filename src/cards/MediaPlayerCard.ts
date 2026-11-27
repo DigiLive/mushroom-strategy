@@ -23,8 +23,12 @@ class MediaPlayerCard extends AbstractCard<MediaPlayerCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<MediaPlayerCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<MediaPlayerCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<MediaPlayerCardConfig> {
     return {
       type: 'custom:mushroom-media-player-card',
       use_media_info: true,

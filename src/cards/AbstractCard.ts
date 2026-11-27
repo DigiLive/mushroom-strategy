@@ -57,15 +57,16 @@ export default abstract class AbstractCard<TConfig extends StrategyCardConfig = 
     } as Partial<TConfig>;
 
     const { hidden: _hidden, ...customCardConfig } = customConfiguration ?? {};
+    const defaultConfig = this.getDefaultConfig();
 
     this.configuration = {
       ...baseDefaultConfig,
-      ...this.getDefaultConfig(),
+      ...defaultConfig,
       ...customCardConfig,
     };
 
     if (!this.allowTypeOverride()) {
-      this.configuration.type = this.getDefaultConfig().type ?? baseDefaultConfig.type;
+      this.configuration.type = defaultConfig.type ?? baseDefaultConfig.type;
     }
   }
 

@@ -42,8 +42,10 @@ class HeaderCard {
    * Get the card configuration.
    *
    * @remarks
-   * The card is represented by a horizontal stack of cards: one title card and optionally
-   * two template cards to control entities.
+   * The card is represented by a horizontal stack of cards: one title card and optionally two template cards to control
+   * entities.
+   *
+   * @returns {StackCardConfig} The card configuration.
    */
   public getCard(): StackCardConfig {
     const cards: LovelaceCardConfig[] = [
@@ -92,7 +94,11 @@ class HeaderCard {
     };
   }
 
-  /** Returns the default configuration object for the card. */
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<StrategyHeaderCardConfig>} The default configuration object.
+   */
   protected getDefaultConfig(): Partial<StrategyHeaderCardConfig> {
     return {
       type: 'custom:mushroom-title-card',

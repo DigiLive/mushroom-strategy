@@ -23,8 +23,12 @@ class CoverCard extends AbstractCard<CoverCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<CoverCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<CoverCardConfig>} The default configuration for the cover card.
+   */
+  protected override getDefaultConfig(): Partial<CoverCardConfig> {
     return {
       type: 'custom:mushroom-cover-card',
       icon: undefined,

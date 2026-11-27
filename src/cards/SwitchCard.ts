@@ -23,8 +23,12 @@ class SwitchCard extends AbstractCard<EntityCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<EntityCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<EntityCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<EntityCardConfig> {
     return {
       type: 'custom:mushroom-entity-card',
       icon: undefined,

@@ -26,8 +26,12 @@ class SensorCard extends AbstractCard<SensorCardConfig> {
     }
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<SensorCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<SensorCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<SensorCardConfig> {
     return {
       type: 'custom:mini-graph-card',
       animate: true,

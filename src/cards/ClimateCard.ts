@@ -23,8 +23,12 @@ class ClimateCard extends AbstractCard<ClimateCardConfig> {
     super(entity, customConfiguration);
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<ClimateCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<ClimateCardConfig>} The default configuration for the climate card.
+   */
+  protected override getDefaultConfig(): Partial<ClimateCardConfig> {
     return {
       type: 'custom:mushroom-climate-card',
       icon: undefined,

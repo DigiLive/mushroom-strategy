@@ -50,8 +50,12 @@ class SceneCard extends AbstractCard<EntityCardConfig> {
     }
   }
 
-  /** Returns the default configuration object for the card. */
-  protected getDefaultConfig(): Partial<EntityCardConfig> {
+  /**
+   * Returns the default configuration object for the card.
+   *
+   * @returns {Partial<EntityCardConfig>} The default configuration object for the card.
+   */
+  protected override getDefaultConfig(): Partial<EntityCardConfig> {
     if (this.isStatefulScene) {
       return {};
     }
